@@ -1,0 +1,219 @@
+---
+title: "AdductomicsR workflow"
+author: "Josie Hayes"
+date: '`r format(Sys.Date(), "%B %e, %Y")`'
+output: rmarkdown::html_vignette
+vignette: >
+    %\VignetteIndexEntry{Adductomics workflow}
+    %\VignetteEngine{knitr::rmarkdown}
+    %\VignetteEncoding{UTF-8}
+---
+
+
+# Getting Started
+
+Ensure that you are running the latest version of 64-bit R of v3.4 or
+later.
+
+```{r, eval=F}
+#ensure you have mzR installed
+source("https://bioconductor.org/biocLite.R")
+biocLite("mzR")
+```
+
+Note that if you receive an error "fatal error: netcdf.h" in installing mzR,
+homebrew has not been able to install netcdf. 
+To install mzR download it from
+https://github.com/Unidata/netcdf-c/releases/v4.4.1.1 
+(using configure, make, make install) and then install mzR again.
+
+```{r, eval=F}
+# install the package directly from Github
+library(devtools)
+devtools::install_github("JosieLHayes/adductomicsR")
+
+#install the data package to run the vignette by downloading the tarball 
+#at:https://berkeley.box.com/s/titfjzlwhqmmjjwm9pw9uqv3ahpzotxm
+#then installing the package (change the path to the file on your computer)
+install.packages(path_to_file/adductData_0.3.0.tar.gz,
+                 repos = NULL, type="source")
+
+```
+
+```{r, eval=F}
+
+#or download the package and install from source
+
+library(devtools)
+devtools::install("path_to_dir/adductomicsR")
+devtools::install("path_to_dir/adductData")
+
+```
+
+After installation of the adductomics package and all dependencies attach
+the adductomics package by typing (copying and pasting) 
+this line of code into the R console and hitting enter:
+
+```{r, eval=F}
+# load the package
+library(adductomicsR)
+library(adductData)
+```
+
+```{r, echo=F}
+suppressMessages(suppressWarnings(library(adductomicsR)))
+
+```
+
+We have provided 2 mzXML files for use in this vignette.
+They are available using this path:
+system.file("extdata", package = "adductomicsR")
+
+# Preparation of the data
+Mass drift correction: Usually mass drift is corrected using lock masses on
+the mass spectrometer.
+If this has not been done a python script is provided in the directory in 
+which the package is saved on your computer at
+/inst/extdata/thermo_MassDriftCalc.py and can be launched from within python 
+using (replace the path to the python script in your system):
+exec(open(“thermo_MassDriftCalc.py“).read())
+
+# Retention time correction
+
+Each sample is corrected for retention time drift using the rtDevModeling 
+function. To run this with the default parameters enter the path of the
+directory containing your mzXML files and the run order file (order in which
+samples were run). For further information on parameters see
+??rtDevModelling. An example run order file is available in inst/extdata
+(within the directory where the package is saved on your computer) and 2
+mzXML files are available at
+system.file("extdata", package = "adductomicsR")
+
+These files will be used in this vignette automatically.
+
+```{r, quiet=T, eval=T}
+
+rtDevModelling(MS2Dir = system.file("extdata", package = "adductData"), 
+nCores=4, runOrder = paste0(system.file("extdata", package = "adductomicsR"),
+'/runOrder.csv'))
+
+```
+
+# Identify adducts
+
+The specSimPepId function detects adducts present on the peptide. To run this
+with the default parameters (the largest triply charged peptide of human 
+serum albumin) enter the path of your mzxml files and rtDevModels object. For 
+further information on running this with different peptides see
+??specSimPepId. This produces MS2 spectra plots, each in a separate
+directory for each sample. A plot of the model spectrum is also saved in
+the mzXML files directory for comparison. The spectra are grouped based 
+on the mz and RT windows, and plots of these groups are also provided 
+based on the raw RT and adjusted RT. These plots can be used to determine
+whether multiple groups pertain to the same peak.
+    
+```{r, quiet=T, eval=T}
+specSimPepId(MS2Dir = system.file("extdata", package = "adductData"),
+nCores=4, rtDevModels = paste0(system.file("extdata", package
+= "adductData"),'/rtDevModels.RData'))
+```
+
+# Generate a target table for quantification
+A list of the adducts for quantification and their monoisotopic mass (MIM), 
+retention time (RT), peptide and charge is generated using the following 
+command. Substitute the file path of the allResults file to the location of 
+your allResults file from the previous step.
+
+```{r, quiet=T, eval=T}
+
+generateTargTable(allresultsFile=paste0(system.file("extdata", package =
+"adductData"),'/allResults_ALVLIAFAQYLQQCPFEDHVK_',
+gsub('-', '', Sys.Date()), '.csv'),
+csvDir=getwd())
+```
+
+It is recommended that the allGroups plot ( m/z vs RT) is used to ensure that 
+the adducts in the target table do not pertain to the same peak, as the 
+quantification step can be computationally intensive.
+
+# Quantify adducts
+
+See ??adductQuant for an explanation on the parameters for this function. To 
+use your target table produced in the previous step, alter the value in the 
+'targTable' option to the path of your target table. Similarly replaced the 
+path to the directory of your own mzXML files in filePaths (set as 
+"Users/Documents/mzXMLfiles" here.
+```{r, quiet=T, eval =T}
+
+adductQuant(nCores=4, targTable=paste0(system.file("extdata", 
+package = "adductomicsR"),'/exampletargTable2.csv'), intStdRtDrift=30, 
+rtDevModels=paste0(system.file("extdata", package = "adductData"),
+'/rtDevModels.RData'),
+filePaths=list.files(system.file("extdata", package = "adductData"),
+    pattern=".mzXML", all.files=FALSE,full.names=TRUE),
+quantObject=NULL,indivAdduct=NULL,maxPpm=5,minSimScore=0.8,spikeScans=1,
+minPeakHeight=100,maxRtDrift=20,maxRtWindow=240,isoWindow=80,
+hkPeptide='LVNEVTEFAK', gaussAlpha=16)
+
+```
+
+# Extract the results from the adductQuantif Object
+It is recommended that spectra for each of the adducts found are checked 
+manually using LC-MS software, either at this step or before quantification. 
+
+To load your adductquantif object set the path to the file on your system. In 
+the example it assumes the file is present in your working directory.
+```{r, quiet=T, eval =T}
+#load the adductquantif object saved in the working directory by the 
+#adductQuant function 
+
+load("adductQuantResults.Rdata")
+
+#produce a peakTable from the adductquantif object and save to the home
+#directory
+
+outputPeakTable(object=object, outputDir="~")
+```
+
+# Filter the results from the peak area table
+Mass spectrometry data is inherently noisy, and the filterAdductTable() 
+function will filter out samples and adducts based on set thresholds. It is 
+recommended to use this filter function to remove adducts that have many 
+missing values and samples where the housekeeping peptide is weak, suggestive 
+of misintegration. Substitute the name of the peaklist file with the path and 
+the name of your peaklist file produced in the previous step (note that we set 
+the previous step to save this file to your home directory).
+
+```{r, quiet=T, eval=T}
+filterAdductTable(paste0("~/adductQuantif_peakList_", Sys.Date(), ".csv"))
+```
+
+```{r, quiet=T, eval=T}
+
+#clean up intermediate files within data package to run the vignette
+#remove testing files
+
+MS2Dir = system.file("extdata", package = "adductData")
+
+fn <- paste0(MS2Dir,"/rtDevModels.RData")
+if (file.exists(fn)) file.remove(fn)   
+    
+fn2 <- paste0(system.file("extdata", 
+package = "adductomicsR"),'/allResults_ALVLIAFAQYLQQCPFEDHVK_',
+gsub('-', '', Sys.Date()), '.csv')
+if (file.exists(fn2)) file.remove(fn2)       
+
+fn3 <- paste0(system.file("extdata", 
+package = "adductomicsR"),'/adductQuantResults.Rdata')
+if (file.exists(fn3)) file.remove(fn3) 
+
+fn4 <- paste0(system.file("vignettes", 
+package = "adductomicsR"),
+'/allResults_ALVLIAFAQYLQQCPFEDHVK_adductQuantif_peakList_',
+Sys.Date(), '_filtered.csv')
+if (file.exists(fn4)) file.remove(fn4)  
+
+
+#session info
+sessionInfo()
+```
