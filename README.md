@@ -58,7 +58,7 @@ A plot of the adjusted retention time for each retention time (seconds) of this 
 
 This function produces an MS2 plot for each adduct in each scan. This is saved in the mzXML directory in a separate directory for each sample ending in _adductID. These should be used to visually inspect 2-3 plots for each adduct group identified to remove false positives. A plot of the model spectrum provided is also saved in the mzXML directory for comparison. An example plot for adduct A40 from dataset https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5555296/ is shown below.
 
-![example_MS2](https://github.com/JosieLHayes/adductomicsR/blob/master/inst/extdata/ORB35018.mzXML%20scan%201616%20M870.4355_RT26.39%20dp%200.97%20varPeakDet%208.png)
+![example_MS2](https://github.com/JosieLHayes/adductomicsR/blob/master/inst/extdata/ORB35018.mzXMLscan1485M798.0402_RT24.52dp0.8varPeakDet5.png)
 
 In addition a plot of the mass-to-charge vs the RT and adjusted RT is produced by this function. Each group, assigned using the grouping thresholds the user provided) is colored differently. These plots are provided within the mzXML directory in a directory labeled spectrumGroups_[peptide]. The plot of all groups for the dataset https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5555296/ is shown below. This shows that some groups, such as those at m/z 850, should be merged into one group as they represent tails of the same peak.
 
