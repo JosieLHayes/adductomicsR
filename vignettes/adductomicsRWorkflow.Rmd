@@ -17,32 +17,26 @@ later.
 
 ```{r, eval=F}
 #ensure you have mzR installed
-source("https://bioconductor.org/biocLite.R")
-biocLite("mzR")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("mzR", version = "3.8")
 ```
-
-Note that if you receive an error "fatal error: netcdf.h" in installing mzR,
-homebrew has not been able to install netcdf. 
-To install mzR download it from
-https://github.com/Unidata/netcdf-c/releases/v4.4.1.1 
-(using configure, make, make install) and then install mzR again.
 
 ```{r, eval=F}
 # install the package directly from Github
 library(devtools)
 devtools::install_github("JosieLHayes/adductomicsR")
 
-#install the data package to run the vignette by downloading the tarball 
-#at:https://berkeley.box.com/s/titfjzlwhqmmjjwm9pw9uqv3ahpzotxm
-#then installing the package (change the path to the file on your computer)
-install.packages(path_to_file/adductData_0.3.0.tar.gz,
-                 repos = NULL, type="source")
+#install the data package containing the data 
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("ExperimentHub", version = "3.9")
 
 ```
 
 ```{r, eval=F}
 
-#or download the package and install from source
+#or download the packages and install from source
 
 library(devtools)
 devtools::install("path_to_dir/adductomicsR")
@@ -58,16 +52,16 @@ this line of code into the R console and hitting enter:
 # load the package
 library(adductomicsR)
 library(adductData)
+library(ExperimentHub)
 ```
 
 ```{r, echo=F}
 suppressMessages(suppressWarnings(library(adductomicsR)))
+suppressMessages(suppressWarnings(library(ExperimentHub)))
 
 ```
 
-We have provided 2 mzXML files for use in this vignette.
-They are available using this path:
-system.file("extdata", package = "adductomicsR")
+We have provided 2 mzXML files for use in this vignette in adductData.
 
 # Preparation of the data
 Mass drift correction: Usually mass drift is corrected using lock masses on
@@ -92,11 +86,16 @@ system.file("extdata", package = "adductomicsR")
 These files will be used in this vignette automatically.
 
 ```{r, quiet=T, eval=T}
+#download the data from ExperimentHub for adductData
+eh  = ExperimentHub()
+temp = query(eh, 'adductData')
+temp[['EH1957']]
+file.rename(file.path(hubCache(temp),'1957'), file.path(hubCache(temp),
+                                                        'ORB35017.mzXML'))
+temp[['EH1958']]
 
-rtDevModelling(MS2Dir = system.file("extdata", package = "adductData"), 
-nCores=4, runOrder = paste0(system.file("extdata", package = "adductomicsR"),
-'/runOrder.csv'))
-
+rtDevModelling(MS2Dir = hubCache(temp), nCores=4, runOrder = paste0(system.file(
+  "extdata", package = "adductomicsR"),'/runOrder.csv'))
 ```
 
 # Identify adducts
@@ -113,9 +112,9 @@ based on the raw RT and adjusted RT. These plots can be used to determine
 whether multiple groups pertain to the same peak.
     
 ```{r, quiet=T, eval=T}
-specSimPepId(MS2Dir = system.file("extdata", package = "adductData"),
-nCores=4, rtDevModels = paste0(system.file("extdata", package
-= "adductData"),'/rtDevModels.RData'))
+specSimPepId(MS2Dir = hubCache(temp),nCores=4, rtDevModels =
+               paste0(system.file("extdata", package=
+                                    "adductData"),'/rtDevModels.RData'))
 ```
 
 # Generate a target table for quantification
@@ -127,8 +126,7 @@ your allResults file from the previous step.
 ```{r, quiet=T, eval=T}
 
 generateTargTable(allresultsFile=paste0(system.file("extdata", package =
-"adductData"),'/allResults_ALVLIAFAQYLQQCPFEDHVK_',
-gsub('-', '', Sys.Date()), '.csv'),
+"adductomicsR"),'allResults_ALVLIAFAQYLQQCPFEDHVK_example.csv'),
 csvDir=getwd())
 ```
 
@@ -144,12 +142,13 @@ use your target table produced in the previous step, alter the value in the
 path to the directory of your own mzXML files in filePaths (set as 
 "Users/Documents/mzXMLfiles" here.
 ```{r, quiet=T, eval =T}
+#get example rtDevModels file from ExperimentHub
+temp[['EH1960']]
 
 adductQuant(nCores=4, targTable=paste0(system.file("extdata", 
 package = "adductomicsR"),'/exampletargTable2.csv'), intStdRtDrift=30, 
-rtDevModels=paste0(system.file("extdata", package = "adductData"),
-'/rtDevModels.RData'),
-filePaths=list.files(system.file("extdata", package = "adductData"),
+rtDevModels= file.path(hubCache(temp),'1960'),
+filePaths=list.files(hubCache(temp),
     pattern=".mzXML", all.files=FALSE,full.names=TRUE),
 quantObject=NULL,indivAdduct=NULL,maxPpm=5,minSimScore=0.8,spikeScans=1,
 minPeakHeight=100,maxRtDrift=20,maxRtWindow=240,isoWindow=80,
@@ -188,32 +187,7 @@ the previous step to save this file to your home directory).
 filterAdductTable(paste0("~/adductQuantif_peakList_", Sys.Date(), ".csv"))
 ```
 
-```{r, quiet=T, eval=T}
-
-#clean up intermediate files within data package to run the vignette
-#remove testing files
-
-MS2Dir = system.file("extdata", package = "adductData")
-
-fn <- paste0(MS2Dir,"/rtDevModels.RData")
-if (file.exists(fn)) file.remove(fn)   
-    
-fn2 <- paste0(system.file("extdata", 
-package = "adductomicsR"),'/allResults_ALVLIAFAQYLQQCPFEDHVK_',
-gsub('-', '', Sys.Date()), '.csv')
-if (file.exists(fn2)) file.remove(fn2)       
-
-fn3 <- paste0(system.file("extdata", 
-package = "adductomicsR"),'/adductQuantResults.Rdata')
-if (file.exists(fn3)) file.remove(fn3) 
-
-fn4 <- paste0(system.file("vignettes", 
-package = "adductomicsR"),
-'/allResults_ALVLIAFAQYLQQCPFEDHVK_adductQuantif_peakList_',
-Sys.Date(), '_filtered.csv')
-if (file.exists(fn4)) file.remove(fn4)  
-
-
+ 
 #session info
 sessionInfo()
 ```
