@@ -6,7 +6,7 @@ Date: 2018-07-02
 Author: Josie Hayes <jlhayes1982@gmail.com>
 Maintainer: Josie Hayes <jlhayes1982@gmail.com>
 Description: Processes MS2 data to identify potentially adducted peptides from spectra that has been corrected for mass drift and retention time drift and quantifies MS1 level mass spectral peaks. 
-Depends: R (>= 3.5),
+Depends: R (>= 3.6),
     adductData,
     ExperimentHub 
 Imports: parallel (>= 3.3.2),
@@ -37,7 +37,8 @@ Imports: parallel (>= 3.3.2),
 License: Artistic-2.0
 LazyData: false
 LazyLoad: false
-biocViews: MassSpectrometry, Metabolomics, Software
+biocViews: MassSpectrometry,Metabolomics,Software,ThirdPartyClient,DataImport,
+ GUI
 RoxygenNote: 6.1.0
 Suggests: knitr (>= 1.15.1),
 	rmarkdown (>= 1.5),
