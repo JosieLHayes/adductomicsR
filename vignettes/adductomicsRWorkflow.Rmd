@@ -100,8 +100,8 @@ file.rename(file.path(hubCache(temp),'1958'), file.path(hubCache(temp),
 
 ```{r, quiet=TRUE, eval=TRUE}
 rtDevModelling(MS2Dir = hubCache(temp), nCores=4, runOrder =
-                 paste0(system.file("extdata", package =
-                                      "adductomicsR"),'/runOrder.csv'))
+    paste0(system.file("extdata", package =
+    "adductomicsR"),'/runOrder.csv'))
 ```
 
 # Identify adducts
@@ -119,7 +119,7 @@ whether multiple groups pertain to the same peak.
     
 ```{r, quiet=TRUE, eval=TRUE}
 specSimPepId(MS2Dir = hubCache(temp),nCores=4, rtDevModels =
-               paste0(hubCache(temp),'/rtDevModels.RData'))
+    paste0(hubCache(temp),'/rtDevModels.RData'))
 ```
 
 # Generate a target table for quantification
@@ -174,7 +174,8 @@ load("adductQuantResults.Rdata")
 #produce a peakTable from the adductquantif object and save to the home
 #directory
 
-suppressMessages(suppressWarnings(outputPeakTable(object=object, outputDir="~")))
+suppressMessages(suppressWarnings(outputPeakTable(object=
+    object, outputDir="~")))
 ```
 
 # Filter the results from the peak area table
@@ -190,7 +191,7 @@ the previous step to save this file to your home directory).
 filterAdductTable(paste0("~/adductQuantif_peakList_", Sys.Date(), ".csv"))
 ```
 
- 
+```{r, quiet=TRUE, eval=TRUE, error=TRUE}
 #session info
 sessionInfo()
 ```
