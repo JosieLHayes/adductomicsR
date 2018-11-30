@@ -11,8 +11,10 @@
 #'The peak table is also returned to
 #'the R session and can be assigned to an object.
 #'@usage outputPeakTable(object = NULL, outputDir = NULL)
-#'@examples outputPeakTable(object=get(load(paste0(system.file("extdata", 
-#'package= "adductData"), '/adductQuantResults.Rdata'))))
+#'@examples
+#'\dontrun{
+#'outputPeakTable(object=get(load(paste0(system.file("extdata", 
+#'package= "adductData"), '/adductQuantResults.Rdata'))))}
 #'@export
 outputPeakTable <- function(object = NULL, outputDir = NULL) {
     if (is.null(object)) {
