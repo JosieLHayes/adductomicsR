@@ -41,7 +41,14 @@
 #' \code{\link{dynamicNoiseFilter}} and identifies precursor ion charge state,
 #' by isotopic pattern.
 #' \examples{
-#' \dontrun{
+#' eh = ExperimentHub();
+#' temp = query(eh, 'adductData');
+#' temp[['EH1957']]; #first mzXML file
+#' file.rename(file.path(hubCache(temp),'1957'), file.path(hubCache(temp), 
+#' 'ORB35017.mzXML'));
+#' temp[['EH1958']]; #second mzXML file
+#' file.rename(file.path(hubCache(temp),'1958'), file.path(hubCache(temp),
+#' 'ORB35022.mzXML'));
 #' adductSpecGen(mzXmlDir=system.file("extdata", package = 
 #' "adductData"), runOrder=paste0(system.file("extdata", package = 
 #' "adductomicsR"),'/runOrder.csv'), nCores=4, 
@@ -50,7 +57,7 @@
 #' 1337.79,1465.85), TICfilter=10000, DNF=2, minInt=300, 
 #' minPeaks=5,intStd_MaxMedRtDrift=360, 
 #' intStd_MaxPpmDev=200,minSpecEx=40,outputPlotDir=NULL)
-#' }}
+#' }
 #' @return adductSpec object
 #' @export
 adductSpecGen <- function(mzXmlDir=NULL, runOrder=NULL, nCores=NULL,
