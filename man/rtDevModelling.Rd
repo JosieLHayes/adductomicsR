@@ -91,7 +91,7 @@ adductomicsR
 \examples{
 eh = ExperimentHub();
 temp = query(eh, 'adductData');
-rtDevModelling(MS2Dir=hubCache(temp),nCores=1,runOrder=paste0(
+rtDevModelling(MS2Dir=hubCache(temp),runOrder=paste0(
 system.file("extdata",package="adductomicsR"),
 '/runOrder.csv'))
 }

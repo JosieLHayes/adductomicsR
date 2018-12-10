@@ -74,7 +74,7 @@ to RT correction model and quantifies peaks.
 \examples{
 eh = ExperimentHub();
 temp = query(eh, 'adductData');
-adductQuant(nCores=1, targTable=paste0(system.file("extdata", 
+adductQuant(targTable=paste0(system.file("extdata", 
 package = "adductomicsR"),'/exampletargTable2.csv'), intStdRtDrift=30, 
 rtDevModels=paste0(hubCache(temp),"/rtDevModels.RData"),
 filePaths=list.files(hubCache(temp),pattern=".mzXML", all.files=FALSE,

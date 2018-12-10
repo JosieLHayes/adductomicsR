@@ -53,8 +53,8 @@
 #' deviation model be saved (TRUE = 1) or the adductSpec class object 
 #'(FALSE = 0) as .RData workspace files.
 #' @examples
-#' rtDevModelling(MS2Dir=paste0(system.file("extdata",package="adductData"),
-#''/'),nCores=4,runOrder=paste0(system.file("extdata",package="adductomicsR"),
+#' rtDevModelling(MS2Dir=hubCache(temp),nCores=4,runOrder=paste0(
+#' system.file("extdata",package="adductomicsR"),
 #' '/runOrder.csv'))
 #' @return LOESS RT models as adductSpectra adductSpec object
 #' @import adductData

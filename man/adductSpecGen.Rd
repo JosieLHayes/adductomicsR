@@ -81,7 +81,7 @@ file.rename(file.path(hubCache(temp),'1958'), file.path(hubCache(temp),
 'ORB35022.mzXML'));
 adductSpecGen(mzXmlDir=hubCache(temp), 
 runOrder=paste0(system.file("extdata", package = 
-"adductomicsR"),'/runOrder.csv'), nCores=1, 
+"adductomicsR"),'/runOrder.csv'),
 intStdMass=834.77692,intStdPeakList=c(290.21, 403.30, 516.38, 
 587.42,849.40, 884.92, 958.46, 993.97,1050.52, 1107.06, 1209.73, 
 1337.79,1465.85), TICfilter=10000, DNF=2, minInt=300, 
