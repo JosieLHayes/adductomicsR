@@ -60,7 +60,7 @@
 #' }
 #' @return adductSpec object
 #' @export
-adductSpecGen <- function(mzXmlDir=NULL, runOrder=NULL, nCores=nCores =     
+adductSpecGen <- function(mzXmlDir=NULL, runOrder=NULL, nCores=     
         parallel::detectCores(),
         intStdMass=834.77692,intStdPeakList=c(290.21, 403.30, 516.38,
         587.42,849.40, 884.92, 958.46, 993.97,1050.52, 1107.06, 1209.73,

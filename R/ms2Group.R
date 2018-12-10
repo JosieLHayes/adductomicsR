@@ -25,7 +25,7 @@
 #' adjPrecursorMZ = TRUE)
 #' @param adjPrecursorMZ logical for precursor mass:charge adjustment
 #'
-ms2Group <- function(adductSpectra = NULL, nCores = NULL, 
+ms2Group <- function(adductSpectra = NULL, nCores = parallel::detectCores(), 
 maxRtDrift = NULL, ms1mzError = 0.1, 
 ms2mzError = 1, dotProdClust = TRUE, minDotProd = 0.8, 
 fclustMethod = "median", 
