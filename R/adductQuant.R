@@ -71,7 +71,7 @@
 #'maxRtWindow = 120, isoWindow = 80, 
 #'hkPeptide = "LVNEVTEFAK", gaussAlpha = 16)
 #'@export 
-adductQuant <- function(nCores = nCores = parallel::detectCores(),
+adductQuant <- function(nCores = parallel::detectCores(),
 targTable = NULL, 
 intStdRtDrift = NULL, rtDevModels = NULL, 
 filePaths = NULL, quantObject = NULL, indivAdduct = NULL, maxPpm = 4,
