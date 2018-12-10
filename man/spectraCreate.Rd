@@ -29,7 +29,9 @@ list of MS2 spectra
 Deconvolute both MS2 and MS1 levels scans adductomics
 }
 \examples{
-spectraCreate(MS2file = paste0(system.file("extdata", package = 
-"adductData"),'/ORB35017.mzXML'), TICfilter = 10000, DNF= 2, minInt =
+eh = ExperimentHub();
+temp = query(eh, 'adductData');
+spectraCreate(MS2file = hubCache(temp),'/ORB35017.mzXML'),
+TICfilter = 10000, DNF= 2, minInt =
 100, minPeaks = 5)
 }

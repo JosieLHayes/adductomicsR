@@ -88,8 +88,11 @@ must have .mzXML to be recognized by the package so they are renamed as
 well.
 
 ```{r, quiet=TRUE, eval=TRUE, error = TRUE}
-eh  = suppressMessages(suppressWarnings(ExperimentHub()))
-temp = suppressMessages(suppressWarnings(query(eh, 'adductData')))
+eh  = suppressMessages(suppressWarnings(ExperimentHub::ExperimentHub()))
+temp = suppressMessages(suppressWarnings(AnnotationHub::query(eh, 'adductData')))
+```
+
+```{r, quiet=TRUE, eval=FALSE, error = TRUE}
 suppressMessages(suppressWarnings(temp[['EH1957']])) #first mzXML file
 file.rename(file.path(hubCache(temp),'1957'), file.path(hubCache(temp),
                                                         'ORB35017.mzXML'))

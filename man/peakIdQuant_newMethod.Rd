@@ -58,8 +58,8 @@ of smoother package. If supplied gaussian smoothing will be performed
 list
 }
 \description{
-peak must be at least 50% resolved from overlapping peaks. 
+peak must be at least 50 percent resolved from overlapping peaks. 
 i.e. the peaks trough
-must be at least 50% of the peak apex intensity for the peak to be 
+must be at least 50 percent of the peak apex intensity for the peak to be 
 considered sufficiently resolved.
 }

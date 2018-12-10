@@ -73,14 +73,24 @@ to RT correction model and quantifies peaks.
 }
 \examples{
 \dontrun{
-adductQuant(nCores=4, targTable=paste0(system.file("extdata", 
+eh = ExperimentHub();
+temp = query(eh, 'adductData');
+temp[['EH1957']]; #first mzXML file
+file.rename(file.path(hubCache(temp),'1957'), file.path(hubCache(temp), 
+'ORB35017.mzXML'));
+temp[['EH1958']]; #second mzXML file
+file.rename(file.path(hubCache(temp),'1958'), file.path(hubCache(temp),
+'ORB35022.mzXML'));
+}
+eh = ExperimentHub();
+temp = query(eh, 'adductData');
+adductQuant(nCores=1, targTable=paste0(system.file("extdata", 
 package = "adductomicsR"),'/exampletargTable2.csv'), intStdRtDrift=30, 
 rtDevModels=system.file("extdata", "rtDevModels.RData", package =
 "adductData"),
-filePaths=list.files(system.file("extdata", package =
-"adductData"),pattern=".mzXML", all.files=FALSE,full.names=TRUE),
-quantObject=NULL,indivAdduct=NULL,maxPpm=5,minSimScore=0.8,spikeScans=1,
+filePaths=list.files(hubCache(temp),pattern=".mzXML", all.files=FALSE,
+full.names=TRUE),quantObject=NULL,
+indivAdduct=NULL,maxPpm=5,minSimScore=0.8,spikeScans=1,
 minPeakHeight=100,maxRtDrift=20,maxRtWindow=240,isoWindow=80,
 hkPeptide='LVNEVTEFAK', gaussAlpha=16)
-}
 }
