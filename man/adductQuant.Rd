@@ -4,7 +4,7 @@
 \alias{adductQuant}
 \title{Adduct quantification for adductomicsR}
 \usage{
-adductQuant(nCores = NULL, targTable = NULL, 
+adductQuant(nCores = parallel::detectCores(), targTable = NULL, 
 intStdRtDrift = NULL, rtDevModels = NULL, 
 filePaths = NULL, quantObject = NULL, indivAdduct = NULL, maxPpm = 4,
 minSimScore = 0.8, spikeScans = 2, minPeakHeight = 100, maxRtDrift = 20,
@@ -74,7 +74,7 @@ to RT correction model and quantifies peaks.
 \examples{
 eh = ExperimentHub();
 temp = query(eh, 'adductData');
-adductQuant(targTable=paste0(system.file("extdata", 
+adductQuant(nCores=2, targTable=paste0(system.file("extdata", 
 package = "adductomicsR"),'/exampletargTable2.csv'), intStdRtDrift=30, 
 rtDevModels=paste0(hubCache(temp),"/rtDevModels.RData"),
 filePaths=list.files(hubCache(temp),pattern=".mzXML", all.files=FALSE,

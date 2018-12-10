@@ -5,7 +5,7 @@
 \title{Constructor of adductSpec object deconvolute spectra 
 MS2 and MS1 levels}
 \usage{
-adductSpecGen(mzXmlDir=NULL, runOrder=NULL, nCores=NULL,
+adductSpecGen(mzXmlDir=NULL, runOrder=NULL, nCores=parallel::detectCores(),
 intStdMass=834.77692,intStdPeakList=c(290.21, 403.30, 516.38,
 587.42,849.40, 884.92, 958.46, 993.97,1050.52, 1107.06, 1209.73,
 1337.79,1465.85),TICfilter=10000, DNF=2, minInt=300,
