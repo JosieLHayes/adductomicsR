@@ -86,8 +86,7 @@ eh = ExperimentHub();
 temp = query(eh, 'adductData');
 adductQuant(nCores=1, targTable=paste0(system.file("extdata", 
 package = "adductomicsR"),'/exampletargTable2.csv'), intStdRtDrift=30, 
-rtDevModels=system.file("extdata", "rtDevModels.RData", package =
-"adductData"),
+rtDevModels=paste0(hubCache(temp),"/rtDevModels.RData"),
 filePaths=list.files(hubCache(temp),pattern=".mzXML", all.files=FALSE,
 full.names=TRUE),quantObject=NULL,
 indivAdduct=NULL,maxPpm=5,minSimScore=0.8,spikeScans=1,
