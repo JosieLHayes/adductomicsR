@@ -89,7 +89,8 @@ well.
 
 ```{r, quiet=TRUE, eval=TRUE, error = TRUE}
 eh  = suppressMessages(suppressWarnings(ExperimentHub::ExperimentHub()))
-temp = suppressMessages(suppressWarnings(AnnotationHub::query(eh, 'adductData')))
+temp = suppressMessages(suppressWarnings(
+AnnotationHub::query(eh, 'adductData')))
 ```
 
 ```{r, quiet=TRUE, eval=FALSE, error = TRUE}

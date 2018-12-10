@@ -142,5 +142,6 @@ identification for adductomicsR
 \examples{
 eh = ExperimentHub();
 temp = query(eh, 'adductData');
-specSimPepId(MS2Dir=hubCache(temp),nCores=1,rtDevModels=paste0(hubCache(temp),'/rtDevModels.RData'))
+specSimPepId(MS2Dir=hubCache(temp),nCores=1,
+rtDevModels=paste0(hubCache(temp),'/rtDevModels.RData'))
 }

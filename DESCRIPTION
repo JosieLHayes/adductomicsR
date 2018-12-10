@@ -1,14 +1,14 @@
 Package: adductomicsR
 Type: Package
 Title: Processing of adductomic mass spectral datasets
-Version: 0.99.14
+Version: 0.99.15
 Date: 2018-12-10
 Author: Josie Hayes <jlhayes1982@gmail.com>
 Maintainer: Josie Hayes <jlhayes1982@gmail.com>
 Description: Processes MS2 data to identify potentially adducted peptides from spectra that has been corrected for mass drift and retention time drift and quantifies MS1 level mass spectral peaks. 
 Depends: R (>= 3.6),
     adductData,
-    ExperimentHub
+    ExperimentHub,
     AnnotationHub 
 Imports: parallel (>= 3.3.2),
 	data.table (>= 1.10.4),

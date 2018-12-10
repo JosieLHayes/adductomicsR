@@ -72,16 +72,6 @@ reads mzXML files from a directory, corrects RT according
 to RT correction model and quantifies peaks.
 }
 \examples{
-\dontrun{
-eh = ExperimentHub();
-temp = query(eh, 'adductData');
-temp[['EH1957']]; #first mzXML file
-file.rename(file.path(hubCache(temp),'1957'), file.path(hubCache(temp), 
-'ORB35017.mzXML'));
-temp[['EH1958']]; #second mzXML file
-file.rename(file.path(hubCache(temp),'1958'), file.path(hubCache(temp),
-'ORB35022.mzXML'));
-}
 eh = ExperimentHub();
 temp = query(eh, 'adductData');
 adductQuant(nCores=1, targTable=paste0(system.file("extdata", 
