@@ -4,7 +4,8 @@
 \alias{ms2Group}
 \title{group MS/MS precursor masses}
 \usage{
-ms2Group(adductSpectra = NULL, nCores = parallel::detectCores(), maxRtDrift = NULL, 
+ms2Group(adductSpectra = NULL, nCores = parallel::detectCores(), 
+maxRtDrift = NULL, 
 ms1mzError = 0.1, ms2mzError = 1, dotProdClust = TRUE, minDotProd = 0.8,
 fclustMethod = "median", disMetric = "euclidean", compSpecGen = TRUE,
 adjPrecursorMZ = TRUE)

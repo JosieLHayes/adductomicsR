@@ -150,7 +150,7 @@ use your target table produced in the previous step, alter the value in the
 'targTable' option to the path of your target table. Similarly replaced the 
 path to the directory of your own mzXML files in filePaths (set as 
 "Users/Documents/mzXMLfiles" here.
-```{r, quiet=TRUE, eval =TRUE}
+```{r, quiet=TRUE, eval =FALSE}
 
 adductQuant(nCores=4, targTable=paste0(system.file("extdata", 
 package = "adductomicsR"),'/exampletargTable2.csv'), intStdRtDrift=30, 
@@ -169,7 +169,7 @@ manually using LC-MS software, either at this step or before quantification.
 
 To load your adductquantif object set the path to the file on your system. In 
 the example it assumes the file is present in your working directory.
-```{r, quiet=TRUE, eval =TRUE, error=TRUE}
+```{r, quiet=TRUE, eval =FALSE, error=TRUE}
 #load the adductquantif object saved in the working directory by the 
 #adductQuant function 
 
@@ -191,7 +191,7 @@ of misintegration. Substitute the name of the peaklist file with the path and
 the name of your peaklist file produced in the previous step (note that we set 
 the previous step to save this file to your home directory).
 
-```{r, quiet=TRUE, eval=TRUE, error=TRUE}
+```{r, quiet=TRUE, eval=FALSE, error=TRUE}
 filterAdductTable(paste0("~/adductQuantif_peakList_", Sys.Date(), ".csv"))
 ```
 
