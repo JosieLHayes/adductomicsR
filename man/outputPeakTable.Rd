@@ -25,5 +25,6 @@ the R session and can be assigned to an object.
 output peak table from adductQuantif object
 }
 \examples{
-outputPeakTable(object= paste0(system.file("extdata", package = "adductData"),'/adductQuantResults.Rdata'))
+outputPeakTable(object= paste0(system.file("extdata", 
+package = "adductomicR"),'/adductQuantResults.Rdata'))
 }
