@@ -79,7 +79,7 @@ file.rename(file.path(hubCache(temp),'1957'), file.path(hubCache(temp),
 temp[['EH1958']]; #second mzXML file
 file.rename(file.path(hubCache(temp),'1958'), file.path(hubCache(temp),
 'ORB35022.mzXML'));
-adductSpecGen(mzXmlDir=hubCache(temp), 
+adductSpecGen(nCores=2, mzXmlDir=hubCache(temp), 
 runOrder=paste0(system.file("extdata", package = 
 "adductomicsR"),'/runOrder.csv'),
 intStdMass=834.77692,intStdPeakList=c(290.21, 403.30, 516.38, 
