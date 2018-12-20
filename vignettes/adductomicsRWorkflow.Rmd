@@ -93,7 +93,7 @@ temp = suppressMessages(suppressWarnings(
 AnnotationHub::query(eh, 'adductData')))
 ```
 
-```{r, quiet=TRUE, eval=FALSE, error = TRUE}
+```{r, quiet=TRUE, eval=TRUE, error = TRUE}
 suppressMessages(suppressWarnings(temp[['EH1957']])) #first mzXML file
 file.rename(file.path(hubCache(temp),'1957'), file.path(hubCache(temp),
                                                         'ORB35017.mzXML'))

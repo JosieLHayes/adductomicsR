@@ -71,14 +71,15 @@ dynamically
 by isotopic pattern.
 }
 \examples{
-eh = ExperimentHub();
-temp = query(eh, 'adductData');
-temp[['EH1957']]; #first mzXML file
-file.rename(file.path(hubCache(temp),'1957'), file.path(hubCache(temp), 
-'ORB35017.mzXML'));
-temp[['EH1958']]; #second mzXML file
-file.rename(file.path(hubCache(temp),'1958'), file.path(hubCache(temp),
-'ORB35022.mzXML'));
+eh  = suppressMessages(suppressWarnings(ExperimentHub::ExperimentHub()))
+temp = suppressMessages(suppressWarnings(
+AnnotationHub::query(eh, 'adductData')))
+suppressMessages(suppressWarnings(temp[['EH2061’]])) #first mzXML file
+file.rename(file.path(hubCache(temp),’2061’), file.path(hubCache(temp),
+'data42_21221_2.mzXML'))
+temp[['EH2062’]] #second mzXML file
+file.rename(file.path(hubCache(temp),’2062’), file.path(hubCache(temp),
+'data142_23271_2.mzXML'));
 adductSpecGen(nCores=2, mzXmlDir=hubCache(temp), 
 runOrder=paste0(system.file("extdata", package = 
 "adductomicsR"),'/runOrder.csv'),
