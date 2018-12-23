@@ -76,11 +76,11 @@ ExperimentHub::ExperimentHub()));
 temp = suppressMessages(suppressWarnings(
 AnnotationHub::query(eh, 'adductData')));
 suppressMessages(suppressWarnings(temp[['EH2061']]))
-file.rename(file.path(hubCache(temp),'2061'), 
-file.path(hubCache(temp),'data42_21221_2.mzXML');
-suppressMessages(suppressWarnings(temp[['EH2062’]]));
-file.rename(file.path(hubCache(temp),'2062'), 
-file.path(hubCache(temp),'data142_23271_2.mzXML');
+file.rename(file.path(hubCache(temp),'2061'
+),file.path(hubCache(temp),'data42_21221_2.mzXML'));
+suppressMessages(suppressWarnings(temp[['EH2062']]));
+file.rename(file.path(hubCache(temp),'2062'
+),file.path(hubCache(temp),'data142_23271_2.mzXML'));
 adductSpecGen(nCores=2, mzXmlDir=hubCache(temp), 
 runOrder=paste0(system.file("extdata", package =
 "adductomicsR"),'/runOrder2.csv'),

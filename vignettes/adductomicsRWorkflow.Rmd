@@ -136,7 +136,7 @@ your allResults file from the previous step.
 
 generateTargTable(allresultsFile=paste0(system.file("extdata", package =
 "adductomicsR"),'/allResults_ALVLIAFAQYLQQCPFEDHVK_example.csv'),
-csvDir=getwd())
+csvDir=tempdir(check = FALSE))
 ```
 
 It is recommended that the allGroups plot ( m/z vs RT) is used to ensure that 
@@ -175,11 +175,11 @@ the example it assumes the file is present in your working directory.
 
 load("adductQuantResults.Rdata")
 
-#produce a peakTable from the adductquantif object and save to the home
+#produce a peakTable from the adductquantif object and save to a temporary
 #directory
 
 suppressMessages(suppressWarnings(outputPeakTable(object=
-    object, outputDir="~")))
+    object, outputDir=tempdir(check = FALSE))))
 ```
 
 # Filter the results from the peak area table
@@ -192,7 +192,7 @@ the name of your peaklist file produced in the previous step (note that we set
 the previous step to save this file to your home directory).
 
 ```{r, quiet=TRUE, eval=FALSE, error=TRUE}
-filterAdductTable(paste0("~/adductQuantif_peakList_", Sys.Date(), ".csv"))
+filterAdductTable(paste0(tempdir(check = FALSE),"/adductQuantif_peakList_", Sys.Date(), ".csv"))
 ```
 
 ```{r, quiet=TRUE, eval=TRUE, error=TRUE}
