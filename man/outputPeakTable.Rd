@@ -27,5 +27,5 @@ output peak table from adductQuantif object
 \examples{
 eh = ExperimentHub();
 Temp = query(eh, c("adductData", "adductQuant", "Rda"))[[1]];
-outputPeakTable(object=temp)
+outputPeakTable(object=Temp)
 }
