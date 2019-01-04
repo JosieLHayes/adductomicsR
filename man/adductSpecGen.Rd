@@ -71,7 +71,6 @@ dynamically
 by isotopic pattern.
 }
 \examples{
-\dontrun{
 eh  = suppressMessages(suppressWarnings(
 ExperimentHub::ExperimentHub()));
 temp = suppressMessages(suppressWarnings(
@@ -90,4 +89,4 @@ intStdMass=834.77692,intStdPeakList=c(290.21, 403.30, 516.38,
 1337.79,1465.85), TICfilter=10000, DNF=2, minInt=300, 
 minPeaks=5,intStd_MaxMedRtDrift=360, 
 intStd_MaxPpmDev=200,minSpecEx=40,outputPlotDir=NULL)
-}}
+}
