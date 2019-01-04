@@ -25,6 +25,7 @@ the R session and can be assigned to an object.
 output peak table from adductQuantif object
 }
 \examples{
+eh = ExperimentHub();
 Temp = query(eh, c("adductData", "adductQuant", "Rda"))[[1]];
 outputPeakTable(object=temp)
 }
