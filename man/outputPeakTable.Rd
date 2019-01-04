@@ -25,7 +25,6 @@ the R session and can be assigned to an object.
 output peak table from adductQuantif object
 }
 \examples{
-\dontrun{
-outputPeakTable(object= paste0(system.file("extdata", 
-package = "adductomicsR"),'/adductQuantResults.Rda'))
-}}
+Temp = query(eh, c("adductData", "adductQuant", "Rda"))[[1]];
+outputPeakTable(object=temp)
+}
