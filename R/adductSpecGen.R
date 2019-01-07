@@ -59,7 +59,6 @@
 #' intStd_MaxPpmDev=200,minSpecEx=40,outputPlotDir=NULL)
 #' }
 #' @return adductSpec object
-#' @export
 adductSpecGen <- function(mzXmlDir=NULL, runOrder=NULL, nCores=     
         parallel::detectCores(),
         intStdMass=834.77692,intStdPeakList=c(290.21, 403.30, 516.38,

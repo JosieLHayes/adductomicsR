@@ -78,7 +78,7 @@ adductQuant(nCores=2, targTable=paste0(system.file("extdata",
 package = "adductomicsR"),'/exampletargTable2.csv'), intStdRtDrift=30, 
 rtDevModels=paste0(hubCache(temp),"/rtDevModels.RData"),
 filePaths=list.files(hubCache(temp),pattern=".mzXML", all.files=FALSE,
-full.names=TRUE),quantObject=NULL,
+full.names=TRUE)[1],quantObject=NULL,
 indivAdduct=NULL,maxPpm=5,minSimScore=0.8,spikeScans=1,
 minPeakHeight=100,maxRtDrift=20,maxRtWindow=240,isoWindow=80,
 hkPeptide='LVNEVTEFAK', gaussAlpha=16)

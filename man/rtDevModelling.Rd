@@ -89,8 +89,13 @@ MS/MS spectrum grouping and retention time deviation modelling for
 adductomicsR
 }
 \examples{
-eh = ExperimentHub();
-temp = query(eh, 'adductData');
+eh  = suppressMessages(suppressWarnings(
+ExperimentHub::ExperimentHub()));
+temp = suppressMessages(suppressWarnings(
+AnnotationHub::query(eh, 'adductData')));
+suppressMessages(suppressWarnings(temp[['EH2061']]))
+file.rename(file.path(hubCache(temp),'2061'
+),file.path(hubCache(temp),'data42_21221_2.mzXML'));
 rtDevModelling(MS2Dir=hubCache(temp),nCores=2,runOrder=paste0(
 system.file("extdata",package="adductomicsR"),
 '/runOrder2.csv'))
