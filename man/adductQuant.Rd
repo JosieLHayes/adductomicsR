@@ -72,6 +72,7 @@ reads mzXML files from a directory, corrects RT according
 to RT correction model and quantifies peaks.
 }
 \examples{
+\dontrun{
 eh = ExperimentHub();
 temp = query(eh, 'adductData');
 adductQuant(nCores=2, targTable=paste0(system.file("extdata", 
@@ -82,4 +83,4 @@ full.names=TRUE)[1],quantObject=NULL,
 indivAdduct=NULL,maxPpm=5,minSimScore=0.8,spikeScans=1,
 minPeakHeight=100,maxRtDrift=20,maxRtWindow=240,isoWindow=80,
 hkPeptide='LVNEVTEFAK', gaussAlpha=16)
-}
+}}
