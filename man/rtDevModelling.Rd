@@ -96,7 +96,7 @@ AnnotationHub::query(eh, 'adductData')));
 suppressMessages(suppressWarnings(temp[['EH2061']]))
 file.rename(file.path(hubCache(temp),'2061'
 ),file.path(hubCache(temp),'data42_21221_2.mzXML'));
-rtDevModelling(MS2Dir=hubCache(temp),nCores=8,runOrder=paste0(
+rtDevModelling(MS2Dir=hubCache(temp),nCores=4,runOrder=paste0(
 system.file("extdata",package="adductomicsR"),
 '/runOrder2.csv'))
 }
