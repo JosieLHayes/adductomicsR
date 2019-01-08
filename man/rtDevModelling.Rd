@@ -93,7 +93,6 @@ eh  = suppressMessages(suppressWarnings(
 ExperimentHub::ExperimentHub()));
 temp = suppressMessages(suppressWarnings(
 AnnotationHub::query(eh, 'adductData')));
-system(paste0('rm -Rf ', hubCache(temp), '/*'));
 suppressMessages(suppressWarnings(temp[['EH2061']]))
 file.rename(file.path(hubCache(temp),'2061'
 ),file.path(hubCache(temp),'data42_21221_2.mzXML'));
