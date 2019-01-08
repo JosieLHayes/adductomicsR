@@ -3,6 +3,7 @@
 export(IsotopicDistributionMod)
 export(loessWrapperMod)
 export(digestMod)
+export(findPeaks)
 export(adductQuant)
 export(filterAdductTable)
 export(generateTargTable)

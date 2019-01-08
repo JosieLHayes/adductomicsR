@@ -17,3 +17,6 @@ string of peaks
 \description{
 identifies peaks in a vector of intensities.
 }
+\examples{
+findPeaks(c(200, 300,200, 200, 200 , 300, 200), m = 3)
+}
