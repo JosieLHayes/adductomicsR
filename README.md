@@ -44,7 +44,7 @@ The *adductomicsR* workflow consists of a retention time correction step (option
 **rtDevModeling** - Performs MS/MS spectrum grouping and loess retention time deviation modeling. Requires as imput a directory path where the mzXML files are and a path to a run order file. Examples mzXML files are available at https://berkeley.box.com/s/fnhttc87v4mn1x50nvckpt99999y7uhl and an example run order file for these examples is in inst/extdata. Information on the internal standard (for Cys34 we use isotopic T3 adducted with iodoacetamide) must be provided here - a list (no white space) of expected fragment ions
 for the internal standard spectrum and the expected mass-to-charge ratio of the internal standard precursor (default = 834.77692, for Cys34)  In addition the internal standard retention time drift window (in seconds) can be specified by the user (default 200-600 ppm). 
 
-This function produces a plot for the internal standard RT, ppm difference and deviation from the median across the run order to highlight retention time drift. This plot from a previous dataset https://www.ncbi.nlm.nih.gov/pubmed/27936627 shows that towards the end of the run the retention time drops.
+This function produces a plot for the internal standard RT, ppm difference and deviation from the median across the run order to highlight retention time drift. This is a plot from a previous dataset https://www.ncbi.nlm.nih.gov/pubmed/27936627
 
 ![example_RT](https://github.com/JosieLHayes/adductomicsR/blob/master/inst/extdata/internalStandard_plots.png)
 
