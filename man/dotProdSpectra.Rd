@@ -8,7 +8,7 @@ dotProdSpectra(adductSpectra = NULL, nCores = NULL,
 minDotProdSpec = 0.8, maxGroups = 10)
 }
 \arguments{
-\item{adductSpectra}{adductSpec object}
+\item{adductSpectra}{AdductSpec object}
 
 \item{nCores}{numeric the number of cores to use for parallel computation. 
 The default is to use all available cores detected using 
@@ -20,7 +20,7 @@ the function parallel::detectCores()}
 the dendrogram.}
 }
 \value{
-adductSpectra adductSpec object
+adductSpectra AdductSpec object
 }
 \description{
 hierarchical clustering 

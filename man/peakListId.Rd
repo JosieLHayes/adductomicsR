@@ -12,7 +12,7 @@ minSpecEx = 50, maxRtDrift = 360, maxPpmDev = 200, allScans = TRUE,
 closestMassByFile = TRUE, outputPlotDir = NULL)
 }
 \arguments{
-\item{adductSpectra}{adductSpec object
+\item{adductSpectra}{AdductSpec object
 param peakList numeric vector of peak masses
 param exPeakMass numeric internal standard peak mass}
 

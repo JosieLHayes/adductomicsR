@@ -78,11 +78,11 @@ If argument is not supplied then optimal smoothing span
 is calculated for each file seperately using 7-fold CV.}
 
 \item{saveRtDev}{integer (default = 1) should just the retention time
-deviation model be saved (TRUE = 1) or the adductSpec class object 
+deviation model be saved (TRUE = 1) or the AdductSpec class object 
 (FALSE = 0) as .RData workspace files.}
 }
 \value{
-LOESS RT models as adductSpectra adductSpec object
+LOESS RT models as adductSpectra AdductSpec object
 }
 \description{
 MS/MS spectrum grouping and retention time deviation modelling for 

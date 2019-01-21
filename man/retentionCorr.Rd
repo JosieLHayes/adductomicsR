@@ -9,7 +9,7 @@ smoothingSpan = NULL, nMissing = 1,
 nExtra = 1, folds = 7, outputFileDir = NULL)
 }
 \arguments{
-\item{adductSpectra}{adductSpec object}
+\item{adductSpectra}{AdductSpec object}
 
 \item{smoothingSpan}{numeric. fixed smoothing span, argument to loess.
 If argument is not supplied then optimal smoothing span is 
@@ -40,7 +40,7 @@ for more details)}
 to save the output images}
 }
 \value{
-LOESS RT models as adductSpectra adductSpec object
+LOESS RT models as adductSpectra AdductSpec object
 }
 \description{
 loess-based retention time deviation correction

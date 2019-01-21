@@ -184,7 +184,7 @@ the example it assumes the file is present in your working directory.
 #load the adductquantif object 
 load(paste0(hubCache(temp),"/adductQuantResults.Rda"))
 
-#produce a peakTable from the adductquantif object and save to a temporary
+#produce a peakTable from the Adductquantif object and save to a temporary
 #directory
 suppressMessages(suppressWarnings(outputPeakTable(object=
     object, outputDir=tempdir(check = FALSE))))

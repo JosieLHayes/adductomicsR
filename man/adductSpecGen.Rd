@@ -2,7 +2,7 @@
 % Please edit documentation in R/adductSpecGen.R
 \name{adductSpecGen}
 \alias{adductSpecGen}
-\title{Constructor of adductSpec object deconvolute spectra 
+\title{Constructor of AdductSpec object deconvolute spectra 
 MS2 and MS1 levels}
 \usage{
 adductSpecGen(mzXmlDir=NULL, runOrder=NULL, nCores=parallel::detectCores(),
@@ -61,7 +61,7 @@ have been interpolated then reduce this value.}
 default is working directory.}
 }
 \value{
-adductSpec object
+AdductSpec object
 }
 \description{
 reads mzXML files from a directory extracts metadata info,

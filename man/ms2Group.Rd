@@ -11,7 +11,7 @@ fclustMethod = "median", disMetric = "euclidean", compSpecGen = TRUE,
 adjPrecursorMZ = TRUE)
 }
 \arguments{
-\item{adductSpectra}{adductSpec object}
+\item{adductSpectra}{AdductSpec object}
 
 \item{nCores}{numeric the number of cores to use for parallel computation. 
 The default is to use all available cores detected using the function 
