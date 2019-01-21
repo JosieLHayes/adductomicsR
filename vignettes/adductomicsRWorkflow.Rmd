@@ -180,7 +180,7 @@ manually using LC-MS software, either at this step or before quantification.
 
 To load your adductquantif object set the path to the file on your system. In 
 the example it assumes the file is present in your working directory.
-```{r, quiet=TRUE, error=TRUE}
+```{r, quiet=TRUE, eval=FALSE, error=TRUE}
 #load the adductquantif object 
 load(paste0(hubCache(temp),"/adductQuantResults.Rda"))
 
@@ -196,10 +196,9 @@ function will filter out samples and adducts based on set thresholds. It is
 recommended to use this filter function to remove adducts that have many 
 missing values and samples where the housekeeping peptide is weak, suggestive 
 of misintegration. Substitute the name of the peaklist file with the path and 
-the name of your peaklist file produced in the previous step (note that we set 
-the previous step to save this file to your home directory).
+the name of your peaklist file produced in the previous step.
 
-```{r, quiet=TRUE, error=TRUE}
+```{r, quiet=TRUE,eval=FALSE, error=TRUE}
 filterAdductTable(
   paste0(tempdir(check = FALSE),"/adductQuantif_peakList_", Sys.Date(), ".csv")
   )
