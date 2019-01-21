@@ -1,7 +1,5 @@
-#' AdductQuantif
- class 
-#' The AdductQuantif
- class contains a peak integral matrix,
+#' AdductQuantif-class 
+#' The AdductQuantif-class contains a peak integral matrix,
 #' peak ranges and region of integration, the isotopic distribution identified
 #' for each integrated peak and the target table of peaks integrated. 
 #' 
@@ -20,43 +18,32 @@
 #' peak ranges and region of integration, the isotopic distribution identified
 #' for each integrated peak and the target table of peaks integrated
 #' and their corresponding MS1 scan isotopic patterns
-#' @name AdductQuantif
--class
-#' @rdname AdductQuantif
--class
-#' @aliases show,c,AdductQuantif
-,AdductQuantif
--class 
+#' @name AdductQuantif class
+#' @rdname AdductQuantif class
+#' @aliases show,c,AdductQuantif,AdductQuantif-class 
 #' @exportClass AdductQuantif
 
 #' @author JL Hayes \email{jlhayes1982@gmail.com}
-setClass("AdductQuantif
-",
+setClass("AdductQuantif",
         representation(peakQuantTable = "matrix",
                         peakIdData = 'list',
                         predIsoDist = 'list',
                         targTable = 'data.frame',
                         file.paths = "character",
                         Parameters = "data.frame"))
-#' @rdname AdductQuantif
--class
-#' @aliases c,AdductQuantif
--method  
+#' @rdname AdductQuantif-class
+#' @aliases c,AdductQuantif-method  
 x <- NULL                  
-setMethod("c", signature(x= "AdductQuantif
-"), function(x, ...) {
+setMethod("c", signature(x= "AdductQuantif"), function(x, ...) {
                             elements = list(x, ...)
                             # error handling check if all adductSpec object
                             if (any(vapply(elements, function(ele) 
-                                is(ele,'AdductQuantif
-'),
+                                is(ele,'AdductQuantif'),
                                 FUN.VALUE=logical(1)) == FALSE)) {
                                     stop("all elements must be an 
-                                    AdductQuantif
- class object")
+                                    AdductQuantif class object")
                                 }
-                                emptyAdductQuantif <- new("AdductQuantif
-")     
+                                emptyAdductQuantif <- new("AdductQuantif")     
                                 for (i in seq_len(length(elements))) {
                                     if 
                                     (ncol(emptyAdductQuantif@peakQuantTable) 
@@ -77,7 +64,7 @@ setMethod("c", signature(x= "AdductQuantif
                                     # keep unique
                                     emptyAdductQuantif@predIsoDist <- 
                                     emptyAdductQuantif@predIsoDist[
-                        duplicated(names(emptyAdductQuantif@predIsoDist)) 
+                            duplicated(names(emptyAdductQuantif@predIsoDist)) 
                                     ==FALSE]
                                     # target table
                                     emptyAdductQuantif@targTable <- 

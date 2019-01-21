@@ -1,7 +1,7 @@
 Package: adductomicsR
 Type: Package
 Title: Processing of adductomic mass spectral datasets
-Version: 0.99.58
+Version: 0.99.59
 Date: 2019-01-21
 Author: Josie Hayes <jlhayes1982@gmail.com>
 Maintainer: Josie Hayes <jlhayes1982@gmail.com>
