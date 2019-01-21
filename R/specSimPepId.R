@@ -155,7 +155,6 @@ idPossForm=0){
     if(is.character(rtDevModels)){
         rtDevModelsDir <- dirname(rtDevModels)
         message('loading rtDevModels .RData file...Please wait.\n')
-        flush.console()
         objectName <- load(rtDevModels, envir=environment())
         rtDevModels <- eval(parse(text = objectName))
     }
@@ -165,7 +164,6 @@ idPossForm=0){
     pepMass <- OrgMassSpecR::MonoisotopicMass(pepForm)
     message('Monoisotopic mass of peptide (', pepTmp,') = ', 
     prettyNum(pepMass, big.mark = ','), '\n')
-    flush.console()
     # save a parameters file
     todaysDate <- gsub('-', '', Sys.Date())
     parameters <- cbind(binSizeMS2, topIons, minDotProd, minRt, maxRt,
@@ -541,14 +539,12 @@ idPossForm=0){
 
                     message(paste0("Starting SNOW cluster with ", nCores, 
                     " local sockets..."))
-                    flush.console()
                     cl <- parallel::makeCluster(nCores, outfile='')
                     doSNOW::registerDoSNOW(cl)
 
                     message("Identifying ", pepTmp, " spectra in ", 
                     length(ms2Files),
                     " MS2 files.\n")
-                    flush.console()
 
                     progress <- function(n) cat(paste0(n, ' of ', 
                     length(ms2Files),
@@ -946,13 +942,11 @@ idPossForm=0){
 cat(paste0('Grouping spectra and
 identifying possible atomic 
 formulae from adduct mass.\n'))
-flush.console()
 cat(paste0('Hierarchically clustering
 spectra and grouping based
 on a mass error of ', groupMzabs, 
 ' and a retention time deviation of ',
 groupRtDev, '.\n'))
-flush.console()
 if(is.null(allResults$adjMIM)){
 hr <- fastcluster::hclust.vector(
 allResults$MIM, metric='euclidean',
@@ -1118,7 +1112,6 @@ allResults$MSMSgroup_freq <- freqTmp[allResults$MSMSGroups]
 
 message(length(unique(allResults$MSMSGroups)),
 ' MS/MS peak groups were identified.\n')
-flush.console()
 
 # average MIM, rt and adduct mass
 if(is.null(allResults$adjMIM)){

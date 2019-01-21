@@ -36,8 +36,6 @@ Imports: parallel (>= 3.3.2),
 	methods (>= 3.5.0),
 	datasets (>= 3.5.0)
 License: Artistic-2.0
-LazyData: false
-LazyLoad: false
 biocViews: MassSpectrometry,Metabolomics,Software,ThirdPartyClient,DataImport,
  GUI
 RoxygenNote: 6.1.0
@@ -75,3 +73,4 @@ Collate:
     'specSimPepId.R'
     'spectraCreate.R'
     'truePeakTrough.R'
+BugReports: https://github.com/JosieLHayes/adductomicsR/issues

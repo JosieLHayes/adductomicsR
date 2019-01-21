@@ -1,6 +1,6 @@
 #' loess-based retention time deviation correction
 #'
-#' @param adductSpectra adductSpec object
+#' @param adductSpectra AdductSpec object
 #' @param smoothingSpan numeric. fixed smoothing span, argument to loess.
 #' If argument is not supplied then optimal smoothing span is 
 #' calculated for each file seperately.
@@ -27,7 +27,7 @@
 #' @usage retentionCorr(adductSpectra = NULL, 
 #' smoothingSpan = NULL, nMissing = 1, 
 #' nExtra = 1, folds = 7, outputFileDir = NULL)
-#' @return LOESS RT models as adductSpectra adductSpec object
+#' @return LOESS RT models as adductSpectra AdductSpec object
 retentionCorr <- function(adductSpectra = NULL, 
 smoothingSpan = NULL, nMissing = 1, 
 nExtra = 1, folds = 7, outputFileDir = NULL) {
@@ -35,8 +35,8 @@ nExtra = 1, folds = 7, outputFileDir = NULL) {
     # error handling
     if (is.null(adductSpectra)) {
         stop("argument adductSpectra is missing with no default.")
-    } else if (!is(adductSpectra,'adductSpec')) {
-        stop("argument adductSpectra is not an adductSpec class object.")
+    } else if (!is(adductSpectra,'AdductSpec')) {
+        stop("argument adductSpectra is not an AdductSpec class object.")
     }
 
     metaDataTmp <- adductSpectra@metaData

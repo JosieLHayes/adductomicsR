@@ -1,6 +1,6 @@
-#'output peak table from adductQuantif object
+#'output peak table from AdductQuantif object
 #'
-#'@param object a 'adductQuantif' class object
+#'@param object a 'AdductQuantif' class object
 #'@param outputDir character full path to a directory to output the peak to
 #'default is the current working directory
 #'@return a peaktable with number of rows equal to the number of adducts
@@ -20,8 +20,8 @@ outputPeakTable <- function(object = NULL, outputDir = NULL) {
     if (is.null(object)) {
         stop("object is missing with no default")
     }
-    if (!is(object,"adductQuantif")) {
-        stop("object is not an \"adductQuantif\" class object")
+    if (!is(object,"AdductQuantif")) {
+        stop("object is not an \"AdductQuantif\" class object")
     }
     if (is.null(outputDir)) {
         outputDir <- getwd()

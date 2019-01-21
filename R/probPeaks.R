@@ -1,5 +1,5 @@
 #' potentially problematic peak identification
-#' @param object an 'adductQuantif' class object
+#' @param object an 'AdductQuantif' class object
 #' @param nTimesMad numeric number of median absolute 
 #' deviations to identify potential
 #' problem peaks.
@@ -13,7 +13,7 @@
 #' metrics = c("nMadDotProdDistN", 
 #' "nMadSkewness", "nMadKurtosis", "nMadRtGroupDev", 
 #' "nMadPeakArea", "duplicates"))
-#' @return 'adductQuantif' class object
+#' @return 'AdductQuantif' class object
 probPeaks <- function(object = NULL, nTimesMad = 3, 
 metrics = c("nMadDotProdDistN", 
 "nMadSkewness", "nMadKurtosis", "nMadRtGroupDev", 
@@ -22,8 +22,8 @@ metrics = c("nMadDotProdDistN",
     # error handling
     if (is.null(object)) {
         stop("argument object is missing with no default.")
-    } else if (!is(object,'adductQuantif')) {
-        stop("argument object is not adductQuantif class object.")
+    } else if (!is(object,'AdductQuantif')) {
+        stop("argument object is not AdductQuantif class object.")
     }
     allMetricColNames <- c("nMadDotProdDistN", "nMadSkewness", 
     "nMadKurtosis", "nMadRtGroupDev", 

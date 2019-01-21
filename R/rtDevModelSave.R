@@ -1,8 +1,8 @@
-#' extract and save retention time deviation models from adductSpec class 
+#' extract and save retention time deviation models from AdductSpec class 
 #' object
 #'
-#' @param object an 'adductSpec' class object or full path to a 
-#' .RData file of the 'adductSpec' object
+#' @param object an 'AdductSpec' class object or full path to a 
+#' .RData file of the 'AdductSpec' object
 #' @param outputDir character full path to a directory to save the
 #' .RData file
 #' (defaults to the current working directory if unsupplied).
@@ -13,14 +13,14 @@
 rtDevModelSave <- function(object = NULL, outputDir = NULL) {
     # error handling
     if (is.character(object)) {
-        message("loading adductSpec .RData file...Please wait.\n")
+        message("loading AdductSpec .RData file...Please wait.\n")
         flush.console()
         objectName <- load(object, envir = environment())
         # if different object then assign object name eval parse
         object <- eval(parse(text = objectName))
     }
-    if (!is(object,'adductSpec')) {
-        stop("object is not an \"adductSpec\" class object")
+    if (!is(object,'AdductSpec')) {
+        stop("object is not an \"AdductSpec\" class object")
     }
     if (is.null(outputDir)) {
         outputDir <- paste0(getwd(), "/")

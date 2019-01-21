@@ -1,8 +1,8 @@
-#' adductSpec class 
+#' AdductSpec class 
 #'
-#' The adductSpec class contains dynamic noise filtered composite MS/MS spectra
+#' The AdductSpec class contains dynamic noise filtered composite MS/MS spectra
 #' and their corresponding MS1 scan isotopic patterns. Produced by
-#' adductSpecGen() from mzXML files.
+#' AdductSpecGen() from mzXML files.
 #'
 #' @slot adductMS2spec list of adduct MS2 spectras
 #' @slot groupMS2spec list of group MS2 spectras
@@ -20,16 +20,16 @@
 #' and their corresponding MS1 scan isotopic patterns
 #' @section Methods:
 #' \describe{
-#' \item{c}{\code{signature(object = "adductSpec")}: Concatenates the 
+#' \item{c}{\code{signature(object = "AdductSpec")}: Concatenates the 
 #' spectra information.}
 #' }
-#' @name adductSpec-class
-#' @rdname adductSpec-class
-#' @aliases show,c,adductSpec-class
-#' @exportClass adductSpec
+#' @name AdductSpec-class
+#' @rdname AdductSpec-class
+#' @aliases show,c,AdductSpec-class
+#' @exportClass AdductSpec
 #' @exportMethod "c"
 #' @author JL Hayes \email{jlhayes1982@gmail.com}
-setClass("adductSpec",
+setClass("AdductSpec",
         representation(adductMS2spec = "list",
                         groupMS2spec = "list",
                         metaData = "data.frame",
@@ -42,18 +42,18 @@ setClass("adductSpec",
                         targetTable = "data.frame",
                         file.paths = "character",
                         Parameters = "data.frame"))
-#' @rdname adductSpec-class
-#' @aliases c,adductSpec-method
+#' @rdname AdductSpec-class
+#' @aliases c,AdductSpec-method
 # set method concatenate
 x <- NULL  
-setMethod("c", signature(x = "adductSpec"), function(x, ...){
+setMethod("c", signature(x = "AdductSpec"), function(x, ...){
     elements = list(x, ...)
-    # error handling check if all adductSpec object
-    if(any(vapply(elements, function(ele) is(ele,'adductSpec'),
+    # error handling check if all AdductSpec object
+    if(any(vapply(elements, function(ele) is(ele,'AdductSpec'),
     FUN.VALUE=logical(1)) == FALSE)){
-    stop('all elements must be an adductSpec class object')
+    stop('all elements must be an AdductSpec class object')
     }
-    emptyAdductSpec <- new('adductSpec')
+    emptyAdductSpec <- new('AdductSpec')
     # bind together results
     # do not include any group info or other information
     for (i in seq_len(length(elements))){
@@ -71,7 +71,7 @@ setMethod("c", signature(x = "adductSpec"), function(x, ...){
     elements[[i]]@file.paths)
     }
     message('Grouping, retention time correction and composite spectra
-    identification must be repeated in the concatenated "adductSpec" class 
+    identification must be repeated in the concatenated "AdductSpec" class 
     object...\n')
     flush.console()
     return(emptyAdductSpec)

@@ -12,8 +12,6 @@ vignette: >
 
 # Getting Started
 
-Ensure that you are running the latest version of 64-bit R of v3.4 or
-later.
 
 ```{r, eval=FALSE}
 #ensure you have mzR installed
@@ -63,7 +61,7 @@ If this has not been done a python script is provided in the directory in
 which the package is saved on your computer at
 /inst/extdata/thermo_MassDriftCalc.py and can be launched from within python 
 using (replace the path to the python script in your system):
-exec(open(“thermo_MassDriftCalc.py“).read())
+`exec(open(“thermo_MassDriftCalc.py“).read())`
 
 # Retention time correction
 
@@ -80,13 +78,13 @@ Download the mzXML files from ExperimentHub for use in this vignette. They
 must have .mzXML to be recognized by the package so they are renamed as 
 well.
 
-```{r, quiet=TRUE, eval=TRUE, error = TRUE}
+```{r, quiet=TRUE, error = TRUE}
 eh  = suppressMessages(suppressWarnings(ExperimentHub::ExperimentHub()))
 temp = suppressMessages(suppressWarnings(
 AnnotationHub::query(eh, 'adductData')))
 ```
 
-```{r, quiet=TRUE, eval=TRUE, error = TRUE}
+```{r, quiet=TRUE, error = TRUE}
 suppressMessages(suppressWarnings(temp[['EH1957']])) #first mzXML file
 file.rename(file.path(hubCache(temp),'1957'), file.path(hubCache(temp),
                                                         'ORB35017.mzXML'))
@@ -95,10 +93,13 @@ file.rename(file.path(hubCache(temp),'1958'), file.path(hubCache(temp),
                                                         'ORB35022.mzXML'))
 ```
 
-```{r, quiet=TRUE, eval=TRUE}
-rtDevModelling(MS2Dir = hubCache(temp), nCores=4, runOrder =
-    paste0(system.file("extdata", package =
-    "adductomicsR"),'/runOrder.csv'))
+```{r, quiet=TRUE}
+rtDevModelling(
+  MS2Dir = hubCache(temp),
+  nCores=4,
+  runOrder =paste0(system.file("extdata", 
+                               package ="adductomicsR"),'/runOrder.csv')
+  )
 ```
 
 # Identify adducts
@@ -114,9 +115,12 @@ on the mz and RT windows, and plots of these groups are also provided
 based on the raw RT and adjusted RT. These plots can be used to determine
 whether multiple groups pertain to the same peak.
     
-```{r, quiet=TRUE, eval=TRUE}
-specSimPepId(MS2Dir = hubCache(temp),nCores=4, rtDevModels =
-    paste0(hubCache(temp),'/rtDevModels.RData'))
+```{r, quiet=TRUE}
+specSimPepId(
+  MS2Dir = hubCache(temp),
+  nCores=4, 
+  rtDevModels =paste0(hubCache(temp),'/rtDevModels.RData')
+  )
 ```
 
 # Generate a target table for quantification
@@ -125,11 +129,12 @@ retention time (RT), peptide and charge is generated using the following
 command. Substitute the file path of the allResults file to the location of 
 your allResults file from the previous step.
 
-```{r, quiet=TRUE, eval=TRUE, error=TRUE}
+```{r, quiet=TRUE, error=TRUE}
 
-generateTargTable(allresultsFile=paste0(system.file("extdata", package =
-"adductomicsR"),'/allResults_ALVLIAFAQYLQQCPFEDHVK_example.csv'),
-csvDir=tempdir(check = FALSE))
+generateTargTable(
+  allresultsFile=paste0(system.file("extdata",package =                            "adductomicsR"),'/allResults_ALVLIAFAQYLQQCPFEDHVK_example.csv'),
+  csvDir=tempdir(check = FALSE)
+  )
 ```
 
 It is recommended that the allGroups plot ( m/z vs RT) is used to ensure that 
@@ -143,15 +148,29 @@ use your target table produced in the previous step, alter the value in the
 'targTable' option to the path of your target table. Similarly replaced the 
 path to the directory of your own mzXML files in filePaths (set as 
 "Users/Documents/mzXMLfiles" here.
+
 ```{r, quiet=TRUE, eval=FALSE}
-adductQuant(nCores=2, targTable=paste0(system.file("extdata", 
-package = "adductomicsR"),'/exampletargTable2.csv'), intStdRtDrift=30, 
-rtDevModels= paste0(hubCache(temp),'/rtDevModels.RData'),
-filePaths=list.files(hubCache(temp),
-    pattern=".mzXML", all.files=FALSE,full.names=TRUE),
-quantObject=NULL,indivAdduct=NULL,maxPpm=5,minSimScore=0.8,spikeScans=1,
-minPeakHeight=100,maxRtDrift=20,maxRtWindow=240,isoWindow=80,
-hkPeptide='LVNEVTEFAK', gaussAlpha=16)
+adductQuant(
+  nCores=2, 
+  targTable=paste0(system.file("extdata", 
+                               package="adductomicsR"),
+                               '/exampletargTable2.csv'), 
+  intStdRtDrift=30, 
+  rtDevModels= paste0(hubCache(temp),'/rtDevModels.RData'),
+  filePaths=list.files(hubCache(temp),pattern=".mzXML",
+                       all.files=FALSE,full.names=TRUE),
+  quantObject=NULL,
+  indivAdduct=NULL,
+  maxPpm=5,
+  minSimScore=0.8,
+  spikeScans=1,
+  minPeakHeight=100,
+  maxRtDrift=20,
+  maxRtWindow=240,
+  isoWindow=80,
+  hkPeptide='LVNEVTEFAK', 
+  gaussAlpha=16
+  )
 
 ```
 
@@ -161,7 +180,7 @@ manually using LC-MS software, either at this step or before quantification.
 
 To load your adductquantif object set the path to the file on your system. In 
 the example it assumes the file is present in your working directory.
-```{r, quiet=TRUE, eval=TRUE, error=TRUE}
+```{r, quiet=TRUE, error=TRUE}
 #load the adductquantif object 
 load(paste0(hubCache(temp),"/adductQuantResults.Rda"))
 
@@ -180,12 +199,13 @@ of misintegration. Substitute the name of the peaklist file with the path and
 the name of your peaklist file produced in the previous step (note that we set 
 the previous step to save this file to your home directory).
 
-```{r, quiet=TRUE, eval=TRUE, error=TRUE}
-filterAdductTable(paste0(tempdir(check = FALSE),
-"/adductQuantif_peakList_", Sys.Date(), ".csv"))
+```{r, quiet=TRUE, error=TRUE}
+filterAdductTable(
+  paste0(tempdir(check = FALSE),"/adductQuantif_peakList_", Sys.Date(), ".csv")
+  )
 ```
 
-```{r, quiet=TRUE, eval=TRUE, error=TRUE}
+```{r, quiet=TRUE, error=TRUE}
 #session info
 sessionInfo()
 ```

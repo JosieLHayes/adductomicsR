@@ -1,5 +1,5 @@
 #' peak list Identification
-#' @param adductSpectra adductSpec object
+#' @param adductSpectra AdductSpec object
 #' param peakList numeric vector of peak masses
 #' param exPeakMass numeric internal standard peak mass
 #' @param frag.delta integer delta mass accuracy difference.
@@ -37,8 +37,8 @@ closestMassByFile = TRUE, outputPlotDir = NULL) {
 
     if (is.null(adductSpectra)) {
         stop("argument adductSpectra is missing with no default.")
-    } else if (!is(adductSpectra,'adductSpec')) {
-        stop("argument adductSpectra is not an adductSpec class object.")
+    } else if (!is(adductSpectra,'AdductSpec')) {
+        stop("argument adductSpectra is not an AdductSpec class object.")
     }
     stopifnot(is.numeric(peakList))
     # add to parameters
