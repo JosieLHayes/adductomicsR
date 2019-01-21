@@ -4,7 +4,7 @@
 #' samples, according to a m/z and retention time error.
 #' @return a list identical to adductSpectra containing an additional list
 #' element:
-#' @param adductSpectra adductSpec object
+#' @param adductSpectra AdductSpec object
 #' @param nCores numeric the number of cores to use for parallel computation. 
 #' The default is to use all available cores detected using the function 
 #' parallel::detectCores()
@@ -33,9 +33,9 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
     # error handling
     if (is.null(adductSpectra)) {
         stop("argument adductSpectra is missing with no default")
-    } else if (!is(adductSpectra,'adductSpec')) {
+    } else if (!is(adductSpectra,'AdductSpec')) {
     
-        stop("argument adductSpectra is not an adductSpec class object.")
+        stop("argument adductSpectra is not an AdductSpec class object.")
     }
     # check if the parameters are the same and stop if re-grouping unneccessary
     if (ncol(adductSpectra@Parameters) > 0) {
@@ -424,7 +424,7 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
                                 metaDataTmp <- metaDataTmp[order(
                                 metaDataTmp$orderTmp), ]
                                 metaDataTmp$orderTmp <- NULL
-                                # add mod metaData back to adductSpec object 
+                                # add mod metaData back to AdductSpec object 
                                 # add additional columns if necc
                                 missCol <- setdiff(colnames(metaDataTmp), 
                                 colnames(adductSpectra@metaData))

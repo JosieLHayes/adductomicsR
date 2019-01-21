@@ -50,13 +50,13 @@
 #' If argument is not supplied then optimal smoothing span
 #' is calculated for each file seperately using 7-fold CV.
 #' @param saveRtDev integer (default = 1) should just the retention time
-#' deviation model be saved (TRUE = 1) or the adductSpec class object 
+#' deviation model be saved (TRUE = 1) or the AdductSpec class object 
 #'(FALSE = 0) as .RData workspace files.
 #' @examples
 #' rtDevModelling(MS2Dir=hubCache(temp),nCores=4,runOrder=paste0(
 #' system.file("extdata",package="adductomicsR"),
 #' '/runOrder.csv'))
-#' @return LOESS RT models as adductSpectra adductSpec object
+#' @return LOESS RT models as adductSpectra AdductSpec object
 #' @import adductData
 #' @usage rtDevModelling(MS2Dir = NULL, runOrder = NULL, 
 #' nCores = parallel::detectCores(), TICfilter = 0, 
@@ -122,7 +122,7 @@ saveRtDev = 1) {
             identification and adduct quantification workflows."))
                 rtDevModelSave(adductSpectra, outputDir = MS2Dir)
             } else {
-                cat(paste0("saving adductSpec class object as an
+                cat(paste0("saving AdductSpec class object as an
                 .RData file:\n", 
                 MS2Dir, 
                 "adductSpectra.RData\n\n"))
