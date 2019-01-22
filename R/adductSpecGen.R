@@ -335,7 +335,6 @@ integer)')
     paste0(getwd(), '/'), outputPlotDir),'internalStd_scansTable.csv'), 
     row.names = FALSE)
     message('...DONE')
-    flush.console()
     }
     return(AdductSpecTmp)
 } # end function
@@ -384,7 +383,7 @@ integer)')
     metaDataTmp$MS2groupFreq <- NULL
     metaDataTmp$MS2groupFreqAbove <- NULL
     metaData(emptyAdductSpec) <- rbind(metaData(emptyAdductSpec), metaDataTmp)
-    Specfile.paths(emptyAdductSpec) <- c(file.paths(emptyAdductSpec),
+    Specfile.paths(emptyAdductSpec) <- c(Specfile.paths(emptyAdductSpec),
     Specfile.paths(elements[[i]]))
     }
     message('Grouping, retention time correction and composite spectra
