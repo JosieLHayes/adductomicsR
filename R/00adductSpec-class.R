@@ -80,9 +80,11 @@ setMethod("c", signature(x = "AdductSpec"), function(x, ...){
 setGeneric("Specfile.paths", function(object) standardGeneric("Specfile.paths"))
 setMethod("Specfile.paths", 
     signature="AdductSpec",
-    definition = function(object){
-        return(object@file.paths)
-    })
+    definition = function(object)
+    # {
+#         return(object@file.paths)
+#     }
+    )
 setGeneric("Specfile.paths<-", function(object,
         value) standardGeneric("Specfile.paths<-"))    
 setMethod("Specfile.paths<-","AdductSpec",function(object, value) {

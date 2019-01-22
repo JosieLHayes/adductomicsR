@@ -378,8 +378,8 @@ integer)')
     metaDataTmp$MS2groupFreq <- NULL
     metaDataTmp$MS2groupFreqAbove <- NULL
     metaData(emptyAdductSpec) <- rbind(metaData(emptyAdductSpec), metaDataTmp)
-    emptyAdductSpec@file.paths <- c(emptyAdductSpec@file.paths,
-    elements[[i]]@file.paths)
+    Specfile.paths(emptyAdductSpec) <- c(Specfile.paths(emptyAdductSpec),
+    Specfile.paths(elements[[i]]))
     }
     message('Grouping, retention time correction and composite spectra
     identification must be repeated in the concatenated "AdductSpec" class
