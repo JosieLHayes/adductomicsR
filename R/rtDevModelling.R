@@ -50,13 +50,13 @@
 #' If argument is not supplied then optimal smoothing span
 #' is calculated for each file seperately using 7-fold CV.
 #' @param saveRtDev integer (default = 1) should just the retention time
-#' deviation model be saved (TRUE = 1) or the adductSpec class object 
+#' deviation model be saved (TRUE = 1) or the AdductSpec class object 
 #'(FALSE = 0) as .RData workspace files.
 #' @examples
-#' rtDevModelling(MS2Dir=paste0(system.file("extdata",package="adductData"),
-#''/'),nCores=4,runOrder=paste0(system.file("extdata",package="adductomicsR"),
+#' rtDevModelling(MS2Dir=hubCache(temp),nCores=4,runOrder=paste0(
+#' system.file("extdata",package="adductomicsR"),
 #' '/runOrder.csv'))
-#' @return LOESS RT models as adductSpectra adductSpec object
+#' @return LOESS RT models as adductSpectra AdductSpec object
 #' @import adductData
 #' @usage rtDevModelling(MS2Dir = NULL, runOrder = NULL, 
 #' nCores = parallel::detectCores(), TICfilter = 0, 
@@ -96,7 +96,8 @@ saveRtDev = 1) {
     intStd_MaxPpmDev = intStd_MaxPpmDev, 
     outputPlotDir = MS2Dir, intStdMass = intStdMass, 
     minSpecEx = minSpecEx)
-    maxRtDrift_intStd <- max(abs(adductSpectra@metaData$intStdRtDrift)) * 1.5
+    maxRtDrift_intStd <- max(abs(metaData(adductSpectra)[,'intStdRtDrift'])) *
+    1.5
     #adductSpectra@metaData$intStdPpmDrift <- NULL
     #adductSpectra@metaData$intStdRtDrift <- NULL
     adductSpectra <- ms2Group(adductSpectra, nCores, 
@@ -104,10 +105,10 @@ saveRtDev = 1) {
     maxRtDrift = maxRtDrift_intStd, dotProdClust = TRUE, 
     compSpecGen = FALSE, 
     minDotProd = minDotProd)
-    nExtra <- round(length(adductSpectra@file.paths) * {
+    nExtra <- round(length(Specfile.paths(adductSpectra)) * {
         percExtra/100
         }, 0)
-        nMissing <- round(length(adductSpectra@file.paths) * {
+        nMissing <- round(length(Specfile.paths(adductSpectra)) * {
             percMissing/100
         }, 0)
             # # retention time correction
@@ -122,7 +123,7 @@ saveRtDev = 1) {
             identification and adduct quantification workflows."))
                 rtDevModelSave(adductSpectra, outputDir = MS2Dir)
             } else {
-                cat(paste0("saving adductSpec class object as an
+                cat(paste0("saving AdductSpec class object as an
                 .RData file:\n", 
                 MS2Dir, 
                 "adductSpectra.RData\n\n"))

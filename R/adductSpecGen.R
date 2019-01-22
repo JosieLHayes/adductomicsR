@@ -1,4 +1,4 @@
-#' Constructor of AdductSpec object deconvolute spectra 
+#' Constructor of adductSpec object deconvolute spectra 
 #' MS2 and MS1 levels
 #' @param mzXmlDir character a full path to a directory containing 
 #' either .mzXML or .mzML data
@@ -40,15 +40,7 @@
 #' dynamically
 #' \code{\link{dynamicNoiseFilter}} and identifies precursor ion charge state,
 #' by isotopic pattern.
-#' \examples{
-#' eh = ExperimentHub();
-#' temp = query(eh, 'adductData');
-#' temp[['EH1957']]; #first mzXML file
-#' file.rename(file.path(hubCache(temp),'1957'), file.path(hubCache(temp), 
-#' 'ORB35017.mzXML'));
-#' temp[['EH1958']]; #second mzXML file
-#' file.rename(file.path(hubCache(temp),'1958'), file.path(hubCache(temp),
-#' 'ORB35022.mzXML'));
+#' @examples 
 #' adductSpecGen(mzXmlDir=system.file("extdata", package = 
 #' "adductData"), runOrder=paste0(system.file("extdata", package = 
 #' "adductomicsR"),'/runOrder.csv'), nCores=4, 
@@ -57,10 +49,15 @@
 #' 1337.79,1465.85), TICfilter=10000, DNF=2, minInt=300, 
 #' minPeaks=5,intStd_MaxMedRtDrift=360, 
 #' intStd_MaxPpmDev=200,minSpecEx=40,outputPlotDir=NULL)
-#' }
-#' @return AdductSpec object
-adductSpecGen <- function(mzXmlDir=NULL, runOrder=NULL, nCores=     
-        parallel::detectCores(),
+#' @usage adductSpecGen(mzXmlDir=NULL, runOrder=NULL, nCores=NULL,
+#' intStdMass=834.77692,intStdPeakList=c(290.21, 403.30, 516.38,
+#' 587.42,849.40, 884.92, 958.46, 993.97,1050.52, 1107.06, 1209.73,
+#' 1337.79,1465.85),TICfilter=10000, DNF=2, minInt=300,
+#' minPeaks=5,intStd_MaxMedRtDrift=360, intStd_MaxPpmDev=200,minSpecEx=40,
+#' outputPlotDir=NULL)
+#' @return adductSpec object
+#' @export
+adductSpecGen <- function(mzXmlDir=NULL, runOrder=NULL, nCores=NULL,
         intStdMass=834.77692,intStdPeakList=c(290.21, 403.30, 516.38,
         587.42,849.40, 884.92, 958.46, 993.97,1050.52, 1107.06, 1209.73,
         1337.79,1465.85),TICfilter=10000, DNF=2, minInt=300,
@@ -107,6 +104,7 @@ integer)')
     recursive=FALSE)
     message(paste0(length(MS2files),
     " MS (.mzXML) files were detected within the directory..."))
+    flush.console()
     # sort ms2 files by run order info
     idxTmp <- match(gsub('\\.mzXML$', '', runOrder[, 1]), gsub('\\.mzXML$',
     '',      basename(MS2files)))
@@ -131,10 +129,12 @@ integer)')
         pmt <- proc.time()
         message(paste0("Starting SNOW cluster with ", nCores, " local          
         sockets..."))
+        flush.console()
         cl <- parallel::makeCluster(nCores, outfile='')
         doSNOW::registerDoSNOW(cl)
         message("Performing Savitsky-Golay baseline subtraction, dynamic noise 
-        filtration and AdductSpec object construction...\n")
+        filtration and adductSpec object construction...\n")
+        flush.console()
         progress <- function(n) cat(paste0(n, ' of ', length(MS2files),
         ' complete (', basename(MS2files)[n],
         ').\n'))
@@ -221,10 +221,11 @@ integer)')
     # add MS2 file names to results list
     names(Results) <- basename(MS2files)
     Results <- unlist(Results, recursive=FALSE)
-    AdductSpecTmp <- new("AdductSpec")
+    adductSpecTmp <- new("adductSpec")
     # add in MS2 spectra
-    adductMS2spec(AdductSpecTmp) <- Results[grep('MS2spectra', names(Results))]
+    adductSpecTmp@adductMS2spec <- Results[grep('MS2spectra', names(Results))]
     # add MS1 isotopes
+    #adductSpecTmp@adductMS1iso <- Results[grep('MS1isotopes', names(Results))]
     # rbind meta data and add in file names
     metaDataTmp <- Results[grep('metaData', names(Results))]
     fileNamesTmp <- rep(gsub('\\.metaData$', '', names(metaDataTmp)),
@@ -232,9 +233,9 @@ integer)')
     metaDataTmp <- do.call(rbind, metaDataTmp)
     metaDataTmp <- data.frame(mzXMLFile=fileNamesTmp, metaDataTmp, 
     stringsAsFactors=FALSE)
-    metaData(AdductSpecTmp) <- metaDataTmp
-    Specfile.paths(AdductSpecTmp) <- MS2files
-    Parameters(AdductSpecTmp) <- data.frame(nCores,ifelse(is.null(intStdMass), 
+    adductSpecTmp@metaData <- metaDataTmp
+    adductSpecTmp@file.paths <- MS2files
+    adductSpecTmp@Parameters <- data.frame(nCores, ifelse(is.null(intStdMass), 
     NA, intStdMass), TICfilter, DNF, minInt, minPeaks, intStd_MaxMedRtDrift,  
     intStd_MaxPpmDev, stringsAsFactors=FALSE)
     # if necessary id internal standard
@@ -242,7 +243,8 @@ integer)')
     message('Identifying internal standard MS/MS spectra within a m/z window  
     of ', intStd_MaxPpmDev, ' ppm and a retention time window of ',           
     round(intStd_MaxMedRtDrift/60, 2), ' minutes...\n')
-    intStdScans <- peakListId(AdductSpecTmp, peakList=intStdPeakList,         
+    flush.console()
+    intStdScans <- peakListId(adductSpecTmp, peakList=intStdPeakList,         
     minPeaksId=7,
     minSpecEx=minSpecEx, outputPlotDir=NULL,
     exPeakMass=intStdMass, maxRtDrift=intStd_MaxMedRtDrift,
@@ -261,15 +263,16 @@ integer)')
     intStdScans$IntStd_medRtDev <- medRtDiffFile / 60
     # match names with file path names
     runOrderTmp <- match(intStdScans$mzXMLFile, 
-    basename(Specfile.paths(AdductSpecTmp)))
+    basename(adductSpecTmp@file.paths))
     # sort table
     intStdScans <- intStdScans[order(runOrderTmp), , drop=FALSE]
-    nFilesTmp <- seq_len(length(Specfile.paths(AdductSpecTmp)))
+    nFilesTmp <- seq_len(length(adductSpecTmp@file.paths))
     missingFiles <- setdiff(nFilesTmp, runOrderTmp)
     # if neccessary cubic spline interpolate missing files with zoo::na.spline
     if(length(missingFiles) > 0){
     message('cubic spline interpolating ', length(missingFiles), ' missing 
     values...\n')
+    flush.console()
     # add NA for missing files
     ppmDiffFile <- c(ppmDiffFile, rep(NA, length(missingFiles)))
     medRtDiffFile <- c(medRtDiffFile, rep(NA, length(missingFiles)))
@@ -283,10 +286,10 @@ integer)')
     medRtDiffFile <- zoo::na.spline(medRtDiffFile)
     }
     # add to meta data
-    indxTmp <- match(metaData(AdductSpecTmp)[,'mzXMLFile'],
-    basename(Specfile.paths(AdductSpecTmp)[,'mzXMLFile']))
-    metaData(AdductSpecTmp)[,'intStdRtDrift'] <- medRtDiffFile[indxTmp]
-    metaData(AdductSpecTmp)[,'intStdPpmDrift'] <- ppmDiffFile[indxTmp]
+    indxTmp <- match(adductSpecTmp@metaData$mzXMLFile,
+    basename(adductSpecTmp@file.paths))
+    adductSpecTmp@metaData$intStdRtDrift <- medRtDiffFile[indxTmp]
+    adductSpecTmp@metaData$intStdPpmDrift <- ppmDiffFile[indxTmp]
     # save plot
     png(paste0(ifelse(is.null(outputPlotDir), paste0(getwd(), '/'),
     outputPlotDir),'internalStandard_plots.png'), width = 961, height = 587)
@@ -330,22 +333,23 @@ integer)')
     paste0(getwd(), '/'), outputPlotDir),'internalStd_scansTable.csv'), 
     row.names = FALSE)
     message('...DONE')
+    flush.console()
     }
-    return(AdductSpecTmp)
+    return(adductSpecTmp)
 } # end function
-    setMethod("show", "AdductSpec", function(object) {
-    if(length(Specfile.paths(object)) > 0){
-    cat("A \"AdductSpec\" class object derived from", 
-    length(Specfile.paths(object)),"MS2 files \n\n")
-    cat("Consisting of:\n", sum(metaData(object)[,'msLevel'] == 1), "raw MS1 
-    scans\n", sum(metaData(object)[,'msLevel'] == 2), "raw MS2 scans of which",
-    sum(metaData(object)[,'aboveMinPeaks'] == TRUE), "scans were above the 
-    noise following filtration.\n\n")
-    cat("m/z range:", round(metaData(object)[,'lowMZ'][1], digits=3), "-",
-    round(metaData(object)[,'highMZ'][1], digits=3), "\n\n")
-    if(length(groupMS2spec(object)) > 0){
+    setMethod("show", "adductSpec", function(object) {
+    if(length(object@file.paths) > 0){
+    cat("A \"adductSpec\" class object derived from", 
+    length(object@file.paths),"MS2 files \n\n")
+    cat("Consisting of:\n", sum(object@metaData$msLevel == 1), "raw MS1 
+    scans\n", sum(object@metaData$msLevel == 2), "raw MS2 scans of which",
+    sum(object@metaData$aboveMinPeaks == TRUE), "scans were above the noise 
+    following filtration.\n\n")
+    cat("m/z range:", round(object@metaData$lowMZ[1], digits=3), "-",
+    round(object@metaData$highMZ[1], digits=3), "\n\n")
+    if(length(object@groupMS2spec) > 0){
     cat('\nInter-file grouping:\n')
-    cat(length(groupMS2spec(object)), 'inter-file composite spectra groups 
+    cat(length(object@groupMS2spec), 'inter-file composite spectra groups 
     were identified.\n')
     }
     cat("\nAdductome identification:\n")
@@ -353,36 +357,37 @@ integer)')
     memsize <- object.size(object)
     cat("Memory usage:", signif(memsize/2^20, 3), "MB\n")
     } else {
-    cat("A new empty\"AdductSpec\" class object")
+    cat("A new empty\"adductSpec\" class object")
     }
 })
     # set method concatenate
-    setMethod("c", signature(x = "AdductSpec"), function(x, ...){
+    setMethod("c", signature(x = "adductSpec"), function(x, ...){
     elements = list(x, ...)
-    # error handling check if all AdductSpec object
-    if(any(vapply(elements, function(ele) is(ele,'AdductSpec'),
+    # error handling check if all adductSpec object
+    if(any(vapply(elements, function(ele) is(ele,'adductSpec'),
     FUN.VALUE=logical(1)) == FALSE)){
-    stop('all elements must be an AdductSpec class object')
-    }
-    emptyAdductSpec <- new('AdductSpec')
+    stop('all elements must be an adductSpec class object')
+    } 
+    emptyAdductSpec <- new('adductSpec')
     # bind together results
     # do not include any group info or other information
     for (i in seq_len(length(elements))){
-    adductMS2spec(emptyAdductSpec) <- c(adductMS2spec(emptyAdductSpec),
-    adductMS2spec(elements[[i]]))
-    metaDataTmp <- metaData(elements[[i]])
+    emptyAdductSpec@adductMS2spec <- c(emptyAdductSpec@adductMS2spec,        
+    elements[[i]]@adductMS2spec)
+    metaDataTmp <- elements[[i]]@metaData
     #metaDataTmp$aboveMinPeaks <- NULL
     metaDataTmp$msPrecursor_group <- NULL
     metaDataTmp$interMSMSrtGroups <- NULL
     metaDataTmp$predRtLoess <- NULL
     metaDataTmp$MS2groupFreq <- NULL
     metaDataTmp$MS2groupFreqAbove <- NULL
-    metaData(emptyAdductSpec) <- rbind(metaData(emptyAdductSpec), metaDataTmp)
-    Specfile.paths(emptyAdductSpec) <- c(Specfile.paths(emptyAdductSpec),
-    Specfile.paths(elements[[i]]))
+    emptyAdductSpec@metaData <- rbind(emptyAdductSpec@metaData, metaDataTmp)
+    emptyAdductSpec@file.paths <- c(emptyAdductSpec@file.paths,          
+    elements[[i]]@file.paths)
     }
-    message('Grouping, retention time correction and composite spectra
-    identification must be repeated in the concatenated "AdductSpec" class
+    message('Grouping, retention time correction and composite spectra 
+    identification must be repeated in the concatenated "adductSpec" class 
     object...\n')
+    flush.console()
     return(emptyAdductSpec)
 }) # end function
