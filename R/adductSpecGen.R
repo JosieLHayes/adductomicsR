@@ -233,7 +233,7 @@ integer)')
     metaDataTmp <- data.frame(mzXMLFile=fileNamesTmp, metaDataTmp, 
     stringsAsFactors=FALSE)
     metaData(AdductSpecTmp) <- metaDataTmp
-    Specfile.paths(AdductSpecTmp) <- unlist(MS2files)
+    AdductSpecTmp@file.paths <- MS2files
     Parameters(AdductSpecTmp) <- data.frame(nCores,ifelse(is.null(intStdMass), 
     NA, intStdMass), TICfilter, DNF, minInt, minPeaks, intStd_MaxMedRtDrift,  
     intStd_MaxPpmDev, stringsAsFactors=FALSE)
@@ -384,6 +384,5 @@ integer)')
     message('Grouping, retention time correction and composite spectra
     identification must be repeated in the concatenated "AdductSpec" class
     object...\n')
-    flush.console()
     return(emptyAdductSpec)
 }) # end function
