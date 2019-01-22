@@ -48,7 +48,7 @@ nExtra = 1, folds = 7, outputFileDir = NULL) {
         metaDataTmp$retentionTime <- as.numeric(metaDataTmp$retentionTime)
     }
 
-    nFiles <- length(adductSpectra@file.paths)
+    nFiles <- length(Specfile.paths(adductSpectra))
     nFilesPerGroup <- tapply(metaDataTmp$mzXMLFile, 
     as.factor(metaDataTmp$interMSMSrtGroups), 
     function(MSMSgroup) {
@@ -93,7 +93,7 @@ nExtra = 1, folds = 7, outputFileDir = NULL) {
     pb <- txtProgressBar(min = 0, max = nFiles, style = 3)
     for (i in seq_len(nFiles)) {
         setTxtProgressBar(pb, i)
-        fileNameTmp <- basename(adductSpectra@file.paths)[i]
+        fileNameTmp <- basename(file.paths(adductSpectra))[i]
         fileIndx <- metaDataTmp$mzXMLFile %in% fileNameTmp
         fileMetaTmp <- metaDataTmp[fileIndx, , drop = FALSE]
         # mean rt each MS/MS rt group
@@ -172,7 +172,7 @@ nExtra = 1, folds = 7, outputFileDir = NULL) {
     flush.console()
     for (i in seq_len(nFiles)) {
         setTxtProgressBar(pb, i)
-        fileNameTmp <- basename(adductSpectra@file.paths)[i]
+        fileNameTmp <- basename(file.paths(adductSpectra))[i]
         fileIndx <- metaDataTmp$mzXMLFile %in% fileNameTmp
         fileMetaTmp <- metaDataTmp[fileIndx, , drop = FALSE]
         # mean rt each MS/MS rt group
