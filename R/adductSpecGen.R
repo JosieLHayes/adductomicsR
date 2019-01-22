@@ -221,7 +221,7 @@ integer)')
     # add MS2 file names to results list
     names(Results) <- basename(MS2files)
     Results <- unlist(Results, recursive=FALSE)
-    adductSpecTmp <- new("adductSpec")
+    adductSpecTmp <- new("AdductSpec")
     # add in MS2 spectra
     adductSpecTmp@adductMS2spec <- Results[grep('MS2spectra', names(Results))]
     # add MS1 isotopes
@@ -337,7 +337,7 @@ integer)')
     }
     return(adductSpecTmp)
 } # end function
-    setMethod("show", "adductSpec", function(object) {
+    setMethod("show", "AdductSpec", function(object) {
     if(length(object@file.paths) > 0){
     cat("A \"adductSpec\" class object derived from", 
     length(object@file.paths),"MS2 files \n\n")
@@ -361,14 +361,14 @@ integer)')
     }
 })
     # set method concatenate
-    setMethod("c", signature(x = "adductSpec"), function(x, ...){
+    setMethod("c", signature(x = "AdductSpec"), function(x, ...){
     elements = list(x, ...)
     # error handling check if all adductSpec object
-    if(any(vapply(elements, function(ele) is(ele,'adductSpec'),
+    if(any(vapply(elements, function(ele) is(ele,'AdductSpec'),
     FUN.VALUE=logical(1)) == FALSE)){
     stop('all elements must be an adductSpec class object')
     } 
-    emptyAdductSpec <- new('adductSpec')
+    emptyAdductSpec <- new('AdductSpec')
     # bind together results
     # do not include any group info or other information
     for (i in seq_len(length(elements))){
