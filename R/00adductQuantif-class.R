@@ -2,8 +2,7 @@
 #' The AdductQuantif-class contains a peak integral matrix,
 #' peak ranges and region of integration, the isotopic distribution identified
 #' for each integrated peak and the target table of peaks integrated. 
-#' 
-#' @include 00adductSpec-class.R
+#' @include 00AdductSpec-class.R
 #' @slot peakQuantTable a matrix containing the peak 
 #' integration results and 
 #' consisting of a row for each peak
@@ -85,3 +84,16 @@ setMethod("c", signature(x= "AdductQuantif"), function(x, ...) {
                                 }
                                 return(emptyAdductQuantif)
                             })  # end function 
+setGeneric("file.paths", function(object) standardGeneric("file.paths"))
+setMethod("file.paths", 
+    signature="AdductQuantif",
+    definition = function(object){
+        return(object@file.paths)
+    })
+setGeneric("peakQuantTable", function(
+    object) standardGeneric("peakQuantTable"))
+setMethod("peakQuantTable", 
+    signature="AdductQuantif",
+    definition = function(object){
+        return(object@peakQuantTable)
+    })
