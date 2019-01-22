@@ -118,9 +118,9 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
                 message("Adjusting retention time based on loess model...")
                 flush.console()
                 metaDataTmp$predRtLoess <- 0
-                for (x in seq_len(length(adductSpectra@file.paths))) {
+                for (x in seq_len(length(Specfile.paths(adductSpectra)))) {
                     indxFileTmp <- which(metaDataTmp$mzXMLFile %in% 
-                    basename(adductSpectra@file.paths)[x])
+                    basename(Specfile.paths(adductSpectra))[x])
                     metaDataTmp$predRtLoess[indxFileTmp] <- 
                     retentionTime[indxFileTmp]-
                     (predict(adductSpectra@rtDevModels[[x]], newdata = 

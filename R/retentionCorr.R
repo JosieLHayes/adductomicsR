@@ -39,7 +39,7 @@ nExtra = 1, folds = 7, outputFileDir = NULL) {
         stop("argument adductSpectra is not an AdductSpec class object.")
     }
 
-    metaDataTmp <- adductSpectra@metaData
+    metaDataTmp <- metaData(adductSpectra)
     # single point rt drift
     if (!is.null(metaDataTmp$intStdRtDrift)) {
         metaDataTmp$retentionTime <- as.numeric(metaDataTmp$retentionTime) + 

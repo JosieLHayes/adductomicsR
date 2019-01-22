@@ -107,7 +107,6 @@ integer)')
     recursive=FALSE)
     message(paste0(length(MS2files),
     " MS (.mzXML) files were detected within the directory..."))
-    flush.console()
     # sort ms2 files by run order info
     idxTmp <- match(gsub('\\.mzXML$', '', runOrder[, 1]), gsub('\\.mzXML$',
     '',      basename(MS2files)))
@@ -132,12 +131,10 @@ integer)')
         pmt <- proc.time()
         message(paste0("Starting SNOW cluster with ", nCores, " local          
         sockets..."))
-        flush.console()
         cl <- parallel::makeCluster(nCores, outfile='')
         doSNOW::registerDoSNOW(cl)
         message("Performing Savitsky-Golay baseline subtraction, dynamic noise 
         filtration and AdductSpec object construction...\n")
-        flush.console()
         progress <- function(n) cat(paste0(n, ' of ', length(MS2files),
         ' complete (', basename(MS2files)[n],
         ').\n'))
@@ -236,7 +233,7 @@ integer)')
     metaDataTmp <- data.frame(mzXMLFile=fileNamesTmp, metaDataTmp, 
     stringsAsFactors=FALSE)
     metaData(AdductSpecTmp) <- metaDataTmp
-    Specfile.paths(AdductSpecTmp) <- unlist(MS2files)
+    AdductSpecTmp@file.paths <- unlist(MS2files)
     Parameters(AdductSpecTmp) <- data.frame(nCores,ifelse(is.null(intStdMass), 
     NA, intStdMass), TICfilter, DNF, minInt, minPeaks, intStd_MaxMedRtDrift,  
     intStd_MaxPpmDev, stringsAsFactors=FALSE)
