@@ -110,10 +110,7 @@ minPeaks = 5) {
                     fileInfoDf[, colnames(metaData)] <- 0
                     fileInfoDf[MS2TICfilt.indx, colnames(metaData)] <- 
                     metaData
-
                     message("...done")
-                    flush.console()
-
                     # spectra
                     specNames <- fileInfoDf$acquisitionNum[
                     fileInfoDf$aboveMinPeaks 

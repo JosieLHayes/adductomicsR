@@ -233,7 +233,7 @@ integer)')
     metaDataTmp <- data.frame(mzXMLFile=fileNamesTmp, metaDataTmp, 
     stringsAsFactors=FALSE)
     metaData(AdductSpecTmp) <- metaDataTmp
-    AdductSpecTmp@file.paths <- unlist(MS2files)
+    Specfile.paths(AdductSpecTmp) <- unlist(MS2files)
     Parameters(AdductSpecTmp) <- data.frame(nCores,ifelse(is.null(intStdMass), 
     NA, intStdMass), TICfilter, DNF, minInt, minPeaks, intStd_MaxMedRtDrift,  
     intStd_MaxPpmDev, stringsAsFactors=FALSE)
@@ -270,7 +270,6 @@ integer)')
     if(length(missingFiles) > 0){
     message('cubic spline interpolating ', length(missingFiles), ' missing 
     values...\n')
-    flush.console()
     # add NA for missing files
     ppmDiffFile <- c(ppmDiffFile, rep(NA, length(missingFiles)))
     medRtDiffFile <- c(medRtDiffFile, rep(NA, length(missingFiles)))
@@ -379,8 +378,8 @@ integer)')
     metaDataTmp$MS2groupFreq <- NULL
     metaDataTmp$MS2groupFreqAbove <- NULL
     metaData(emptyAdductSpec) <- rbind(metaData(emptyAdductSpec), metaDataTmp)
-    Specfile.paths(emptyAdductSpec) <- c(Specfile.paths(emptyAdductSpec),
-    Specfile.paths(elements[[i]]))
+    emptyAdductSpec@file.paths <- c(emptyAdductSpec@file.paths,
+    elements[[i]]@file.paths)
     }
     message('Grouping, retention time correction and composite spectra
     identification must be repeated in the concatenated "AdductSpec" class
