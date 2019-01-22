@@ -28,9 +28,9 @@ outputPeakTable <- function(object = NULL, outputDir = NULL) {
     }
     outputDir <- paste0(outputDir, "/")
     # output table
-    peakQuantTable <- object@peakQuantTable
+    peakQuantTable <- peakQuantTable(object)
     fileNamesTmp <- unique(peakQuantTable[, "file"])
-    peakQuantDf <- data.frame(matrix(object@peakQuantTable[, "peakArea"],
+    peakQuantDf <- data.frame(matrix(peakQuantTable(object)[, "peakArea"],
     byrow = FALSE, 
     ncol = length(fileNamesTmp)), stringsAsFactors = FALSE)
     colnames(peakQuantDf) <- fileNamesTmp
@@ -53,7 +53,7 @@ outputPeakTable <- function(object = NULL, outputDir = NULL) {
         names(wMeanColTmp))
         resMatrixTmp[, i] <- as.numeric(wMeanColTmp)[tmpidx]
     }
-    peakQuantDf <- data.frame(cbind(object@targTable, 
+    peakQuantDf <- data.frame(cbind(targTable(object), 
     resMatrixTmp, peakQuantDf), 
     stringsAsFactors = FALSE)
     write.csv(peakQuantDf, paste0(outputDir, "adductQuantif_peakList_", 
