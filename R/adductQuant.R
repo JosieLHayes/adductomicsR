@@ -168,14 +168,14 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
                     stop("a numeric vector of AdductQuantif
                 targets to re-integrate must be provided")
                 }
-                targTable <- quantObject@targTable
+                targTable <- targTable(quantObject)
                 intSeq <- indivAdduct
                 minMaxRt <- c((min(as.numeric(targTable$RT)) * 60) -
                 maxRtWindow, (max(as.numeric(targTable$RT)) * 60) + 
                 maxRtWindow)
                 # extract previous results
-                predIsoDist <- quantObject@predIsoDist
-                results <- quantObject@peakQuantTable
+                predIsoDist <- predIsoDist(quantObject)
+                results <- peakQuantTable(quantObject)
                 # empty the results rows necessary
                 keepCols <- grepl("file|featureName|expMass|expRt|peptide",
                 colnames(results))
@@ -186,7 +186,7 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
                 length(indivAdduct)) + rep(indivAdduct, 
                 each = length(file.paths(quantObject)))
                 results[emptyResultRows, keepCols] <- 0
-                resultsList <- quantObject@peakIdData
+                resultsList <- peakIdData(quantObject)
                 filePaths <- file.paths(quantObject)
             }
             for (i in seq_len(length(filePaths))) {
@@ -370,12 +370,12 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
                 object <- quantObject
             } else {
                 object <- new("AdductQuantif")
-                object@predIsoDist <- predIsoDist
-                object@targTable <- targTable
+                predIsoDist(object) <- predIsoDist
+                targTable(object) <- targTable
                 file.paths(object) <- filePaths
             }
-            object@peakQuantTable <- results
-            object@peakIdData <- resultsList
+            peakQuantTable(object) <- results
+            peakIdData(object) <- resultsList
             save(object, file = "adductQuantResults.Rdata")
             return(object)
         }  # end Function 
@@ -384,22 +384,22 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
                 cat("A \"AdductQuantif\" class object derived from", 
                 length(file.paths(object)), 
             "MS files \n\n")
-                cat("Consisting of:\n", sum(object@peakQuantTable[,
+                cat("Consisting of:\n", sum(peakQuantTable(object)[,
                 "peakArea"] != "0"), 
                 "quantified peaks\n", "and",
-                sum(object@peakQuantTable[, "peakArea"] == 
+                sum(peakQuantTable(object)[, "peakArea"] == 
                 "0"), "missing peaks (i.e. zero peak area)\n",
                 "Derived from a target list of:", 
-                nrow(object@targTable), "targets.\n\n")
+                nrow(targTable(object)), "targets.\n\n")
                 if (any(grepl("^possOutPeak$", 
-                    colnames(object@peakQuantTable)))) {
+                    colnames(peakQuantTable(object))))) {
                         cat("Potentially outlying peaks:\n")
-                        cat(sum(object@peakQuantTable[, "possOutPeak"] == 1), 
-                        paste0("(", round((sum(object@peakQuantTable[, 
-                        "possOutPeak"] == "1")/sum(object@peakQuantTable[
+                        cat(sum(peakQuantTable(object)[, "possOutPeak"] == 1), 
+                        paste0("(", round((sum(peakQuantTable(object)[, 
+                        "possOutPeak"] == "1")/sum(peakQuantTable(object)[
                         ,"peakArea"]!= 
                         "0") * 100), 1), "%)", collapse = ""),
-                        "of a total of", sum(object@peakQuantTable[, 
+                        "of a total of", sum(peakQuantTable(object)[, 
                         "peakArea"] != "0"), 
                         "peaks quantified were potentially non-gaussian, 
                         long tailed,
@@ -422,35 +422,35 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
                     }
                     emptyAdductQuantif <- new("AdductQuantif")
                     for (i in seq_len(length(elements))) {
-                        if (ncol(emptyAdductQuantif@peakQuantTable) == 0) {
-                            emptyAdductQuantif@peakQuantTable <- 
-                            elements[[i]]@peakQuantTable
+                        if (ncol(peakQuantTable(emptyAdductQuantif)) == 0) {
+                            peakQuantTable(emptyAdductQuantif) <- 
+                            peakQuantTable(elements[[i]])
                         } else {
-                            emptyAdductQuantif@peakQuantTable <- 
-                            rbind(emptyAdductQuantif@peakQuantTable, 
-                        elements[[i]]@peakQuantTable)
+                            peakQuantTable(emptyAdductQuantif)<- 
+                            rbind(peakQuantTable(emptyAdductQuantif), 
+                        peakQuantTable(elements[[i]]))
                         }
-                        emptyAdductQuantif@peakIdData <- 
-                        c(emptyAdductQuantif@peakIdData,
-                        elements[[i]]@peakIdData)
-                        emptyAdductQuantif@predIsoDist <- 
-                        c(emptyAdductQuantif@predIsoDist,
-                        elements[[i]]@predIsoDist)
+                        peakIdData(emptyAdductQuantif) <- 
+                        c(peakIdData(emptyAdductQuantif),
+                        peakIdData(elements[[i]]))
+                        predIsoDist(emptyAdductQuantif) <- 
+                        c(predIsoDist(emptyAdductQuantif),
+                        predIsoDist(elements[[i]]))
                         # keep unique
-                        emptyAdductQuantif@predIsoDist <- 
-                        emptyAdductQuantif@predIsoDist[
-                        duplicated(names(emptyAdductQuantif@predIsoDist)) 
+                        predIsoDist(emptyAdductQuantif) <- 
+                        predIsoDist(emptyAdductQuantif)[
+                        duplicated(names(predIsoDist(emptyAdductQuantif))) 
                         ==FALSE]
                         # target table
-                        emptyAdductQuantif@targTable <- 
-                        rbind(emptyAdductQuantif@targTable,
-                        elements[[i]]@targTable)
+                        targTable(emptyAdductQuantif) <- 
+                        rbind(targTable(emptyAdductQuantif),
+                        targTable(elements[[i]]))
                         # remove duplicates
-                        uniEntries <- apply(emptyAdductQuantif@targTable[
+                        uniEntries <- apply(targTable(emptyAdductQuantif)[
                         , seq_len(3)],
                         1, paste, collapse = "")
-                        emptyAdductQuantif@targTable <- 
-                        emptyAdductQuantif@targTable[
+                        targTable(emptyAdductQuantif) <- 
+                        targTable(emptyAdductQuantif)[
                         duplicated(uniEntries) == 
                         FALSE, , drop = FALSE]
                         file.paths(emptyAdductQuantif) <- 
