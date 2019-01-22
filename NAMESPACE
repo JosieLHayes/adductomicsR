@@ -12,9 +12,11 @@ export(rtDevModelling)
 export(specSimPepId)
 exportClasses(AdductQuantif)
 exportClasses(AdductSpec)
-exportMethods("c", "file.paths", "file.paths<-", "peakQuantTable", 
-"peakQuantTable<-"), "peakIdData", "peakIdData<-", "predIsoDist", 
-"predIsoDist<-", "targTable", "targTable<-", 
+exportMethods("c", "file.paths", "file.paths<-")
+exportMethods("peakQuantTable", "peakQuantTable<-")
+exportMethods("peakIdData", "peakIdData<-")
+exportMethods("predIsoDist", "predIsoDist<-")
+exportMethods("targTable", "targTable<-")
 import(DT)
 import(adductData)
 import(ade4)
