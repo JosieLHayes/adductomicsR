@@ -90,6 +90,14 @@ setMethod("file.paths",
     definition = function(object){
         return(object@file.paths)
     })
+setGeneric("file.paths<-", function(object,
+        value) standardGeneric("file.paths<-"))    
+setMethod("file.paths<-","AdductQuantif",function(object, value) {
+    object@file.paths <- value
+    if (validObject(object))
+    return(object)   
+})
+    
 setGeneric("peakQuantTable", function(
     object) standardGeneric("peakQuantTable"))
 setMethod("peakQuantTable", 
