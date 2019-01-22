@@ -181,13 +181,13 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
                 colnames(results))
                 keepCols <- which(keepCols == FALSE)
                 emptyResultRows <- rep(((seq_len(length(
-                quantObject@file.paths)) - 1)
+                file.paths(quantObject))) - 1)
                 * nrow(targTable)), 
                 length(indivAdduct)) + rep(indivAdduct, 
-                each = length(quantObject@file.paths))
+                each = length(file.paths(quantObject)))
                 results[emptyResultRows, keepCols] <- 0
                 resultsList <- quantObject@peakIdData
-                filePaths <- quantObject@file.paths
+                filePaths <- file.paths(quantObject)
             }
             for (i in seq_len(length(filePaths))) {
                 filePathTmp <- filePaths[i]
@@ -372,7 +372,7 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
                 object <- new("AdductQuantif")
                 object@predIsoDist <- predIsoDist
                 object@targTable <- targTable
-                object@file.paths <- filePaths
+                file.paths(object) <- filePaths
             }
             object@peakQuantTable <- results
             object@peakIdData <- resultsList
@@ -380,9 +380,9 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
             return(object)
         }  # end Function 
         setMethod("show", "AdductQuantif", function(object) {
-            if (length(object@file.paths) > 0) {
+            if (length(file.paths(object)) > 0) {
                 cat("A \"AdductQuantif\" class object derived from", 
-                length(object@file.paths), 
+                length(file.paths(object)), 
             "MS files \n\n")
                 cat("Consisting of:\n", sum(object@peakQuantTable[,
                 "peakArea"] != "0"), 
@@ -453,9 +453,9 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
                         emptyAdductQuantif@targTable[
                         duplicated(uniEntries) == 
                         FALSE, , drop = FALSE]
-                        emptyAdductQuantif@file.paths <- 
-                        c(emptyAdductQuantif@file.paths, 
-                    elements[[i]]@file.paths)
+                        file.paths(emptyAdductQuantif) <- 
+                        c(file.paths(emptyAdductQuantif), 
+                    file.paths(elements[[i]]))
                     }
                     return(emptyAdductQuantif)
                 })  # end function
