@@ -372,7 +372,7 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
                 object <- new("AdductQuantif")
                 object@predIsoDist <- predIsoDist
                 object@targTable <- targTable
-                file.paths(object) <- filePaths
+                object@file.paths <- filePaths
             }
             object@peakQuantTable <- results
             object@peakIdData <- resultsList
