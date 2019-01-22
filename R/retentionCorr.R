@@ -93,7 +93,7 @@ nExtra = 1, folds = 7, outputFileDir = NULL) {
     pb <- txtProgressBar(min = 0, max = nFiles, style = 3)
     for (i in seq_len(nFiles)) {
         setTxtProgressBar(pb, i)
-        fileNameTmp <- basename(file.paths(adductSpectra))[i]
+        fileNameTmp <- basename(Specfile.paths(adductSpectra))[i]
         fileIndx <- metaDataTmp$mzXMLFile %in% fileNameTmp
         fileMetaTmp <- metaDataTmp[fileIndx, , drop = FALSE]
         # mean rt each MS/MS rt group
@@ -172,7 +172,7 @@ nExtra = 1, folds = 7, outputFileDir = NULL) {
     flush.console()
     for (i in seq_len(nFiles)) {
         setTxtProgressBar(pb, i)
-        fileNameTmp <- basename(file.paths(adductSpectra))[i]
+        fileNameTmp <- basename(Specfile.paths(adductSpectra))[i]
         fileIndx <- metaDataTmp$mzXMLFile %in% fileNameTmp
         fileMetaTmp <- metaDataTmp[fileIndx, , drop = FALSE]
         # mean rt each MS/MS rt group

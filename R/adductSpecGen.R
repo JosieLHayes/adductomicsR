@@ -233,7 +233,7 @@ integer)')
     metaDataTmp <- data.frame(mzXMLFile=fileNamesTmp, metaDataTmp, 
     stringsAsFactors=FALSE)
     metaData(AdductSpecTmp) <- metaDataTmp
-    AdductSpecTmp@file.paths <- MS2files
+    Specfile.paths(AdductSpecTmp) <- MS2files
     Parameters(AdductSpecTmp) <- data.frame(nCores,ifelse(is.null(intStdMass), 
     NA, intStdMass), TICfilter, DNF, minInt, minPeaks, intStd_MaxMedRtDrift,  
     intStd_MaxPpmDev, stringsAsFactors=FALSE)
