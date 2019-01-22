@@ -96,7 +96,8 @@ saveRtDev = 1) {
     intStd_MaxPpmDev = intStd_MaxPpmDev, 
     outputPlotDir = MS2Dir, intStdMass = intStdMass, 
     minSpecEx = minSpecEx)
-    maxRtDrift_intStd <- max(abs(adductSpectra@metaData$intStdRtDrift)) * 1.5
+    maxRtDrift_intStd <- max(abs(metaData(adductSpectra)[,'intStdRtDrift'])) *
+    1.5
     #adductSpectra@metaData$intStdPpmDrift <- NULL
     #adductSpectra@metaData$intStdRtDrift <- NULL
     adductSpectra <- ms2Group(adductSpectra, nCores, 
@@ -104,10 +105,10 @@ saveRtDev = 1) {
     maxRtDrift = maxRtDrift_intStd, dotProdClust = TRUE, 
     compSpecGen = FALSE, 
     minDotProd = minDotProd)
-    nExtra <- round(length(adductSpectra@file.paths) * {
+    nExtra <- round(length(Specfile.paths(adductSpectra)) * {
         percExtra/100
         }, 0)
-        nMissing <- round(length(adductSpectra@file.paths) * {
+        nMissing <- round(length(Specfile.paths(adductSpectra)) * {
             percMissing/100
         }, 0)
             # # retention time correction

@@ -76,3 +76,74 @@ setMethod("c", signature(x = "AdductSpec"), function(x, ...){
     flush.console()
     return(emptyAdductSpec)
 }) # end function
+
+setGeneric("Specfile.paths", function(object) standardGeneric("Specfile.paths"))
+setMethod("Specfile.paths", 
+    signature="AdductSpec",
+    definition = function(object){
+        return(object@file.paths)
+    })
+setGeneric("Specfile.paths<-", function(object,
+        value) standardGeneric("Specfile.paths<-"))    
+setMethod("Specfile.paths<-","AdductSpec",function(object, value) {
+    object@file.paths <- value
+    if (validObject(object))
+    return(object)   
+})
+
+setGeneric("adductMS2spec", function(object) standardGeneric("adductMS2spec"))
+setMethod("adductMS2spec", 
+    signature="AdductSpec",
+    definition = function(object){
+        return(object@file.paths)
+    })
+setGeneric("adductMS2spec<-", function(object,
+        value) standardGeneric("adductMS2spec<-"))    
+setMethod("adductMS2spec<-","AdductSpec",function(object, value) {
+    object@file.paths <- value
+    if (validObject(object))
+    return(object)   
+})
+
+setGeneric("metaData", function(object) standardGeneric("metaData"))
+setMethod("metaData", 
+    signature="AdductSpec",
+    definition = function(object){
+        return(object@file.paths)
+    })
+setGeneric("metaData<-", function(object,
+        value) standardGeneric("metaData<-"))    
+setMethod("metaData<-","AdductSpec",function(object, value) {
+    object@file.paths <- value
+    if (validObject(object))
+    return(object)   
+})
+
+setGeneric("Parameters", function(object) standardGeneric("Parameters"))
+setMethod("Parameters", 
+    signature="AdductSpec",
+    definition = function(object){
+        return(object@file.paths)
+    })
+setGeneric("Parameters<-", function(object,
+        value) standardGeneric("Parameters<-"))    
+setMethod("Parameters<-","AdductSpec",function(object, value) {
+    object@file.paths <- value
+    if (validObject(object))
+    return(object)   
+})
+
+setGeneric("groupMS2spec", function(object) standardGeneric("groupMS2spec"))
+setMethod("groupMS2spec", 
+    signature="AdductSpec",
+    definition = function(object){
+        return(object@file.paths)
+    })
+setGeneric("groupMS2spec<-", function(object,
+        value) standardGeneric("groupMS2spec<-"))    
+setMethod("groupMS2spec<-","AdductSpec",function(object, value) {
+    object@file.paths <- value
+    if (validObject(object))
+    return(object)   
+})
+
