@@ -27,13 +27,13 @@
 #'list.files('J:\\parentdirectory\\directoryContainingfiles',
 #'pattern='.mzXML', all.files=FALSE, full.names=TRUE).
 #'@param quantObject character string for filepath to an 
-#'adductQuantif object to be integrated.
+#'AdductQuantif object to be integrated.
 #'@param maxPpm numeric for the maximum parts per million to be used.
 #'@param minSimScore a numeric between 0
 # and 1 for peak quality stringency.
 #'@param spikeScans a numeric for the number of scans that a spike
 #'must be seen in for it to be integrated. Default is 2.
-#'@param indivAdduct numeric vector of adductQuantif targets to re-integrate 
+#'@param indivAdduct numeric vector of AdductQuantif targets to re-integrate 
 #'@param minPeakHeight numeric to determine the minimum height for a 
 #'peak to be integrated. Default
 #'is set low at 100.
@@ -161,11 +161,11 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
                 intSeq <- seq_len(nrow(targTable))
             } else {
                 # error handling
-                if (!is(quantObject,'adductQuantif')) {
+                if (!is(quantObject,'AdductQuantif')) {
                     stop("argument object is not an 
                 AdductQuantif class object")
                 } else if (is.null(indivAdduct)) {
-                    stop("a numeric vector of adductQuantif
+                    stop("a numeric vector of AdductQuantif
                 targets to re-integrate must be provided")
                 }
                 targTable <- quantObject@targTable
@@ -232,10 +232,8 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
                     pmt <- proc.time()
                     message(paste0("Starting SNOW cluster with ", nCores,
                 " local sockets...\n"))
-                    utils::flush.console()
                     message("identifying and quantifying ", nrow(targTable),
                 " features...\n")
-                    utils::flush.console()
                     cl <- parallel::makeCluster(nCores)
                     doSNOW::registerDoSNOW(cl)
                     # foreach and dopar from foreach package
@@ -371,7 +369,7 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
             if (!is.null(quantObject)) {
                 object <- quantObject
             } else {
-                object <- new("adductQuantif")
+                object <- new("AdductQuantif")
                 object@predIsoDist <- predIsoDist
                 object@targTable <- targTable
                 object@file.paths <- filePaths
@@ -381,9 +379,9 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
             save(object, file = "adductQuantResults.Rdata")
             return(object)
         }  # end Function 
-        setMethod("show", "adductQuantif", function(object) {
+        setMethod("show", "AdductQuantif", function(object) {
             if (length(object@file.paths) > 0) {
-                cat("A \"adductQuantif\" class object derived from", 
+                cat("A \"AdductQuantif\" class object derived from", 
                 length(object@file.paths), 
             "MS files \n\n")
                 cat("Consisting of:\n", sum(object@peakQuantTable[,
@@ -411,18 +409,18 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16) {
                     memsize <- object.size(object)
                     cat("Memory usage:", signif(memsize/2^20, 3), "MB\n")
                 } else {
-                    cat("A new empty\"adductQuantif\" class object")
+                    cat("A new empty\"AdductQuantif\" class object")
                 }
             }) 
-            setMethod("c", signature(x = "adductQuantif"), function(x, ...) {
+            setMethod("c", signature(x = "AdductQuantif"), function(x, ...) {
                 elements = list(x, ...)
                 # error handling check if all adductSpec object
-                if (any(vapply(elements, function(ele) is(ele,'adductQuantif'),
+                if (any(vapply(elements, function(ele) is(ele,'AdductQuantif'),
                     FUN.VALUE=logical(1)) == FALSE)) {
                         stop("all elements must be an 
-                        adductQuantif class object")
+                        AdductQuantif class object")
                     }
-                    emptyAdductQuantif <- new("adductQuantif")
+                    emptyAdductQuantif <- new("AdductQuantif")
                     for (i in seq_len(length(elements))) {
                         if (ncol(emptyAdductQuantif@peakQuantTable) == 0) {
                             emptyAdductQuantif@peakQuantTable <- 

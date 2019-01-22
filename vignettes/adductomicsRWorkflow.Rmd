@@ -174,7 +174,7 @@ adductQuant(
 
 ```
 
-# Extract the results from the adductQuantif Object
+# Extract the results from the AdductQuantif Object
 It is recommended that spectra for each of the adducts found are checked 
 manually using LC-MS software, either at this step or before quantification. 
 
