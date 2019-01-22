@@ -105,3 +105,55 @@ setMethod("peakQuantTable",
     definition = function(object){
         return(object@peakQuantTable)
     })
+setGeneric("peakQuantTable<-", function(object,
+        value) standardGeneric("peakQuantTable<-"))    
+setMethod("peakQuantTable<-","AdductQuantif",function(object, value) {
+    object@peakQuantTable <- value
+    if (validObject(object))
+    return(object)   
+})
+    
+setGeneric("peakIdData", function(
+    object) standardGeneric("peakIdData"))
+setMethod("peakIdData", 
+    signature="AdductQuantif",
+    definition = function(object){
+        return(object@peakIdData)
+    })
+setGeneric("peakIdData<-", function(object,
+        value) standardGeneric("peakIdData<-"))    
+setMethod("peakIdData<-","AdductQuantif",function(object, value) {
+    object@peakIdData <- value
+    if (validObject(object))
+    return(object)   
+})
+    
+setGeneric("predIsoDist", function(
+    object) standardGeneric("predIsoDist"))
+setMethod("predIsoDist", 
+    signature="AdductQuantif",
+    definition = function(object){
+        return(object@predIsoDist)
+    })
+setGeneric("predIsoDist<-", function(object,
+        value) standardGeneric("predIsoDist<-"))    
+setMethod("predIsoDist<-","AdductQuantif",function(object, value) {
+    object@predIsoDist <- value
+    if (validObject(object))
+    return(object)   
+})
+    
+setGeneric("targTable", function(
+    object) standardGeneric("targTable"))
+setMethod("targTable", 
+    signature="AdductQuantif",
+    definition = function(object){
+        return(object@targTable)
+    })
+setGeneric("targTable<-", function(object,
+        value) standardGeneric("targTable<-"))    
+setMethod("targTable<-","AdductQuantif",function(object, value) {
+    object@targTable <- value
+    if (validObject(object))
+    return(object)   
+})
