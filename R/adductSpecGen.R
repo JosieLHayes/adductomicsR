@@ -236,7 +236,7 @@ integer)')
     metaDataTmp <- data.frame(mzXMLFile=fileNamesTmp, metaDataTmp, 
     stringsAsFactors=FALSE)
     metaData(AdductSpecTmp) <- metaDataTmp
-    Specfile.paths(AdductSpecTmp) <- MS2files
+    Specfile.paths(AdductSpecTmp) <- unlist(MS2files)
     Parameters(AdductSpecTmp) <- data.frame(nCores,ifelse(is.null(intStdMass), 
     NA, intStdMass), TICfilter, DNF, minInt, minPeaks, intStd_MaxMedRtDrift,  
     intStd_MaxPpmDev, stringsAsFactors=FALSE)
@@ -245,7 +245,6 @@ integer)')
     message('Identifying internal standard MS/MS spectra within a m/z window  
     of ', intStd_MaxPpmDev, ' ppm and a retention time window of ',           
     round(intStd_MaxMedRtDrift/60, 2), ' minutes...\n')
-    flush.console()
     intStdScans <- peakListId(AdductSpecTmp, peakList=intStdPeakList,         
     minPeaksId=7,
     minSpecEx=minSpecEx, outputPlotDir=NULL,
@@ -342,7 +341,7 @@ integer)')
     if(length(Specfile.paths(object)) > 0){
     cat("A \"AdductSpec\" class object derived from", 
     length(Specfile.paths(object)),"MS2 files \n\n")
-    cat("Consisting of:\n", sum(object@metaData$msLevel == 1), "raw MS1 
+    cat("Consisting of:\n", sum(metaData(object)[,'msLevel'] == 1), "raw MS1 
     scans\n", sum(metaData(object)[,'msLevel'] == 2), "raw MS2 scans of which",
     sum(metaData(object)[,'aboveMinPeaks'] == TRUE), "scans were above the 
     noise following filtration.\n\n")
