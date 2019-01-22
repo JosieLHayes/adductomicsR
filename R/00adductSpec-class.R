@@ -40,7 +40,7 @@ setClass("AdductSpec",
                         Peptides = "data.frame",
                         rtDevModels = "list",
                         targetTable = "data.frame",
-                        file.paths = "character",
+                        file.paths = "list",
                         Parameters = "data.frame"))
 #' @rdname AdductSpec-class
 #' @aliases c,AdductSpec-method
