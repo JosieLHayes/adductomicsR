@@ -10,7 +10,7 @@ metrics = c("nMadDotProdDistN",
 "nMadPeakArea", "duplicates"))
 }
 \arguments{
-\item{object}{an 'adductQuantif' class object}
+\item{object}{an 'AdductQuantif' class object}
 
 \item{nTimesMad}{numeric number of median absolute 
 deviations to identify potential
@@ -25,7 +25,7 @@ list element names corresponding to column names of metrics.}
 \item{...}{further arguments to \code{\link{mad}}}
 }
 \value{
-'adductQuantif' class object
+'AdductQuantif' class object
 }
 \description{
 potentially problematic peak identification

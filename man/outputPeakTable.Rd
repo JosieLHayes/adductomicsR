@@ -2,12 +2,12 @@
 % Please edit documentation in R/outputPeakTable.R
 \name{outputPeakTable}
 \alias{outputPeakTable}
-\title{output peak table from adductQuantif object}
+\title{output peak table from AdductQuantif object}
 \usage{
 outputPeakTable(object = NULL, outputDir = NULL)
 }
 \arguments{
-\item{object}{a 'adductQuantif' class object}
+\item{object}{a 'AdductQuantif' class object}
 
 \item{outputDir}{character full path to a directory to output the peak to
 default is the current working directory}
@@ -22,7 +22,7 @@ The peak table is also returned to
 the R session and can be assigned to an object.
 }
 \description{
-output peak table from adductQuantif object
+output peak table from AdductQuantif object
 }
 \examples{
 eh = ExperimentHub();

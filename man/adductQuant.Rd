@@ -32,9 +32,9 @@ list.files('J:\\parentdirectory\\directoryContainingfiles',
 pattern='.mzXML', all.files=FALSE, full.names=TRUE).}
 
 \item{quantObject}{character string for filepath to an 
-adductQuantif object to be integrated.}
+AdductQuantif object to be integrated.}
 
-\item{indivAdduct}{numeric vector of adductQuantif targets to re-integrate}
+\item{indivAdduct}{numeric vector of AdductQuantif targets to re-integrate}
 
 \item{maxPpm}{numeric for the maximum parts per million to be used.}
 
