@@ -43,10 +43,10 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
             colnames(Parameters(adductSpectra)))) {
                 if (!is.null(maxRtDrift)) {
                     if (Parameters(adductSpectra)[,'maxRtDrift'] == 
-                        maxRtDrift & Parameters(adductSpectra)
-                    [,'ms1mzError'] == 
-                        ms1mzError & Parameters(
-                            adductSpectra)[,'dotProdClust'] ==
+                        maxRtDrift & 
+                    Parameters(adductSpectra)$ms1mzError == 
+                        ms1mzError &
+                         Parameters(adductSpectra)[,'dotProdClust'] ==
                         FALSE)
                         {
                             stop("Grouping and composite spectrum generation is 
@@ -71,9 +71,8 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
             # check if mz error has changed if not then do not re-do 
             # hierarchical clustering of mass
             hclustMass <- TRUE
-            if (!is.null(Parameters(adductSpectra)[,'ms1mzError'])) {
-                hclustMass <- ifelse(Parameters(adductSpectra)[,
-                'ms1mzError'] == 
+            if (!is.null(Parameters(adductSpectra)$ms1mzError)) {
+                hclustMass <- ifelse(Parameters(adductSpectra)$ms1mzError == 
                 ms1mzError, FALSE, 
             TRUE)
             }
