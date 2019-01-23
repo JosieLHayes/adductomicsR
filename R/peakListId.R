@@ -42,19 +42,20 @@ closestMassByFile = TRUE, outputPlotDir = NULL) {
     }
     stopifnot(is.numeric(peakList))
     # add to parameters
-    adductSpectra@Parameters$idLevel <- ifelse(allScans == FALSE,
+    Parameters(adductSpectra)[,'idLevel'] <- ifelse(allScans == FALSE,
     "compSpec", "rawSpec")
     # if the id is on the raw scans rather than composite spectra
-    if (adductSpectra@Parameters$idLevel == "compSpec") {
-        spectraTmp <- adductSpectra@groupMS2spec
+    if (Parameters(adductSpectra)[,'idLevel'] == "compSpec") {
+        spectraTmp <- groupMS2spec(adductSpectra)
     } else {
-        spectraTmp <- unlist(adductSpectra@adductMS2spec, recursive = FALSE)
+        spectraTmp <- unlist(adductMS2spec(adductSpectra), recursive = FALSE)
     }
     # mass and rts of interest
-    idxTmp <- match(names(spectraTmp), paste0(adductSpectra@metaData$mzXMLFile,
+    idxTmp <- match(names(spectraTmp), paste0(
+        metaData(adductSpectra)[,'mzXMLFile'],
     ".MS2spectra.", 
-adductSpectra@metaData$seqNum))
-    precursorMz <- adductSpectra@metaData$precursorMZ[idxTmp]
+metaData(adductSpectra)[,'seqNum']))
+    precursorMz <- metaData(adductSpectra)[,'precursorMZ'][idxTmp]
     # all scans within maxPpm Deviation (default = 200 ppm)
     ppmIdx <- abs((precursorMz - exPeakMass)/exPeakMass * 1e+06) < maxPpmDev
     spectraTmp <- spectraTmp[ppmIdx]
@@ -106,14 +107,15 @@ adductSpectra@metaData$seqNum))
     nrow = nrow(peakListMatches)), stringsAsFactors = FALSE)
     colnames(specPepMatchesTmp) <- resColNamesTmp
     indxTmp <- match(peakListMatches[, 1], 
-    paste0(adductSpectra@metaData$mzXMLFile, 
-    ".MS2spectra.", adductSpectra@metaData$seqNum))
-    specPepMatchesTmp$precursorMz <- adductSpectra@metaData$precursorMZ[
+    paste0(metaData(adductSpectra)[,'mzXMLFile'], 
+    ".MS2spectra.", metaData(adductSpectra)[,'seqNum']))
+    specPepMatchesTmp$precursorMz <- metaData[,'precursorMZ'][
     indxTmp]
     specPepMatchesTmp$retentionTime <-
-    adductSpectra@metaData$retentionTime[indxTmp]
-    specPepMatchesTmp$seqNum <- adductSpectra@metaData$seqNum[indxTmp]
-    specPepMatchesTmp$mzXMLFile <- adductSpectra@metaData$mzXMLFile[indxTmp]
+    metaData(adductSpectra)[,'retentionTime'][indxTmp]
+    specPepMatchesTmp$seqNum <- metaData(adductSpectra)[,'seqNum'][indxTmp]
+    specPepMatchesTmp$mzXMLFile <- metaData(
+        adductSpectra)[,'mzXMLFile'][indxTmp]
     specPepMatchesTmp$peakNo <- peakNos[as.numeric(peakListMatches[, 5])]
     peakPercentSumInt <- (as.numeric(peakListMatches[, 2])/
     as.numeric(peakListMatches[, 

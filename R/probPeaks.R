@@ -45,7 +45,7 @@ metrics = c("nMadDotProdDistN",
         metrics <- names(metrics)
     }
 
-    indxTmp <- as.numeric(object@peakQuantTable[, "peakArea"]) != 0
+    indxTmp <- as.numeric(peakQuantTable(object)[, "peakArea"]) != 0
     resultsTmp <- matrix(0, ncol = 11, nrow = length(indxTmp))
     colnames(resultsTmp) <- c("dotProdDistN", "skewness", 
     "kurtosis", "nMadRtGroupDev", 
@@ -53,7 +53,7 @@ metrics = c("nMadDotProdDistN",
     "nMadKurtosis", "nMadDuplicates", 
     "possOutPeak", "peakOutMetrics")
 
-    quantTableTmp <- object@peakQuantTable
+    quantTableTmp <- peakQuantTable(object)
     # remove previous results if necessary
     quantTableTmp <- quantTableTmp[, setdiff(colnames(quantTableTmp), 
     colnames(resultsTmp))]
@@ -77,7 +77,7 @@ metrics = c("nMadDotProdDistN",
 
     for (i in which(indxTmp)) {
         # setTxtProgressBar(pb, i)
-        peakRangeTmp <- object@peakIdData[[i]]$peakRange
+        peakRangeTmp <- peakIdData(object)[[i]]$peakRange
         peakIntIndx <- which(peakRangeTmp$troughs == "intPeakTrough")
         if (length(peakIntIndx) == 0) {
             next
@@ -199,7 +199,7 @@ time or peak area.\n")
     function(rowTmp) {
         paste0(nMadColNames[rowTmp >= nTimesMad], collapse = "; ")
     })
-        object@peakQuantTable <- cbind(resultsTmp[, c("possOutPeak",
+        peakQuantTable(object) <- cbind(resultsTmp[, c("possOutPeak",
         "peakOutMetrics")], quantTableTmp, 
         resultsTmp[, c("dotProdDistN", "skewness", "kurtosis", 
         "nMadRtGroupDev", 

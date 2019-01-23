@@ -148,3 +148,44 @@ setMethod("groupMS2spec<-","AdductSpec",function(object, value) {
     return(object)   
 })
 
+setGeneric("rtDevModels", function(object) standardGeneric("rtDevModels"))
+setMethod("rtDevModels", 
+    signature="AdductSpec",
+    definition = function(object){
+        return(object@rtDevModels)
+    })
+setGeneric("rtDevModels<-", function(object,
+        value) standardGeneric("rtDevModels<-"))    
+setMethod("rtDevModels<-","AdductSpec",function(object, value) {
+    object@rtDevModels <- value
+    if (validObject(object))
+    return(object)   
+})
+
+setGeneric("sumAdductType", function(object) standardGeneric("sumAdductType"))
+setMethod("sumAdductType", 
+    signature="AdductSpec",
+    definition = function(object){
+        return(object@sumAdductType)
+    })
+setGeneric("sumAdductType<-", function(object,
+        value) standardGeneric("sumAdductType<-"))    
+setMethod("sumAdductType<-","AdductSpec",function(object, value) {
+    object@sumAdductType <- value
+    if (validObject(object))
+    return(object)   
+})
+
+setGeneric("Peptides", function(object) standardGeneric("Peptides"))
+setMethod("Peptides", 
+    signature="AdductSpec",
+    definition = function(object){
+        return(object@Peptides)
+    })
+setGeneric("Peptides<-", function(object,
+        value) standardGeneric("Peptides<-"))    
+setMethod("Peptides<-","AdductSpec",function(object, value) {
+    object@Peptides <- value
+    if (validObject(object))
+    return(object)   
+})

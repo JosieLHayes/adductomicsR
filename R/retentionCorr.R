@@ -76,7 +76,7 @@ nExtra = 1, folds = 7, outputFileDir = NULL) {
     max(metaDataTmp$retentionTime)/60)
     rtSeqTmp <- seq(minMaxRt[1], minMaxRt[2], 0.1)
     # plot deviation from RT loess
-    adductSpectra@rtDevModels <- vector("list", nFiles)
+    rtDevModels(adductSpectra) <- vector("list", nFiles)
     minMaxRtDf <- matrix(0, ncol = 2, nrow = nFiles)
     rtDevAllTmp <- vector("list", nFiles)
     if (!is.null(smoothingSpan)) {
@@ -114,18 +114,18 @@ nExtra = 1, folds = 7, outputFileDir = NULL) {
         # loess model retentionTime and retentionTime deviation optimal loess
         # predict(adductSpectra@rtDevModels[[i]], newdata=rtSeqTmp)
         if (!is.null(smoothingSpan)) {
-            adductSpectra@rtDevModels[[i]] <- loess(deviationMed ~ rtsFileTmp,
+            rtDevModels(adductSpectra)[[i]] <- loess(deviationMed ~ rtsFileTmp,
             span = smoothingSpan, 
         surface = "direct")
         } else {
-            adductSpectra@rtDevModels[[i]] <- loessWrapperMod(rtsFileTmp, 
+            rtDevModels(adductSpectra)[[i]] <- loessWrapperMod(rtsFileTmp, 
         deviationMed, folds = folds)
         }
         # predict retention time for plotting
         metaDataTmp$predRtLoess[fileIndx] <- {
             {
                 metaDataTmp$retentionTime[fileIndx]/60
-            } - predict(adductSpectra@rtDevModels[[i]], newdata = 
+            } - predict(rtDevModels(adductSpectra)[[i]], newdata = 
         metaDataTmp$retentionTime[fileIndx]/60)
         } * 60
         # min/max deviation
@@ -149,7 +149,7 @@ nExtra = 1, folds = 7, outputFileDir = NULL) {
     type = "l")
     for (i in seq_len(nFiles)) {
         lines(x = rtSeqTmp, 
-        y = predict(adductSpectra@rtDevModels[[i]], newdata = rtSeqTmp), 
+        y = predict(rtDevModels(adductSpectra)[[i]], newdata = rtSeqTmp), 
     col = i + 1)
         rtDevTmp <- rtDevAllTmp[[i]]
         points(rtDevTmp[-c(nrow(rtDevTmp) - 1, nrow(rtDevTmp)), ], 

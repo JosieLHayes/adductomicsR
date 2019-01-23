@@ -24,23 +24,23 @@ minDotProdSpec = 0.8, maxGroups = 10) {
     } else if (!is(adductSpectra,'adductSpec')) {
         stop("argument adductSpectra is not an adductSpec class object.")
     }
-    if (is.null(adductSpectra@metaData$interMSMSrtGroups)) {
+    if (is.null(metaData(adductSpectra)[,'interMSMSrtGroups'])) {
         stop("spectral grouping using the ?ms2Group function has 
     not yet been performed...")
     }
     # all constituent spectra
-    indivSpecs <- unlist(adductSpectra@adductMS2spec, recursive = FALSE)
+    indivSpecs <- unlist(adductMS2spec(adductSpectra), recursive = FALSE)
 
-    uniqueMSMSgroups <- unique(adductSpectra@metaData$interMSMSrtGroups)
+    uniqueMSMSgroups <- unique(metaData(adductSpectra)[,'interMSMSrtGroups'])
     uniqueMSMSgroups <- uniqueMSMSgroups[uniqueMSMSgroups != ""]
-    freqMSMSgroup <- table(adductSpectra@metaData$interMSMSrtGroups)
+    freqMSMSgroup <- table(metaData(adductSpectra)[,'interMSMSrtGroups'])
     freqMSMSgroup <- freqMSMSgroup[freqMSMSgroup != ""]
     freqMSMSgroup <- names(freqMSMSgroup)[freqMSMSgroup > 1]
 
     uniqueMSMSgroups <- uniqueMSMSgroups[uniqueMSMSgroups %in% freqMSMSgroup]
 
-    metaDataTmp <- adductSpectra@metaData[
-    adductSpectra@metaData$interMSMSrtGroups
+    metaDataTmp <- metaData(adductSpectra)[
+    metaData(adductSpectra)[,'interMSMSrtGroups']
     %in% uniqueMSMSgroups, , drop = FALSE]
     spectrumIds <- paste0(metaDataTmp$mzXMLFile, ".MS2spectra", ".", 
     metaDataTmp$seqNum)
@@ -138,7 +138,7 @@ minDotProdSpec = 0.8, maxGroups = 10) {
         }  
     }
     proc.time() - pmt
-    prevMetaData <- adductSpectra@metaData
+    prevMetaData <- metaData(adductSpectra)
     prevSpectrumIds <- paste0(prevMetaData$mzXMLFile, ".MS2spectra", ".", 
     prevMetaData$seqNum)
     tmpIndx <- match(prevSpectrumIds, spectrumIds)
@@ -148,6 +148,6 @@ minDotProdSpec = 0.8, maxGroups = 10) {
     prevMetaData$meanDotProd_mzRtGroup <- 0
     prevMetaData$meanDotProd_mzRtGroup[which(!is.na(tmpIndx))]<-
     as.numeric(names(dotProdResults)[tmpIndx[!is.na(tmpIndx)]])
-    adductSpectra@metaData <- prevMetaData
+    metaData(adductSpectra) <- prevMetaData
     return(adductSpectra)
 }  # end function

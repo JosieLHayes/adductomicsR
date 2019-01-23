@@ -38,13 +38,15 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
         stop("argument adductSpectra is not an AdductSpec class object.")
     }
     # check if the parameters are the same and stop if re-grouping unneccessary
-    if (ncol(adductSpectra@Parameters) > 0) {
+    if (ncol(Parameters(adductSpectra)) > 0) {
         if (all(c("maxRtDrift", "ms1mzError", "dotProdClust") %in% 
-            colnames(adductSpectra@Parameters))) {
+            colnames(Parameters(adductSpectra)))) {
                 if (!is.null(maxRtDrift)) {
-                    if (adductSpectra@Parameters$maxRtDrift == 
-                        maxRtDrift & adductSpectra@Parameters$ms1mzError == 
-                        ms1mzError & adductSpectra@Parameters$dotProdClust ==
+                    if (Parameters(adductSpectra)[,'maxRtDrift'] == 
+                        maxRtDrift & Parameters(adductSpectra)
+                    [,'ms1mzError'] == 
+                        ms1mzError & Parameters
+                        (adductSpectra)[,'dotProdClust'] ==
                         FALSE)
                         {
                             stop("Grouping and composite spectrum generation is 
@@ -56,21 +58,22 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
                 }
             }
             # empty peptide identification results slots
-            adductSpectra@specPepMatches <- vector("list", 0)
-            adductSpectra@sumAdductType <- data.frame()
-            adductSpectra@Peptides <- data.frame()
-            metaDataTmp <- adductSpectra@metaData
+            specPepMatches(adductSpectra) <- vector("list", 0)
+            sumAdductType(adductSpectra) <- data.frame()
+            Peptides(adductSpectra) <- data.frame()
+            metaDataTmp <- metaData(adductSpectra)
             metaDataTmp$orderTmp <- seq_len(nrow(metaDataTmp))
             indxTmp <- metaDataTmp$aboveMinPeaks == 1
             metaDataTmp <- metaDataTmp[indxTmp, ]
             # all spectra 1 list
-            allSpectra <- unlist(adductSpectra@adductMS2spec, recursive =
+            allSpectra <- unlist(adductMS2spec(adductSpectra), recursive =
             FALSE)
             # check if mz error has changed if not then do not re-do 
             # hierarchical clustering of mass
             hclustMass <- TRUE
-            if (!is.null(adductSpectra@Parameters$ms1mzError)) {
-                hclustMass <- ifelse(adductSpectra@Parameters$ms1mzError == 
+            if (!is.null(Parameters(adductSpectra)[,'ms1mzError'])) {
+                hclustMass <- ifelse(Parameters(adductSpectra)[,
+                'ms1mzError'] == 
                 ms1mzError, FALSE, 
             TRUE)
             }
@@ -90,9 +93,9 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
                 }
                 if (adjPrecursorMZ == TRUE) {
                     # add ppm mass drift value
-                    precursorMZs <- metaDataTmp$adjPrecursorMZ
+                    precursorMZs <- adjPrecursorMZ(metaDataTmp)
                 } else {
-                    precursorMZs <- metaDataTmp$precursorMZ
+                    precursorMZs <- precursorMZ(metaDataTmp)
                 }
 
                 hr <- fastcluster::hclust.vector(precursorMZs, 
@@ -114,7 +117,7 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
             } else {
                 retentionTime <- as.numeric(metaDataTmp$retentionTime)
             }
-            if (length(adductSpectra@rtDevModels) > 0) {
+            if (length(rtDevModels(adductSpectra)) > 0) {
                 message("Adjusting retention time based on loess model...")
                 flush.console()
                 metaDataTmp$predRtLoess <- 0
@@ -123,7 +126,7 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
                     basename(Specfile.paths(adductSpectra))[x])
                     metaDataTmp$predRtLoess[indxFileTmp] <- 
                     retentionTime[indxFileTmp]-
-                    (predict(adductSpectra@rtDevModels[[x]], newdata = 
+                    (predict(rtDevModels(adductSpectra)[[x]], newdata = 
                     as.numeric(retentionTime[indxFileTmp])/60) * 
                 60)
                 }
@@ -132,9 +135,10 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
     
             # if unneccessary do not re do retention time clustering
             hclustRt <- TRUE
-            if (!is.null(adductSpectra@Parameters$maxRtDrift)) {
+            if (!is.null(Parameters(adductSpectra)[,'maxRtDrift'])) {
                 if (!is.null(maxRtDrift)) {
-                    hclustRt <- ifelse(adductSpectra@Parameters$maxRtDrift == 
+                    hclustRt <- ifelse
+                    (Parameters(adductSpectra)[,'maxRtDrift'] == 
                     maxRtDrift, 
                 FALSE, TRUE)
                 } else {
@@ -413,7 +417,8 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
                                     proc.time() - pmt
                                 }  # nCores
                                 # add inter sample spectra to adductspectra
-                                adductSpectra@groupMS2spec <- lapply(
+                                groupMS2spec(adductSpectra
+                                    ) <- lapply(
                                 interMSMScompSpec,
                                 function(subL) {
                                     colnames(subL) <- c("mass", "intensity")
@@ -427,13 +432,15 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
                                 # add mod metaData back to AdductSpec object 
                                 # add additional columns if necc
                                 missCol <- setdiff(colnames(metaDataTmp), 
-                                colnames(adductSpectra@metaData))
-                                adductSpectra@metaData[, missCol] <- ""
+                                colnames(metaData(
+                                    adductSpectra)))
+                                metaData(adductSpectra
+                                    )[, missCol] <- ""
                                 nameIndx <- match(colnames(metaDataTmp), 
-                                colnames(adductSpectra@metaData))
-                                adductSpectra@metaData <- 
-                                adductSpectra@metaData[, nameIndx]
-                                adductSpectra@metaData[indxTmp, ] <- 
+                            colnames(metaData(adductSpectra)))
+                            metaData(adductSpectra) <- 
+                                metaData(adductSpectra)[, nameIndx]
+                                metaData(adductSpectra)[indxTmp, ] <- 
                                 metaDataTmp
                                 # add parameters to parameters slot
                                 argsTmp <- c("maxRtDrift", "ms1mzError",
@@ -446,10 +453,10 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
                                 minDotProd, fclustMethod, 
                                 disMetric, stringsAsFactors = FALSE)
                                 colnames(paramTmp) <- argsTmp
-                                if (ncol(adductSpectra@Parameters) == 0) {
-                                    adductSpectra@Parameters <- paramTmp
+                                if (ncol(Parameters(adductSpectra)) == 0) {
+                                    Parameters(adductSpectra) <- paramTmp
                                 } else {
-                                    adductSpectra@Parameters[, argsTmp] <- 
+                                    Parameters(adductSpectra)[, argsTmp] <- 
                                     paramTmp
                                 }
                                 return(adductSpectra)

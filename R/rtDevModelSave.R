@@ -26,7 +26,7 @@ rtDevModelSave <- function(object = NULL, outputDir = NULL) {
         outputDir <- paste0(getwd(), "/")
     }
     # extract rtDevModels
-    rtDevModels <- object@rtDevModels
+    rtDevModels <- rtDevModels(object)
     names(rtDevModels) <- basename(Specfile.paths(object))
     rm(object)
     # save as
