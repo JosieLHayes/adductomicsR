@@ -42,7 +42,7 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
         if (all(c("maxRtDrift", "ms1mzError", "dotProdClust") %in% 
             colnames(Parameters(adductSpectra)))) {
                 if (!is.null(maxRtDrift)) {
-                    if (Parameters(adductSpectra)[,'maxRtDrift'] == 
+                    if (Parameters(adductSpectra)$maxRtDrift == 
                         maxRtDrift & 
                     Parameters(adductSpectra)$ms1mzError == 
                         ms1mzError &
@@ -134,7 +134,7 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
     
             # if unneccessary do not re do retention time clustering
             hclustRt <- TRUE
-            if (!is.null(Parameters(adductSpectra)[,'maxRtDrift'])) {
+            if (!is.null(Parameters(adductSpectra)$maxRtDrift)) {
                 if (!is.null(maxRtDrift)) {
                     hclustRt <- ifelse(Parameters(adductSpectra
                         )[,'maxRtDrift'] == maxRtDrift, FALSE, TRUE)
