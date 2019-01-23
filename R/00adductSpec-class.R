@@ -73,7 +73,7 @@ setMethod("c", signature(x = "AdductSpec"), function(x, ...){
     message('Grouping, retention time correction and composite spectra
     identification must be repeated in the concatenated "AdductSpec" class 
     object...\n')
-    flush.console()
+    
     return(emptyAdductSpec)
 }) # end function
 

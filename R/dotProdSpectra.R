@@ -106,7 +106,7 @@ minDotProdSpec = 0.8, maxGroups = 10) {
         pmt <- proc.time()
         message(paste0("Starting SNOW cluster with ", nCores, 
         " local sockets...\n"))
-        flush.console()
+        
         cl <- parallel::makeCluster(nCores)
         doSNOW::registerDoSNOW(cl)
         dotProdResults <- foreach(i = seq_len(length(indivSpecs)),
