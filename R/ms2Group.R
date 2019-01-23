@@ -138,9 +138,9 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
             if (!is.null(Parameters(adductSpectra)[,'maxRtDrift'])) {
                 if (!is.null(maxRtDrift)) {
                     hclustRt <- ifelse
-                    (Parameters(adductSpectra)[,'maxRtDrift'] == 
-                    maxRtDrift, 
-                FALSE, TRUE)
+                    (Parameters(
+                        adductSpectra)[,'maxRtDrift'] == maxRtDrift, 
+                    FALSE, TRUE)
                 } else {
                     hclustRt <- FALSE
                 }
