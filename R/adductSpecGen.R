@@ -285,8 +285,8 @@ integer)')
     # add to meta data
     MD <- as.data.frame(metaData(AdductSpecTmp))
     indxTmp <- match(MD$mzXMLFile,basename(Specfile.paths(AdductSpecTmp)))
-    MD$intStdRtDrift <- medRtDiffFile[indxTmp]
-    MD$intStdPpmDrift <- ppmDiffFile[indxTmp]
+    metaData(adductSpecTmp)[,'intStdRtDrift'] <- medRtDiffFile[indxTmp]
+    metaData(adductSpecTmp)[,'intStdPpmDrift'] <- ppmDiffFile[indxTmp]
     # save plot
     png(paste0(ifelse(is.null(outputPlotDir), paste0(getwd(), '/'),
     outputPlotDir),'internalStandard_plots.png'), width = 961, height = 587)
