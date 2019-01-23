@@ -189,3 +189,17 @@ setMethod("Peptides<-","AdductSpec",function(object, value) {
     if (validObject(object))
     return(object)   
 })
+
+setGeneric("specPepMatches", function(object) standardGeneric("specPepMatches"))
+setMethod("specPepMatches", 
+    signature="AdductSpec",
+    definition = function(object){
+        return(object@specPepMatches)
+    })
+setGeneric("specPepMatches<-", function(object,
+        value) standardGeneric("specPepMatches<-"))    
+setMethod("specPepMatches<-","AdductSpec",function(object, value) {
+    object@specPepMatches <- value
+    if (validObject(object))
+    return(object)   
+})
