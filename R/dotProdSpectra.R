@@ -6,6 +6,9 @@
 #' mass groups are therefore further subdivided based on spectral similarity. 
 #' If outlying mass spectra have been erroneously grouped then these will 
 #' be reclassified.
+#' The dopProdSimClust function calculates the dot product and returns a 
+#'  cluster id. This function is used later in the script on all spectra
+#' in order to group the spectra (removing peak tails etc)
 #' @param adductSpectra adductSpec object
 #' @param minDotProdSpec numeric minimum dot product score
 #' @param nCores numeric the number of cores to use for parallel computation. 
@@ -100,8 +103,8 @@ minDotProdSpec = 0.8, maxGroups = 10) {
         # }
     return(clusterId)
     }  # end function
-
-    if (!is.null(nCores)) {
+    nCores <- ifelse(is.null(nCores), 1, nCores)
+    if (nCores > 1) {
         # multi-threaded
         pmt <- proc.time()
         message(paste0("Starting SNOW cluster with ", nCores, 

@@ -27,7 +27,7 @@
 #'
 ms2Group <-
     function(adductSpectra = NULL,
-             nCores = parallel::detectCores(),
+             nCores = NULL,
              maxRtDrift = NULL,
              ms1mzError = 0.1,
              ms2mzError = 1,
@@ -318,7 +318,8 @@ ms2Group <-
                     }
                     return(clusterId)
                 }  # end dot product hierarchical clustering
-            if (!is.null(nCores)) {
+            nCores <- ifelse(is.null(nCores), 1, nCores)
+            if (nCores > 1) {
                 # multi-threaded
                 pmt <- proc.time()
                 message(paste0(

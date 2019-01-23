@@ -61,8 +61,7 @@
 #' @return AdductSpec object
 adductSpecGen <- function(mzXmlDir = NULL,
                           runOrder = NULL,
-                          nCores =
-                              parallel::detectCores(),
+                          nCores = NULL,
                           intStdMass = 834.77692,
                           intStdPeakList = c(
                               290.21,
@@ -171,7 +170,8 @@ adductSpecGen <- function(mzXmlDir = NULL,
             "\n"
         )
     }
-    if (!is.null(nCores)) {
+    nCores <- ifelse(is.null(nCores), 1, nCores)
+    if (nCores > 1) {
         # start time to record computation time
         pmt <- proc.time()
         message(paste0("Starting SNOW cluster with ", nCores, " local
@@ -612,4 +612,8 @@ setMethod("c", signature(x = "AdductSpec"), function(x, ...) {
         object...\n'
     )
     return(emptyAdductSpec)
+    # reset global options
+    options(stringsAsFactors = TRUE)
 }) # end function
+
+

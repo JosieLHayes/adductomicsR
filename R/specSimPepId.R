@@ -117,7 +117,7 @@
 #' @export
 specSimPepId <-
     function(MS2Dir = NULL,
-             nCores = parallel::detectCores(),
+             nCores = NULL,
              rtDevModels = NULL,
              topIons = 100,
              topIntIt = 5,
@@ -777,7 +777,7 @@ specSimPepId <-
                         rbind(allResults, resTable)
                 }
             }
-        } else {
+         else {
             # MULTITHREADED
             
             
@@ -1632,6 +1632,7 @@ specSimPepId <-
                 )
             )
             dev.off()
+        close(pb)
         }
         #
         # # plot all

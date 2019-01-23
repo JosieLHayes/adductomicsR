@@ -71,7 +71,7 @@
 #'maxRtWindow = 120, isoWindow = 80,
 #'hkPeptide = "LVNEVTEFAK", gaussAlpha = 16)
 #'@export
-adductQuant <- function(nCores = parallel::detectCores(),
+adductQuant <- function(nCores = NULL,
                         targTable = NULL,
                         intStdRtDrift = NULL,
                         rtDevModels = NULL,
@@ -295,7 +295,8 @@ adductQuant <- function(nCores = parallel::detectCores(),
         } else {
             rtDevModel <- NULL
         }
-        if (!is.null(nCores)) {
+        nCores <- ifelse(is.null(nCores), 1, nCores)
+        if (nCores > 1) {
             pmt <- proc.time()
             message(paste0(
                 "Starting SNOW cluster with ",
@@ -476,22 +477,22 @@ adductQuant <- function(nCores = parallel::detectCores(),
 setMethod("show", "AdductQuantif", function(object) {
     if (length(file.paths(object)) > 0) {
         message(
-            "A \"AdductQuantif\" class object derived from",
+            "A \"AdductQuantif\" class object derived from ",
             length(file.paths(object)),
-            "MS files \n\n"
+            " MS files \n\n"
         )
         message(
             "Consisting of:\n",
             sum(peakQuantTable(object)[,
                                        "peakArea"] != "0"),
-            "quantified peaks\n",
-            "and",
+            " quantified peaks\n",
+            "and ",
             sum(peakQuantTable(object)[, "peakArea"] ==
                     "0"),
-            "missing peaks (i.e. zero peak area)\n",
-            "Derived from a target list of:",
+            " missing peaks (i.e. zero peak area)\n",
+            "Derived from a target list of: ",
             nrow(targTable(object)),
-            "targets.\n\n"
+            " targets.\n\n"
         )
         if (any(grepl("^possOutPeak$",
                       colnames(peakQuantTable(object))))) {
