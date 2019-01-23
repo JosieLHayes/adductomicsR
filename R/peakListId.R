@@ -109,7 +109,7 @@ metaData(adductSpectra)[,'seqNum']))
     indxTmp <- match(peakListMatches[, 1], 
     paste0(metaData(adductSpectra)[,'mzXMLFile'], 
     ".MS2spectra.", metaData(adductSpectra)[,'seqNum']))
-    specPepMatchesTmp$precursorMz <- metaData[,'precursorMZ'][
+    specPepMatchesTmp$precursorMz <- metaData(adductSpectra)[,'precursorMZ'][
     indxTmp]
     specPepMatchesTmp$retentionTime <-
     metaData(adductSpectra)[,'retentionTime'][indxTmp]
