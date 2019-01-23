@@ -283,8 +283,8 @@ integer)')
     medRtDiffFile <- zoo::na.spline(medRtDiffFile)
     }
     # add to meta data
-    MD <- metaData(AdductSpecTmp)
-    FP <- Specfile.paths(AdductSpecTmp)
+    MD <- as.data.frame(metaData(AdductSpecTmp))
+    FP <- as.data.frame(Specfile.paths(AdductSpecTmp))
     indxTmp <- match(MD$mzXMLFile,
     basename(FP$mzXMLFile))
     metaData(AdductSpecTmp)[,'intStdRtDrift'] <- medRtDiffFile[indxTmp]
