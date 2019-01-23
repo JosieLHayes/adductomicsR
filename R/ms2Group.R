@@ -45,8 +45,8 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
                     if (Parameters(adductSpectra)[,'maxRtDrift'] == 
                         maxRtDrift & Parameters(adductSpectra)
                     [,'ms1mzError'] == 
-                        ms1mzError & Parameters
-                        (adductSpectra)[,'dotProdClust'] ==
+                        ms1mzError & Parameters(
+                            adductSpectra)[,'dotProdClust'] ==
                         FALSE)
                         {
                             stop("Grouping and composite spectrum generation is 
@@ -93,9 +93,9 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
                 }
                 if (adjPrecursorMZ == TRUE) {
                     # add ppm mass drift value
-                    precursorMZs <- adjPrecursorMZ(metaDataTmp)
+                    precursorMZs <- metaDataTmp$precursorMZ
                 } else {
-                    precursorMZs <- precursorMZ(metaDataTmp)
+                    precursorMZs <- metaDataTmp$precursorMZ
                 }
 
                 hr <- fastcluster::hclust.vector(precursorMZs, 
@@ -137,10 +137,8 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
             hclustRt <- TRUE
             if (!is.null(Parameters(adductSpectra)[,'maxRtDrift'])) {
                 if (!is.null(maxRtDrift)) {
-                    hclustRt <- ifelse
-                    (Parameters(
-                        adductSpectra)[,'maxRtDrift'] == maxRtDrift, 
-                    FALSE, TRUE)
+                    hclustRt <- ifelse(Parameters(adductSpectra
+                        )[,'maxRtDrift'] == maxRtDrift, FALSE, TRUE)
                 } else {
                     hclustRt <- FALSE
                 }
@@ -148,8 +146,7 @@ disMetric = "euclidean", compSpecGen = TRUE, adjPrecursorMZ = TRUE) {
             if (hclustRt == TRUE) {
                 # matching ms/ms scans across samples
                 message("clustering ms/ms scans across samples based on a
-                maximum RT drift of ", 
-            maxRtDrift, ".\n")
+                maximum RT drift of ", maxRtDrift, ".\n")
                 flush.console()
                 interMSMSrtGroups <- tapply(retentionTime, 
                 metaDataTmp$msPrecursor_group, 
