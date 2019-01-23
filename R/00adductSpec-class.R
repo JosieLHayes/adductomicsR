@@ -101,7 +101,7 @@ setMethod("adductMS2spec",
 setGeneric("adductMS2spec<-", function(object,
         value) standardGeneric("adductMS2spec<-"))    
 setMethod("adductMS2spec<-","AdductSpec",function(object, value) {
-    object@file.paths <- value
+    object@adductMS2spec <- value
     if (validObject(object))
     return(object)   
 })
@@ -115,7 +115,7 @@ setMethod("metaData",
 setGeneric("metaData<-", function(object,
         value) standardGeneric("metaData<-"))    
 setMethod("metaData<-","AdductSpec",function(object, value) {
-    object@file.paths <- value
+    object@metaData <- value
     if (validObject(object))
     return(object)   
 })
@@ -129,7 +129,7 @@ setMethod("Parameters",
 setGeneric("Parameters<-", function(object,
         value) standardGeneric("Parameters<-"))    
 setMethod("Parameters<-","AdductSpec",function(object, value) {
-    object@file.paths <- value
+    object@Parameters <- value
     if (validObject(object))
     return(object)   
 })
@@ -143,7 +143,7 @@ setMethod("groupMS2spec",
 setGeneric("groupMS2spec<-", function(object,
         value) standardGeneric("groupMS2spec<-"))    
 setMethod("groupMS2spec<-","AdductSpec",function(object, value) {
-    object@file.paths <- value
+    object@groupMS2spec <- value
     if (validObject(object))
     return(object)   
 })
