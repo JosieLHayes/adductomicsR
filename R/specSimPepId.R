@@ -780,16 +780,15 @@ specSimPepId <-
                     )
 
                     resTable <-
-                        resTable[resTable$meanSNRVar != 0,
-                                 , drop = FALSE]
+                        resTable[resTable$meanSNRVar != 0,, drop = FALSE]
                     
                 
                     }
-            }
+            
                         
                     allResults <-
                         rbind(allResults, resTable)
-                    
+            }        
             
                     
         # MULTITHREADED
@@ -1361,7 +1360,7 @@ specSimPepId <-
         # Find the number of clusters that first
         #exceeds hval
         k <- max(nclust[which(diff(hr$height < hval) ==
-                                  -1) + 1])
+                                  -1) + 1], na.rm=TRUE)
         allResults$msPrecursor_group <- cutree(hr,
                                                k = k)
         
@@ -1390,11 +1389,8 @@ specSimPepId <-
             max(allResults$propEx, na.rm = TRUE)
         # 3. number of fixed and var
         #identified 1= most 0=lowest
-        allResults$nFixVarScore <-
-            allResults$nFixedIons +
-            allResults$nVarIons
-        allResults$nFixVarScore <-
-            allResults$nFixVarScore /
+        allResults$nFixVarScore <-allResults$nFixedIons + allResults$nVarIons
+        allResults$nFixVarScore <- allResults$nFixVarScore /
             max(allResults$nFixVarScore, na.rm = TRUE)
         # 4. number of consecutive fixed and
         #var ions
