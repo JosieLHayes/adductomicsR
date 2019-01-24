@@ -231,7 +231,7 @@ specSimPepId <-
                type = 'h',
                col = 'sandybrown',
                lwd = 2)
-        points(modelSpec[modelSpec$fixed.or.variable == 'variable', seq_len(2)],
+        points(modelSpec[modelSpec$fixed.or.variable == 'variable',seq_len(2)],
                type = 'h',
                col = 'yellowgreen',
                lwd = 2)
@@ -308,10 +308,11 @@ specSimPepId <-
         )
         massDriftFiles <-
             gsub('\\.mzXML$|\\.mzML$', '.massDrift.csv', ms2Files)
+    
         if (nCores < 2) {
             pb <- txtProgressBar(max = length(ms2Files), style = 3)
             allResults <- data.frame(stringsAsFactors = FALSE)
-            for (i in seq_len(length(ms2Files))) {
+            for(i in seq_len(length(ms2Files))) {
                 setTxtProgressBar(pb, i)
                 ms2File <- mzR::openMSfile(ms2Files[i])
                 metaData <- mzR::header(ms2File)
@@ -390,7 +391,7 @@ specSimPepId <-
                               # more than 10 daltons from base peak
                               topIntIdx <-
                                   topIntIdx[c(1, which(abs(top5[1, 1] -
-                                                               top5[, 1]) > 10)[
+                                      top5[, 1]) > 10)[
                                                                    seq_len({
                                                                    topIntIt - 1
                                                                })])]
@@ -410,7 +411,7 @@ specSimPepId <-
                               }, FUN.VALUE = numeric(c(nlevels(
                                   cut(
                                       rnorm(1, length(x)),
-                                      breaks = seq(minMass, maxMass, binSizeMS2)
+                                      breaks = seq(minMass, maxMass,binSizeMS2)
                                   )
                               ) *
                                   2)))
@@ -506,15 +507,10 @@ specSimPepId <-
                     )
                     names(adductMasses) <- unique(resTable$precursorCharge)
                     resTable$adductMass <- {
-                        {
-                            resTable$MIM -
-                            {
-                                1.00782504 / resTable$precursorCharge
-                            }
-                        } -
-                            adductMasses[as.character(resTable$precursorCharge)]
-                    } *
-                        resTable$precursorCharge
+                        {   resTable$MIM -
+                            { 1.00782504 / resTable$precursorCharge}} -
+                        adductMasses[as.character(resTable$precursorCharge)]
+                    } * resTable$precursorCharge
                     resTable$massUnModPep <- adductMasses[as.character(
                         resTable$precursorCharge)]
                     # subset for adduct mass
@@ -755,6 +751,9 @@ specSimPepId <-
                             dev.off()
                         }
                     }
+            
+            
+        
                     # filter by minimum total spectrum signal to
                     #noise
                     write.csv(
@@ -770,18 +769,21 @@ specSimPepId <-
                         ),
                         row.names = FALSE
                     )
+
                     resTable <-
                         resTable[resTable$meanSNRVar != 0,
                                  , drop = FALSE]
+                
+                    }
+            }
+                        
                     allResults <-
                         rbind(allResults, resTable)
-                }
-            }
-         else {
-            # MULTITHREADED
+                    
             
-            
-            
+                    
+        # MULTITHREADED
+        } else { 
             message(paste0("Starting SNOW cluster with ", nCores,
                            " local sockets..."))
             cl <- parallel::makeCluster(nCores, outfile = '')
@@ -1314,6 +1316,7 @@ specSimPepId <-
             parallel::stopCluster(cl)
             allResults <- do.call(rbind, allResults)
         }
+
         # Spectrum grouping and formula generation
         message(
             paste0(
@@ -1669,71 +1672,6 @@ specSimPepId <-
             )
         )
         dev.off()
-        #
-        # # identify adduct mass formulae
-        # possFormDir <- paste0(dirname(ms2Files[1]), '/possibleFormulae_',
-        # pepTmp, '/')
-        # suppressWarnings(dir.create(possFormDir))
-        # possFormFiles <- paste0(possFormDir, 'possFormulae_',
-        # names(avAddMass), '.csv')
-        # names(possFormFiles) <- names(avAddMass)
-        # # pb <- txtProgressBar(max=length(avAddMass), style=3)
-        # if(idPossForm == 1){
-        #     message(paste0('Identifying possible atomic formulae for ',
-        #     length(avAddMass),
-        #     ' adduct masses and saving .csv files of similar
-        #     formulae from the internal database.\n'))
-        #     
-        #     if(nCores < 2){
-        #         for(m in seq_len(length(avAddMass))){
-        #             # setTxtProgressBar(pb, m)
-        #             message(paste0('adduct mass ', m, ' of ', length(avAddMass),
-        #             ' (', round(avAddMass[m], 3), ').\n'))
-        #             
-        #             possFormStr <- formulaGenCheck(mass=abs(avAddMass[m]), 
-        #             ppm=0,
-        #             mzabs = possFormMzabs)
-        #             if(!is.null(possFormStr)){
-        #                 write.csv(possFormStr, possFormFiles[m], row.names =
-        #       FALSE)
-        #             } else {
-        #                 possFormFiles[m] <- ''
-        #             }
-        #         }
-        #     } else {
-        #         message(paste0("Starting SNOW cluster with ", nCores,
-        #         " local sockets..."))
-        #         
-        #         cl <- parallel::makeCluster(nCores, outfile='')
-        #         doSNOW::registerDoSNOW(cl)
-        #         progress <- function(n) message(message(paste0('adduct mass ', n, ' 
-        #         of ',
-        #         length(avAddMass), ' (',
-        #         round(avAddMass[n], 3), ').\n')))
-        #         opts <- list(progress=progress)
-        #         # foreach and dopar from foreach package
-        #         possFormFiles <- foreach(m=seq_len(length(avAddMass)),
-        #         .packages=c('Rdisop', 'adductomics'),
-        #         .options.snow=opts, .combine=c) %dopar% {
-        #             possFormStr <- formulaGenCheck(
-        #             mass=abs(avAddMass[m]),ppm=0,mzabs = possFormMzabs)
-        #             if(!is.null(possFormStr)){
-        #                 write.csv(possFormStr, possFormFiles[m],
-        #             row.names = FALSE)
-        #             } else {
-        #                 possFormFiles[m] <- ''
-        #             }
-        #             return(possFormFiles[m])
-        #         }
-        #         # stop SNOW cluster
-        #         parallel::stopCluster(cl)
-        #     }
-        #     # add links to csv files
-        #     allResults$MSMSGroups_possFormulae <- possFormFiles[
-        #     allResults$MSMSGroups]
-        # } else {
-        #     allResults$MSMSGroups_possFormulae <- ''
-        # }
         # write final results
         allResults$MSMSGroups <- NULL
         allResults$MSMSGroupsName <- paste0(
