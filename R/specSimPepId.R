@@ -391,10 +391,9 @@ specSimPepId <-
                               # more than 10 daltons from base peak
                               topIntIdx <-
                                   topIntIdx[c(1, which(abs(top5[1, 1] -
-                                      top5[, 1]) > 10)[
-                                                                   seq_len({
-                                                                   topIntIt - 1
-                                                               })])]
+                                      top5[, 1]) > 10)[seq_len({
+                                                    topIntIt - 1
+                                                    })])]
                               # generate scaled spec
                               diffSpecTop5 <- vapply(topIntIdx, function(y) {
                                   diffTmp <- x[, 1] - x[y, 1]
@@ -484,7 +483,7 @@ specSimPepId <-
                     resTable$peptide <- pepTmp
                     resTable$MS2FileName <-
                         basename(ms2Files[i])
-                    # resTable$plotURL <- ''
+                    resTable$plotURL <- ''
                     # resTable$plotHyperLink <- ''
                     resTable$meanSNRFixed <- 0
                     resTable$SNRFixed <- 0
@@ -506,18 +505,25 @@ specSimPepId <-
                         MoreArgs = list(formula = pepForm)
                     )
                     names(adductMasses) <- unique(resTable$precursorCharge)
-                    resTable$adductMass <- {
+                    resTable$adductMass <- 
+                    {
                         {   resTable$MIM -
-                            { 1.00782504 / resTable$precursorCharge}} -
-                        adductMasses[as.character(resTable$precursorCharge)]
-                    } * resTable$precursorCharge
+                            { 
+                                1.00782504 / resTable$precursorCharge
+                            }
+                        } -
+                        adductMasses[as.character(
+                            resTable$precursorCharge)]
+                    } * 
+                    resTable$precursorCharge
                     resTable$massUnModPep <- adductMasses[as.character(
                         resTable$precursorCharge)]
                     # subset for adduct mass
                     massIdx <- resTable$adjMIM >= minMz &
                         resTable$adjMIM <= maxMz
                     resTable <-
-                        resTable[massIdx, , drop = FALSE]
+                        resTable[massIdx, , 
+                        drop = FALSE]
                     maxDp <- maxDp[massIdx]
                     scanIdx <- scanIdx[massIdx]
                     resTable$fixedIonIdx <- ''
@@ -540,6 +546,7 @@ specSimPepId <-
                             'adductMass',
                             'precursorCharge',
                             'MS2FileName',
+                            'plotURL',
                             'peptide',
                             'precursorScanNum',
                             'MS2ScanNum',
@@ -626,7 +633,9 @@ specSimPepId <-
                                 paste0(round(snrVarPeaks, 2),
                                        collapse = '; ')
                             relIntBPScore <-
-                                max(specTmp[varPeakIdx, 2]) / max(specTmp[, 2])
+                                max(specTmp[varPeakIdx, 2],
+                                     na.rm=TRUE) / max(specTmp[, 2]
+                                         , na.rm=TRUE)
                             plotName <- paste0(
                                 basename(ms2Files[i]),
                                 ' scan ',
