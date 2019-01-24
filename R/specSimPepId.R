@@ -782,7 +782,7 @@ specSimPepId <-
                     resTable <-
                         resTable[resTable$meanSNRVar != 0,
                                  , drop = FALSE]
-                    return(resTable)
+                    
                 
                     }
             }
