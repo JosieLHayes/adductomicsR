@@ -97,7 +97,7 @@ rtDevModelling <- function(MS2Dir = NULL,
                            percExtra = 100,
                            smoothingSpan = 0.8,
                            saveRtDev = 1,
-                           outputPlotDir =  NULL) {
+                           outputPlotDir = NULL) {
     #intStdPeakList <- as.numeric(strsplit(intStdPeakList, ",")[[1]])
     if (is.null(MS2Dir)) {
         stop("Please provide an .mzXML data directory")
@@ -123,7 +123,6 @@ rtDevModelling <- function(MS2Dir = NULL,
             outputPlotDir = outputPlotDir,
             intStdMass = intStdMass,
             minSpecEx = minSpecEx,
-            outputPlotDir = outputPlotDir
         )
     maxRtDrift_intStd <-
         max(abs(metaData(adductSpectra)[, 'intStdRtDrift'])) *
