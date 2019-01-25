@@ -422,13 +422,10 @@ adductSpecGen <- function(mzXmlDir = NULL,
         metaData(AdductSpecTmp)[, 'intStdPpmDrift'] <-
             ppmDiffFile[indxTmp]
         # save plot
+        
+        if (!is.null(outputPlotDir)) {
         png(
-            paste0(
-                ifelse(
-                    is.null(outputPlotDir),
-                    paste0(getwd(), '/'),
-                    outputPlotDir
-                ),
+            paste0(outputPlotDir),
                 'internalStandard_plots.png'
             ),
             width = 961,
@@ -512,6 +509,7 @@ adductSpecGen <- function(mzXmlDir = NULL,
             col = "red"
             )
         dev.off()
+    
         # write table
         intStdScans$peakId <- NULL
         intStdScans$peakNo <- NULL
@@ -533,8 +531,10 @@ adductSpecGen <- function(mzXmlDir = NULL,
                       'internalStd_scansTable.csv'
                   ),
                   row.names = FALSE)
+              }
         message('...DONE')
     }
+
     return(AdductSpecTmp)
     } # end function
 setMethod("show", "AdductSpec", function(object) {

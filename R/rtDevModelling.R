@@ -52,6 +52,8 @@
 #' @param saveRtDev integer (default = 1) should just the retention time
 #' deviation model be saved (TRUE = 1) or the AdductSpec class object
 #'(FALSE = 0) as .RData workspace files.
+#' @param outputPlotDir character (default = NULL) where to save plots
+#'  and int standard table. Default option of NULL does not save plots.
 #' @examples
 #' rtDevModelling(MS2Dir=hubCache(temp),nCores=4,runOrder=paste0(
 #' system.file("extdata",package="adductomicsR"),
@@ -65,7 +67,7 @@
 #' intStdMass = 834.77692, intStd_MaxMedRtDrift = 600, intStd_MaxPpmDev = 200,
 #' minSpecEx = 40,
 #' minDotProd = 0.8, percMissing = 15, percExtra = 100, smoothingSpan = 0.8,
-#' saveRtDev = 1)
+#' saveRtDev = 1, outputPlotDir = NULL)
 #' @export
 rtDevModelling <- function(MS2Dir = NULL,
                            runOrder = NULL,
@@ -94,7 +96,8 @@ rtDevModelling <- function(MS2Dir = NULL,
                            percMissing = 15,
                            percExtra = 100,
                            smoothingSpan = 0.8,
-                           saveRtDev = 1) {
+                           saveRtDev = 1,
+                           outputPlotDir =  NULL) {
     #intStdPeakList <- as.numeric(strsplit(intStdPeakList, ",")[[1]])
     if (is.null(MS2Dir)) {
         stop("Please provide an .mzXML data directory")
@@ -117,7 +120,7 @@ rtDevModelling <- function(MS2Dir = NULL,
             intStdPeakList = intStdPeakList,
             intStd_MaxMedRtDrift = intStd_MaxMedRtDrift,
             intStd_MaxPpmDev = intStd_MaxPpmDev,
-            outputPlotDir = MS2Dir,
+            outputPlotDir = outputPlotDir,
             intStdMass = intStdMass,
             minSpecEx = minSpecEx
         )

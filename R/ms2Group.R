@@ -541,7 +541,7 @@ ms2Group <-
                 stringsAsFactors = FALSE
             )
         colnames(paramTmp) <- argsTmp
-        if (ncol(Parameters(adductSpectra)) == 0) {
+        if (!ncol(Parameters(adductSpectra))) {
             Parameters(adductSpectra) <- paramTmp
         } else {
             Parameters(adductSpectra)[, argsTmp] <-

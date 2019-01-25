@@ -101,6 +101,8 @@
 #' hypotheses. The default 0 mean this will not take place as the
 #' computation is
 #' potentially time consuming.
+#' @param outputPlotDir character (default = NULL) where to save 
+#'  plots. Default option of NULL does not save plots.
 #' @examples
 #' \dontrun{
 #' specSimPepId(MS2Dir=system.file("extdata",package
@@ -112,7 +114,7 @@
 #' minSNR=3,minRt=20, maxRt=35, minIdScore=0.4,minFixed=3, minMz=750,
 #' maxMz=1000,modelSpec=c('ALVLIAFAQYLQQCPFEDHVK','RHPYFYAPELLFFAK'),
 #' groupMzabs=0.005, groupRtDev=0.5, possFormMzabs=0.01,
-#' minMeanSpecSim=0.7,idPossForm=0)
+#' minMeanSpecSim=0.7,idPossForm=0, outputPlotDir = NULL)
 #' @return dataframe of putative adducts
 #' @export
 specSimPepId <-
@@ -136,7 +138,8 @@ specSimPepId <-
              groupRtDev = 0.5,
              possFormMzabs = 0.01,
              minMeanSpecSim = 0.7,
-             idPossForm = 0) {
+             idPossForm = 0,
+             outputPlotDir = NULL) {
         binSizeMS2 = 3
         noiseBin = 200
         minVarPeaks = 0
@@ -209,8 +212,9 @@ specSimPepId <-
             stringsAsFactors = FALSE
         ))
         # png
+        if (!is.null(outputPlotDir)) {
         png(
-            paste0(MS2Dir, '/', 'modelSpec.png'),
+            paste0(outputPlotDir, '/', 'modelSpec.png'),
             width = 2200,
             height = 2000,
             res = 275
@@ -252,6 +256,7 @@ specSimPepId <-
             col = c('sandybrown', 'yellowgreen', 'purple')
         )
         dev.off()
+        }
         fixedIons <-
             modelSpec$mass[modelSpec$fixed.or.variable == 'fixed']
         fixedIonNames <-
@@ -660,9 +665,10 @@ specSimPepId <-
                             snrFixTmp <- as.numeric(gsub(
                                 '.+_\\.|.+_', '', names(fixIonTmp)))
                             resTable$plotURL[j] <-
-                                paste0(outDir,
+                                paste0(outputPlotDir,
                                        '/', plotName, '.png')
                             #png
+                            if (!is.null(outputPlotDir)) {
                             png(
                                 resTable$plotURL[j],
                                 width = 2200,
@@ -758,6 +764,7 @@ specSimPepId <-
                                 col = c('blue', 'red')
                             )
                             dev.off()
+                        }
                         }
                     }
             
@@ -1197,9 +1204,10 @@ specSimPepId <-
                                 snrFixTmp <- as.numeric(gsub('.+_\\.|.+_',
                                             '', names(fixIonTmp)))
                                 resTable$plotURL[j] <-
-                                    paste0(outDir, '/',
+                                    paste0(outputPlotDir, '/',
                                            plotName, '.png')
                                 # png
+                                if (!is.null(outputPlotDir)) {
                                 png(
                                     resTable$plotURL[j],
                                     width = 2200,
@@ -1297,6 +1305,7 @@ specSimPepId <-
                                     col = c('blue', 'red')
                                 )
                                 dev.off()
+                            }
                             }
                         }
                         # save results table
@@ -1571,13 +1580,14 @@ specSimPepId <-
         allResults$MSMSgroup_averageAdductMass <-
             avAddMass[allResults$MSMSGroups]
         # generate plots
+        if (!is.null(outputPlotDir)) {
         message(paste0('Generating ', length(unique(
             allResults$MSMSGroups
         )),
         ' plots of spectrum groups'))
         
         groupDir <-
-            paste0(dirname(ms2Files[1]), '/spectrumGroups_', pepTmp, '/')
+            paste0(outputPlotDir, '/spectrumGroups_', pepTmp, '/')
         suppressWarnings(dir.create(groupDir))
         allGroups <- unique(allResults$MSMSGroups)
         gPlotNames <- paste0(
@@ -1678,6 +1688,7 @@ specSimPepId <-
             )
         )
         dev.off()
+    }
         # write final results
         allResults$MSMSGroups <- NULL
         allResults$MSMSGroupsName <- paste0(
