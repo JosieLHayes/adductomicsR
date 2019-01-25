@@ -122,7 +122,8 @@ rtDevModelling <- function(MS2Dir = NULL,
             intStd_MaxPpmDev = intStd_MaxPpmDev,
             outputPlotDir = outputPlotDir,
             intStdMass = intStdMass,
-            minSpecEx = minSpecEx
+            minSpecEx = minSpecEx,
+            outputPlotDir = outputPlotDir
         )
     maxRtDrift_intStd <-
         max(abs(metaData(adductSpectra)[, 'intStdRtDrift'])) *
@@ -152,7 +153,7 @@ rtDevModelling <- function(MS2Dir = NULL,
             nMissing = nMissing,
             nExtra = nExtra,
             smoothingSpan = smoothingSpan,
-            outputFileDir = MS2Dir
+            outputFileDir = outputPlotDir
         )
     if (saveRtDev == 1) {
         message(

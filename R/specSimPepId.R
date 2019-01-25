@@ -688,6 +688,7 @@ specSimPepId <-
                                     col = 'darkgrey'
                                 )
                             )
+                            }
                             fixTmp <-
                                 specTmp[fixIonTmp, ,
                                         drop = FALSE]
@@ -695,6 +696,7 @@ specSimPepId <-
                                 gsub('\\+.+', '+',
                                      names(fixIonTmp))
                             #label fixed ions
+                            if (!is.null(outputPlotDir)) {
                             points(
                                 fixTmp,
                                 col = 'blue',
@@ -709,6 +711,7 @@ specSimPepId <-
                                 pos = 3,
                                 srt = 90
                             )
+                            }
                             resTable$fixedDetected[j] <-
                                 paste0(names(fixTmp), collapse = '; ')
                             resTable$nFixedIons[j] <-
@@ -743,6 +746,7 @@ specSimPepId <-
                                                   FALSE]
                             rownames(varTmp) <- gsub('\\+.+', '+',
                                                      (fragTypes[varSNRIdx]))
+                            if (!is.null(outputPlotDir)) {
                             points(
                                 varTmp,
                                 col = 'red',
@@ -764,6 +768,7 @@ specSimPepId <-
                                 col = c('blue', 'red')
                             )
                             dev.off()
+                        
                         }
                         }
                     }
@@ -1226,10 +1231,12 @@ specSimPepId <-
                                         col = 'darkgrey'
                                     )
                                 )
+                            }
                                 fixTmp <- specTmp[fixIonTmp, , drop =
                                                       FALSE]
                                 rownames(fixTmp) <- gsub('\\+.+', '+',
                                                          names(fixIonTmp))
+                                if (!is.null(outputPlotDir)) {                         
                                 #label fixed ions
                                 points(
                                     fixTmp,
@@ -1245,6 +1252,7 @@ specSimPepId <-
                                     pos = 3,
                                     srt = 90
                                 )
+                            }
                                 resTable$fixedDetected[j] <-
                                     paste0(names(fixTmp),
                                            collapse = '; ')
@@ -1284,6 +1292,7 @@ specSimPepId <-
                                                       FALSE]
                                 rownames(varTmp) <- gsub('\\+.+', '+',
                                                         (fragTypes[varSNRIdx]))
+                                if (!is.null(outputPlotDir)) {                
                                 points(
                                     varTmp,
                                     col = 'red',
