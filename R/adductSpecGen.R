@@ -425,7 +425,7 @@ adductSpecGen <- function(mzXmlDir = NULL,
         
         if (!is.null(outputPlotDir)) {
         png(
-            paste0(outputPlotDir),
+            paste0(outputPlotDir,
                 'internalStandard_plots.png'
             ),
             width = 961,
