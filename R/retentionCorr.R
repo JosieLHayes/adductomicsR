@@ -164,7 +164,6 @@ retentionCorr <- function(adductSpectra = NULL,
     }
     if (!is.null(outputFileDir)) {
         png(paste0(outputFileDir, "/rtDevPlot.png"))
-    }
     plot(
         rtSeqTmp,
         rep(0, length(rtSeqTmp)),
@@ -194,7 +193,9 @@ retentionCorr <- function(adductSpectra = NULL,
     abline(h = rep(0, length(rtSeqTmp)), col = "blue")
     if (!is.null(outputFileDir)) {
         dev.off()
+    
     }
+}
     # plot adjusted
     wellBehavedMeta <-
         metaDataTmp[metaDataTmp$interMSMSrtGroups %in%
@@ -242,7 +243,7 @@ retentionCorr <- function(adductSpectra = NULL,
     }
     if (!is.null(outputFileDir)) {
         png(paste0(outputFileDir, "/adjRtPlot.png"))
-    }
+    
     plot(
         rtSeqTmp,
         rep(0, length(rtSeqTmp)),
@@ -267,6 +268,7 @@ retentionCorr <- function(adductSpectra = NULL,
     abline(h = rep(0, length(rtSeqTmp)), col = "blue")
     if (!is.null(outputFileDir)) {
         dev.off()
+    }
     }
     return(adductSpectra)
     }

@@ -426,7 +426,7 @@ adductSpecGen <- function(mzXmlDir = NULL,
         if (!is.null(outputPlotDir)) {
         png(
             paste0(outputPlotDir,
-                'internalStandard_plots.png'
+                '/internalStandard_plots.png'
             ),
             width = 961,
             height = 587
@@ -528,7 +528,7 @@ adductSpecGen <- function(mzXmlDir = NULL,
                           paste0(getwd(), '/'),
                           outputPlotDir
                       ),
-                      'internalStd_scansTable.csv'
+                      '/internalStd_scansTable.csv'
                   ),
                   row.names = FALSE)
               }
