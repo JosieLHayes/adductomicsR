@@ -163,7 +163,7 @@ ms2Group <-
                 hclustRt <- FALSE
             }
         }
-        if (hclustRt == TRUE) {
+        if (hclustRt) {
             # matching ms/ms scans across samples
             message(
                 "clustering ms/ms scans across samples based on a
