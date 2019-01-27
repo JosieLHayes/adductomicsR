@@ -59,7 +59,7 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
     maxMz <- mzTmp + (mzTmp / 1e+06) * maxPpm
     # 1. monoisotopic mass peak range detect
     peakRangeMIM <- peakRangeRtSub[peakRangeRtSub[, 1] <
-                    maxMz && peakRangeRtSub[,1] > minMz, , drop = FALSE]
+                    maxMz & peakRangeRtSub[,1] > minMz, , drop = FALSE]
     if (nrow(peakRangeMIM) > 0)
     {
         # sum signal rt
@@ -99,7 +99,7 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
             truePeaks <- unique(truePeaks[grep("peak",
                                                names(truePeaks))])
             
-            if (length(truePeaks) > 0 &&
+            if (length(truePeaks) > 0 &
                 length(trueTroughs) > 0)
             {
                 peaksMIM <- peaksMIM[truePeaks]
@@ -128,7 +128,7 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                 truePeaks <-
                     unique(truePeaks[grep("peak",
                                           names(truePeaks))])
-                if (length(truePeaks) > 0 &&
+                if (length(truePeaks) > 0 &
                     length(trueTroughs) > 0)
                 {
                     peaksMIM <- peaksMIM[truePeaks]
