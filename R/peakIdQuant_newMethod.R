@@ -283,8 +283,8 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                         rtGroups <-
                             cutree(hr, h = isoWindow)
                         nIsoDetected <-
-                            table(rtGroups[duplicated(paste0(
-                                peaksTableTmp[,1], "_", rtGroups)) == FALSE])
+                            table(rtGroups[!duplicated(paste0(
+                                peaksTableTmp[,1], "_", rtGroups))])
                         nIsoDetected <-
                             nIsoDetected[names(nIsoDetected)
                                 %in% rtGroups[seq_len(length(peaksMIM))]]

@@ -127,7 +127,7 @@ adductQuant <- function(nCores = NULL,
                  or mzML files must be supplied.")
         }
         # peptide isotopic distribution prediction
-        indxTmp <- duplicated(targTable$peptide) == FALSE
+        indxTmp <- !duplicated(targTable$peptide)
         pepSeqs <- as.character(targTable$peptide[indxTmp])
         eleForm <-
             lapply(pepSeqs, OrgMassSpecR::ConvertPeptide,
@@ -546,8 +546,8 @@ setMethod("c", signature(x = "AdductQuantif"), function(x, ...) {
               predIsoDist(elements[[i]]))
         # keep unique
         predIsoDist(emptyAdductQuantif) <-
-            predIsoDist(emptyAdductQuantif)[duplicated(names(predIsoDist(
-                emptyAdductQuantif)))== FALSE]
+            predIsoDist(emptyAdductQuantif)[!duplicated(names(predIsoDist(
+                emptyAdductQuantif)))]
         # target table
         targTable(emptyAdductQuantif) <-
             rbind(targTable(emptyAdductQuantif),

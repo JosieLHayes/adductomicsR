@@ -65,9 +65,8 @@ setMethod("c", signature(x = "AdductQuantif"), function(x, ...) {
               elements[[i]]@predIsoDist)
         # keep unique
         emptyAdductQuantif@predIsoDist <-
-            emptyAdductQuantif@predIsoDist[duplicated(names(
-                emptyAdductQuantif@predIsoDist))
-                                           == FALSE]
+            emptyAdductQuantif@predIsoDist[!duplicated(names(
+                emptyAdductQuantif@predIsoDist))]
         # target table
         emptyAdductQuantif@targTable <-
             rbind(emptyAdductQuantif@targTable,

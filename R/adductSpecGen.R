@@ -370,7 +370,7 @@ adductSpecGen <- function(mzXmlDir = NULL,
             )
         # remove duplicates
         intStdScans <-
-            intStdScans[duplicated(intStdScans$mzXMLFile) == FALSE, ,
+            intStdScans[!duplicated(intStdScans$mzXMLFile), ,
                         drop = FALSE]
         # take average ppmDev of all less than 5 ppm
         # adjust theoretical then calculate deviation from observed
