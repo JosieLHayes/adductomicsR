@@ -338,7 +338,7 @@ specSimPepId <-
                 # rt range
                 metaData$retentionTime <- metaData$retentionTime / 60
                 ms2Indx <- ms2Indx[metaData$retentionTime[ms2Indx] >=
-                                    minRt & metaData$retentionTime[
+                                    minRt && metaData$retentionTime[
                                         ms2Indx] <= maxRt]
                 # if fixed ions detected
                 fixedDetectIons <- lapply(mzR::peaks(ms2File, ms2Indx),
@@ -862,7 +862,7 @@ specSimPepId <-
                         metaData$retentionTime / 60
                     ms2Indx <-
                         ms2Indx[metaData$retentionTime[ms2Indx]
-                                >= minRt &
+                                >= minRt &&
                                     metaData$retentionTime[ms2Indx] <= maxRt]
                     # if fixed ions detected
                     fixedDetectIons <-

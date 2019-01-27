@@ -50,9 +50,9 @@ ms2Group <-
                     colnames(Parameters(adductSpectra)))) {
                 if (!is.null(maxRtDrift)) {
                     if (Parameters(adductSpectra)$maxRtDrift ==
-                        maxRtDrift &
+                        maxRtDrift &&
                         Parameters(adductSpectra)$ms1mzError ==
-                        ms1mzError &
+                        ms1mzError &&
                         Parameters(adductSpectra)[, 'dotProdClust'] ==
                         FALSE)
                     {

@@ -82,7 +82,7 @@ digestMod <-
             stop <- grep("F|L|W|Y|A|E|Q", seq_vector)
             start <- stop + 1
         }
-        if (enzyme != "trypsin" & enzyme != "trypsin.strict" &
+        if (enzyme != "trypsin" && enzyme != "trypsin.strict" &&
             enzyme != "pepsin")
             stop("undefined enzyme, defined enzymes are trypsin,
                  trypsin.strict, and pepsin")
@@ -167,9 +167,9 @@ digestMod <-
                 mass = C * 9 + H * 9 + N + O * 2
             if (residue == "V")
                 mass = C * 5 + H * 9 + N + O
-            if (residue == "C" & IAA == FALSE)
+            if (residue == "C" && IAA == FALSE)
                 mass = C * 3 + H * 5 + N + O + S
-            if (residue == "C" & IAA == TRUE)
+            if (residue == "C" && IAA == TRUE)
                 mass <-
                     ifelse(N15 == FALSE,
                            C * 5 + H * 8 + N *
