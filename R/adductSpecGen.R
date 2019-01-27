@@ -580,7 +580,7 @@ setMethod("show", "AdductSpec", function(object) {
 })
 # set method concatenate
 setMethod("c", signature(x = "AdductSpec"), function(x, ...) {
-    elements = list(x, ...)
+    elements = list(...)
     # error handling check if all AdductSpec object
     if (any(vapply(elements, function(ele)
         is(ele, 'AdductSpec'),

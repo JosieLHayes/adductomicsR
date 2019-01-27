@@ -58,7 +58,7 @@ ms2Group <-
                     {
                         stop(
                             "Grouping and composite spectrum generation is
-                            unneccessary as maxRtDrift and ms1mzError
+                            unnecessary as maxRtDrift and ms1mzError
                             arguments are un-changed from
                             the previous round of grouping...\n"
                         )

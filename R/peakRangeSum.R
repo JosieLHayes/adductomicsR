@@ -88,7 +88,7 @@ peakRangeSum <-
         # replace only one scans (spikes) with zero
         spikes <- rle(peakRange[, 2] == 0)
         spikesIndx <- cumsum(spikes$lengths)[spikes$lengths <=
-                                                 spikeScans && spikes$values 
+                                                 spikeScans & spikes$values 
                                             == FALSE]
         spikesIndx <- do.call(c, lapply(spikesIndx,
                                         function(spike)

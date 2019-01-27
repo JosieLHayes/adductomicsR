@@ -38,7 +38,7 @@ setClass(
 #' @aliases c,AdductQuantif-method
 x <- NULL
 setMethod("c", signature(x = "AdductQuantif"), function(x, ...) {
-    elements = list(x, ...)
+    elements = list(...)
     # error handling check if all adductSpec object
     if (any(vapply(elements, function(ele)
         is(ele, 'AdductQuantif'),
