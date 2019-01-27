@@ -133,7 +133,7 @@ adductQuant <- function(nCores = NULL,
             lapply(pepSeqs, OrgMassSpecR::ConvertPeptide,
                    IAA = FALSE)
         eleForm <-
-            lapply(seq_len(length(eleForm)), function(ele) {
+            lapply(seq_along(eleForm), function(ele) {
                 eleForm[[ele]]$H <- eleForm[[ele]]$H +
                     targTable$chargeState[indxTmp][ele]
                 return(eleForm[[ele]])
@@ -251,7 +251,7 @@ adductQuant <- function(nCores = NULL,
             resultsList <- peakIdData(quantObject)
             filePaths <- file.paths(quantObject)
             }
-    for (i in seq_len(length(filePaths))) {
+    for (i in seq_along(filePaths)) {
         filePathTmp <- filePaths[i]
         # mass drift correction
         massDriftFile <- gsub("\\.mzXML", ".massDrift.csv",
@@ -377,7 +377,7 @@ adductQuant <- function(nCores = NULL,
             # stop SNOW cluster
             parallel::stopCluster(cl)
             proc.time() - pmt
-            for (res in seq_len(length(resultsTmp))) {
+            for (res in seq_along(resultsTmp)) {
                 resultRow <- ((i - 1) * nrow(targTable)) + res
                 if (length(resultsTmp[[res]]) == 3) {
                     results[resultRow, 6:ncol(results)] <-
@@ -529,7 +529,7 @@ setMethod("c", signature(x = "AdductQuantif"), function(x, ...) {
              AdductQuantif class object")
     }
     emptyAdductQuantif <- new("AdductQuantif")
-    for (i in seq_len(length(elements))) {
+    for (i in seq_along(elements)) {
         if (ncol(peakQuantTable(emptyAdductQuantif))==0) {
             peakQuantTable(emptyAdductQuantif) <-
                 peakQuantTable(elements[[i]])

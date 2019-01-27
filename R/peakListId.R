@@ -108,14 +108,14 @@ peakListId <-
         peakNos <- peakNos[intOrder]
         # add order information to massV vector
         names(massV) <-
-            paste0(names(massV), ";", seq_len(length(massV)))
+            paste0(names(massV), ";", seq_along(massV))
         peakList <- sort(peakList)
-        names(peakList) <- paste("peak", seq_len(length(peakList)))
+        names(peakList) <- paste("peak", seq_along(peakList))
         message("identifying target ion list...\n")
         
         pb <- txtProgressBar(max = length(peakList), style = 3)
         peakListMatches <- as.numeric()
-        for (j in seq_len(length(peakList))) {
+        for (j in seq_along(peakList)) {
             setTxtProgressBar(pb, j)
             # which peakList fragments match
             indxTmp <- which(abs(massV - peakList[j]) < frag.delta)
@@ -239,7 +239,7 @@ peakListId <-
             )
             
             pb <- txtProgressBar(max = length(fileNames), style = 3)
-            for (j in seq_len(length(fileNames))) {
+            for (j in seq_along(fileNames)) {
                 setTxtProgressBar(pb, j)
                 indxTmp <-
                     which(specPepMatchesTmp$name %in% fileNames[j])

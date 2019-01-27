@@ -59,7 +59,7 @@ outputPeakTable <- function(object = NULL, outputDir = NULL) {
                            nrow = nrow(peakQuantDf),
                            ncol = length(reqPeakColumns))
     colnames(resMatrixTmp) <- reqPeakColumns
-    for (i in seq_len(length(reqPeakColumns))) {
+    for (i in seq_along(reqPeakColumns)) {
         # change to weighted mean with by
         nonZeroIndx <-
             as.numeric(peakQuantTable[, reqPeakColumns[i]]) != 0

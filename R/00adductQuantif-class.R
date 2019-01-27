@@ -47,7 +47,7 @@ setMethod("c", signature(x = "AdductQuantif"), function(x, ...) {
              AdductQuantif class object")
     }
     emptyAdductQuantif <- new("AdductQuantif")
-    for (i in seq_len(length(elements))) {
+    for (i in seq_along(elements)) {
         if (ncol(emptyAdductQuantif@peakQuantTable==0)
             ) {
             emptyAdductQuantif@peakQuantTable <-

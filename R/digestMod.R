@@ -177,7 +177,7 @@ digestMod <-
                            C * 5 + H * 8 + N + 14.0030740052 +
                                O * 2 + S)
             if (length(custom) != 0)
-                for (i in seq_len(length(custom$code)))
+                for (i in seq_along(custom$code))
                     if (residue == custom$code[i])
                         mass = custom$mass[i]
                     return(mass)

@@ -20,7 +20,7 @@ truePeakTrough <- function(peaksTmp = NULL,
                            lrRes = FALSE) {
     minRes <- 100 / 50
     # identify intra-peak troughs and remove
-    truePeaks <- unlist(lapply(seq_len(length(peaksTmp)),
+    truePeaks <- unlist(lapply(seq_along(peaksTmp),
        function(peakInd) {
            # left trough
            nearLTrough <- which(troughsTmp - peaksTmp[peakInd] < 0)

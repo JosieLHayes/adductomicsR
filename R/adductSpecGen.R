@@ -199,7 +199,7 @@ adductSpecGen <- function(mzXmlDir = NULL,
         # foreach and dopar from foreach package
         Results <-
             foreach(
-                i = seq_len(length(MS2files)),
+                i = seq_along(MS2files),
                 .packages = c('mzR',
                               "RcppEigen", 'pracma'),
                 .options.snow = opts
@@ -263,7 +263,7 @@ adductSpecGen <- function(mzXmlDir = NULL,
         massDriftFiles <-
             gsub('\\.mzXML$|\\.mzML$', '.massDrift.csv',
                  MS2files)
-        for (i in seq_len(length(MS2files))) {
+        for (i in seq_along(MS2files)) {
             Res.tmp <- spectraCreate(
                 MS2file = MS2files[i],
                 TICfilter = TICfilter,
@@ -390,7 +390,7 @@ adductSpecGen <- function(mzXmlDir = NULL,
                              basename(Specfile.paths(AdductSpecTmp)))
         # sort table
         intStdScans <- intStdScans[order(runOrderTmp), , drop = FALSE]
-        nFilesTmp <- seq_len(length(Specfile.paths(AdductSpecTmp)))
+        nFilesTmp <- seq_along(Specfile.paths(AdductSpecTmp))
         missingFiles <- setdiff(nFilesTmp, runOrderTmp)
         # if neccessary cubic spline interpolate missing files 
         # with zoo::na.spline
@@ -590,7 +590,7 @@ setMethod("c", signature(x = "AdductSpec"), function(x, ...) {
     emptyAdductSpec <- new('AdductSpec')
     # bind together results
     # do not include any group info or other information
-    for (i in seq_len(length(elements))) {
+    for (i in seq_along(elements)) {
         adductMS2spec(emptyAdductSpec) <- c(adductMS2spec(emptyAdductSpec),
                                             adductMS2spec(elements[[i]]))
         metaDataTmp <- metaData(elements[[i]])

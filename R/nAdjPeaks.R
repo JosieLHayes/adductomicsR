@@ -21,7 +21,7 @@ nAdjPeaks <- function(peaksTmp = NULL,
     if (any(multPeaksTmp)) {
         indxTmp <- cumsum(rlencodTmp$lengths)[multPeaksTmp]
         remPeaks <- numeric()
-        for (k in seq_len(length(indxTmp))) {
+        for (k in seq_along(indxTmp)) {
             p1 <- (indxTmp[k] - 1)
             p2 <- (p1 + rlencodTmp$lengths[multPeaksTmp][k]) - 1
             mPindxTmp <- seq(p1, p2, 1)

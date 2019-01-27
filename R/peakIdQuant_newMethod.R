@@ -287,7 +287,7 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                 peaksTableTmp[,1], "_", rtGroups))])
                         nIsoDetected <-
                             nIsoDetected[names(nIsoDetected)
-                                %in% rtGroups[seq_len(length(peaksMIM))]]
+                                %in% rtGroups[seq_along(peaksMIM)]]
                         # at least 3 peaks detected
                         nIsoDetected <-
                             nIsoDetected[nIsoDetected >= 3]

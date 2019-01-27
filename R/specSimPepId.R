@@ -317,7 +317,7 @@ specSimPepId <-
         if (nCores < 2) {
             pb <- txtProgressBar(max = length(ms2Files), style = 3)
             allResults <- data.frame(stringsAsFactors = FALSE)
-            for(i in seq_len(length(ms2Files))) {
+            for(i in seq_along(ms2Files)) {
                 setTxtProgressBar(pb, i)
                 ms2File <- mzR::openMSfile(ms2Files[i])
                 metaData <- mzR::header(ms2File)
@@ -427,10 +427,10 @@ specSimPepId <-
                            rep(seq_len(topIntIt), length(fixedDetectIndx)))
                 dpMat[is.na(dpMat)] <- 0
                 massesMat <-
-                    dpMat[seq_len(length(massBinsDiffSpec)),]
+                    dpMat[seq_along(massBinsDiffSpec),]
                 dpMat <-
                     dpMat[-{
-                        seq_len(length(massBinsDiffSpec))
+                        seq_along(massBinsDiffSpec)
                     },]
                 #subset to only include ions in model spec
                 massesMat <- massesMat[modelSpecIndx,]
@@ -580,7 +580,7 @@ specSimPepId <-
                     suppressWarnings(dir.create(outDir))
                     outDir <- paste0(outDir, '/', pepTmp)
                     suppressWarnings(dir.create(outDir))
-                    for (j in seq_len(length(maxDp))) {
+                    for (j in seq_along(maxDp)) {
                         specTmp <- mzR::peaks(ms2File, scanIdx[j])
                         iTmp <- dpMat[, maxDp[j]]
                         peaksDet <- iTmp != 0
@@ -832,7 +832,7 @@ specSimPepId <-
             # foreach and dopar from foreach package
             allResults <-
                 foreach(
-                    i = seq_len(length(ms2Files)),
+                    i = seq_along(ms2Files),
                     .packages = c('mzR', 'data.table'),
                     .options.snow = opts,
                     .verbose = FALSE
@@ -956,9 +956,9 @@ specSimPepId <-
                                                 fixedDetectIndx)))
                     dpMat[is.na(dpMat)] <- 0
                     massesMat <-
-                        dpMat[seq_len(length(massBinsDiffSpec)),]
+                        dpMat[seq_along(massBinsDiffSpec),]
                     dpMat <- dpMat[-{
-                        seq_len(length(massBinsDiffSpec))
+                        seq_along(massBinsDiffSpec)
                     },]
                     #subset to only include ions in model spec
                     massesMat <-
@@ -1130,7 +1130,7 @@ specSimPepId <-
                         outDir <-
                             paste0(outDir, '/', pepTmp)
                         suppressWarnings(dir.create(outDir))
-                        for (j in seq_len(length(maxDp))) {
+                        for (j in seq_along(maxDp)) {
                             specTmp <- mzR::peaks(ms2File, scanIdx[j])
                             iTmp <- dpMat[, maxDp[j]]
                             peaksDet <- iTmp != 0
@@ -1467,13 +1467,13 @@ specSimPepId <-
                   fixMassTmp <-
                       suppressMessages(strsplit(
                           allResults$fixedIonMzTmp[idxTmp],'; '))
-                  names(fixMassTmp) <- paste0(seq_len(length(fixMassTmp)), '_')
+                  names(fixMassTmp) <- paste0(seq_along(fixMassTmp), '_')
                   fixMassTmp <- unlist(fixMassTmp)
                   
                   fixIntTmp <-
                       suppressMessages(strsplit(
                         allResults$fixedIonIntTmp[idxTmp], '; '))
-                  names(fixIntTmp) <- paste0(seq_len(length(fixIntTmp)), '_')
+                  names(fixIntTmp) <- paste0(seq_along(fixIntTmp), '_')
                   fixIntTmp <- unlist(fixIntTmp)
                   
                   fixSpec <- cbind(as.numeric(
@@ -1482,11 +1482,11 @@ specSimPepId <-
                   row.names(fixSpec) <- gsub('_.+', '', names(fixMassTmp))
                   
                   varMassTmp <- strsplit(allResults$varIonMzTmp[idxTmp], '; ')
-                  names(varMassTmp) <- paste0(seq_len(length(varMassTmp)), '_')
+                  names(varMassTmp) <- paste0(seq_along(varMassTmp), '_')
                   varMassTmp <- unlist(varMassTmp)
                   
                   varIntTmp <- strsplit(allResults$varIonIntTmp[idxTmp], '; ')
-                  names(varIntTmp) <- paste0(seq_len(length(varIntTmp)), '_')
+                  names(varIntTmp) <- paste0(seq_along(varIntTmp), '_')
                   varIntTmp <- unlist(varIntTmp)
                   
                   varSpec <- cbind(as.numeric(varMassTmp), 
@@ -1621,7 +1621,7 @@ specSimPepId <-
         allResults$MSMSgroup_plot <- gPlotNames[allResults$MSMSGroups]
         
         pb <- txtProgressBar(max = length(allGroups), style = 3)
-        for (p in seq_len(length(allGroups))) {
+        for (p in seq_along(allGroups)) {
             setTxtProgressBar(pb, p)
             png(
                 gPlotNames[p],

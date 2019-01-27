@@ -56,7 +56,7 @@ setMethod("c", signature(x = "AdductSpec"), function(x, ...){
     emptyAdductSpec <- new('AdductSpec')
     # bind together results
     # do not include any group info or other information
-    for (i in seq_len(length(elements))){
+    for (i in seq_along(elements)){
     emptyAdductSpec@adductMS2spec <- c(emptyAdductSpec@adductMS2spec,  
     elements[[i]]@adductMS2spec)
     metaDataTmp <- elements[[i]]@metaData

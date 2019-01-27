@@ -90,7 +90,7 @@ minDotProdSpec = 0.8, maxGroups = 10) {
         }
         # add the within group means of dot products to cluster ids
         diag(subDotProds) <- NA
-        namesClustId <- vapply(seq_len(length(clusterId)), function(x) {
+        namesClustId <- vapply(seq_along(clusterId), function(x) {
             subGroupIndxTmp <- clusterId == clusterId[x]
             if (sum(subGroupIndxTmp) > 1) {
                 return(mean(subDotProds[x, ], na.rm = TRUE))
@@ -112,7 +112,7 @@ minDotProdSpec = 0.8, maxGroups = 10) {
         
         cl <- parallel::makeCluster(nCores)
         doSNOW::registerDoSNOW(cl)
-        dotProdResults <- foreach(i = seq_len(length(indivSpecs)),
+        dotProdResults <- foreach(i = seq_along(indivSpecs),
         .combine = "c",
         .packages = c("fastcluster")) %dopar% 
         {
@@ -131,7 +131,7 @@ minDotProdSpec = 0.8, maxGroups = 10) {
         pmt <- proc.time()
 
         pb <- txtProgressBar(max = length(indivSpecs), style = 3)
-        for (i in seq_len(length(indivSpecs))) {
+        for (i in seq_along(indivSpecs)) {
             setTxtProgressBar(pb, i)
             dotProdResTmp <- dotProdSimClust(spectraList = indivSpecs[[i]], 
             compSpecName = names(indivSpecs)[i])

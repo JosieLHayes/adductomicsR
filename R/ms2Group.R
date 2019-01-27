@@ -135,7 +135,7 @@ ms2Group <-
             message("Adjusting retention time based on loess model...")
             
             metaDataTmp$predRtLoess <- 0
-            for (x in seq_len(length(Specfile.paths(adductSpectra)))) {
+            for (x in seq_along(Specfile.paths(adductSpectra))) {
                 indxFileTmp <- which(metaDataTmp$mzXMLFile %in%
                                          basename(Specfile.paths(
                                              adductSpectra))[x])
@@ -355,7 +355,7 @@ ms2Group <-
             } else {
                 dotProdResults <- vector("character",
                                          nrow(metaDataTmp))
-                for (i in seq_len(length(specByGroup))) {
+                for (i in seq_along(specByGroup)) {
                     message(i,
                             " of ",
                             length(specByGroup),
@@ -477,7 +477,7 @@ ms2Group <-
                 max = length(compSpecIndx),
                 style = 3
             )
-            for (j in seq_len(length(compSpecIndx))) {
+            for (j in seq_along(compSpecIndx)) {
                 setTxtProgressBar(pb, j)
                 intGroup <- compSpecIndx[j]
                 listIndxTmp <- which(names(interMSMScompSpec) == intGroup)
