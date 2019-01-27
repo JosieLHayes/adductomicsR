@@ -642,7 +642,7 @@ specSimPepId <-
                                      na.rm=TRUE) / max(specTmp[, 2]
                                          , na.rm=TRUE)
                             suppressWarnings(dir.create(paste0(outputPlotDir, 
-                                '/spectrumGroups/')))
+                                '/scanplots/')))
                             plotName <- paste0( 
                                 '/spectrumGroups/',
                                 basename(ms2Files[i]),
@@ -1189,7 +1189,7 @@ specSimPepId <-
                                         
                                         
                             suppressWarnings(dir.create(paste0(outputPlotDir, 
-                                            '/spectrumGroups/')))
+                                            '/scanplots/')))
                                 plotName <- paste0( 
                                     '/spectrumGroups/',
                                     basename(ms2Files[i]),
