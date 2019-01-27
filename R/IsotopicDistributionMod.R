@@ -23,62 +23,62 @@ IsotopicDistributionMod <- function(formula = list(), charge = 1) {
         )
     inputFormula[names(formula)] <- formula
     simulation <- function(inputFormula) {
+        data = read.table(paste0(system.file("extdata", 
+        package = "adductomicsR"), '/ElementMasses.txt'), h=TRUE)
+        row.names(data)= data[,1]
+        data = data[,-1]
         massCarbon <- sum(sample(
-            c(12, 13.0033548378),
-            size =
-                inputFormula$C,
+            as.numeric(data['C', 1:2]),
+            size = inputFormula$C,
             replace = TRUE,
-            prob = c(0.9893, 0.0107)
+            prob = as.numeric(data['C', 5:6])
         ))
         massHydrogen <-
             sum(sample(
-                c(1.0078250321, 2.014101778),
+                as.numeric(data['H', 1:2]),
                 size = inputFormula$H,
                 replace = TRUE,
-                prob = c(0.999885, 0.000115)
+                prob = as.numeric(data['H', 5:6])
             ))
         massNitrogen <-
             sum(sample(
-                c(14.0030740052, 15.0001088984),
+                as.numeric(data['N', 1:2]),
                 size = inputFormula$N,
                 replace = TRUE,
-                prob = c(0.99632, 0.00368)
+                prob = as.numeric(data['N', 5:6])
             ))
         massOxygen <-
             sum(sample(
-                c(15.9949146221, 16.9991315, 17.9991604),
+                as.numeric(data['O', 1:3]),
                 size = inputFormula$O,
                 replace = TRUE,
-                prob = c(0.99757, 0.00038, 0.00205)
+                prob = as.numeric(data['O', 5:7])
             ))
         massSulfer <- sum(sample(
-            c(31.97207069, 32.9714585,
-              33.96786683, 35.96708088),
+            as.numeric(data['S', 1:4]),
             size = inputFormula$S,
             replace = TRUE,
-            prob = c(0.9493, 0.0076,
-                     0.0429, 2e-04)
+            prob = as.numeric(data['S', 5:8])
         ))
-        massPhosphorus <- inputFormula$P * 30.97376151
+        massPhosphorus <- inputFormula$P * as.numeric(data['P', 1])
         massBromine <- sum(sample(
-            c(78.9183376, 80.916291),
+            as.numeric(data['Br', 1:2]),
             size = inputFormula$Br,
             replace = TRUE,
-            prob = c(0.5069, 0.4931)
+            prob = as.numeric(data['Br', 5:6])
         ))
         massChlorine <- sum(sample(
-            c(34.96885271, 36.9659026),
+            as.numeric(data['Cl', 1:2]),
             size = inputFormula$Cl,
             replace = TRUE,
-            prob = c(0.7578, 0.2422)
+            prob = as.numeric(data['Cl', 5:6])
         ))
-        massFluorine <- inputFormula$F * 18.9984032
+        massFluorine <- inputFormula$F * as.numeric(data['F', 1])
         massSilicon <- sum(sample(
-            c(27.9769265327, 28.97649472,
-              29.97377022),
+            as.numeric(data['Si', 1:3]),
             size = inputFormula$Si,
             replace = TRUE,
-            prob = c(0.922297, 0.046832, 0.030872)
+            prob = as.numeric(data['Si', 5:7])
         ))
         massMolecule <-
             sum(
