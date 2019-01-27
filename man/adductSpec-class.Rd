@@ -53,6 +53,24 @@ adductSpecGen() from mzXML files.
 \describe{
 \item{c}{\code{signature(object = "AdductSpec")}: Concatenates the 
 spectra information.}
+\item{Specfile.paths}{\code{signature(object = "AdductSpec")}: Accesses the 
+file paths.}
+\item{adductMS2spec}{\code{signature(object = "AdductSpec")}: Accesses the 
+adduct MS2 spectral information.}
+\item{metaData}{\code{signature(object = "AdductSpec")}: Accesses the 
+scan metadata.}
+\item{Parameters}{\code{signature(object = "AdductSpec")}: Accesses the 
+user parameters.}
+\item{groupMS2spec}{\code{signature(object = "AdductSpec")}: Accesses the 
+spectral information for the grouped MS2 spectra.}
+\item{rtDevModels}{\code{signature(object = "AdductSpec")}: Accesses the 
+retention time deviation models.}
+\item{sumAdductType}{\code{signature(object = "AdductSpec")}: Accesses the 
+total adduct types.}
+\item{Peptides}{\code{signature(object = "AdductSpec")}: Accesses the 
+peptide information.}
+\item{specPepMatches}{\code{signature(object = "AdductSpec")}: Accesses the 
+peptide matches in the spectra.}
 }
 }
 

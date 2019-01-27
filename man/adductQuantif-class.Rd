@@ -45,6 +45,24 @@ and 50 targets 200 * 50 = 10,000 rows)}
 \item{\code{Parameters}}{dataframe of specified parameters}
 }}
 
+\section{Methods}{
+
+\describe{
+\item{c}{\code{signature(object = "AdductQuantif")}: Concatenates the 
+spectra information.}
+\item{file.paths}{\code{signature(object = "AdductQuantif")}: Accesses the 
+file paths.}
+\item{peakQuantTable}{\code{signature(object = "AdductQuantif")}: Accesses the 
+peak quantification data as a table.}
+\item{peakIdData}{\code{signature(object = "AdductQuantif")}: Accesses the 
+ID data for the peaks.}
+\item{predIsoDist}{\code{signature(object = "AdductQuantif")}: Accesses the 
+predicted isotopic distribution.}
+\item{targTable}{\code{signature(object = "AdductQuantif")}: Accesses the 
+user provided target table.}
+}
+}
+
 \author{
 JL Hayes \email{jlhayes1982@gmail.com}
 }
