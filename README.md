@@ -8,7 +8,7 @@ Processes peptide adducts from LC-MS data. The software interrogates tandem mass
 Installation
 ===============
 
-The package requires an R version of at least 3.4. It is also recommended to install mzR manually prior to installing the package if it is not already installed on your system.
+The package requires an R version of at least 3.6 which is currently in development. There is also a version that will work with R version 3.5 in branch R3.5. It is also recommended to install mzR manually prior to installing the package if it is not already installed on your system.
 ```{r}
 source("https://bioconductor.org/biocLite.R")
 biocLite("mzR")
@@ -22,6 +22,7 @@ The latest development version and all other package dependencies can be install
 library(devtools)
 devtools::install_github('JosieLHayes/adductomicsR', dependencies=c("Depends", "Imports", "Suggests"))
 ```
+Including ref= 'R3.5' in this command will download the version that can be used for R 3.5.
 
 Vignette
 ========
@@ -41,7 +42,7 @@ The *adductomicsR* workflow consists of a retention time correction step (option
 
 ******
 
-**rtDevModeling** - Performs MS/MS spectrum grouping and loess retention time deviation modeling. Requires as imput a directory path where the mzXML files are and a path to a run order file. Examples mzXML files are available at https://berkeley.box.com/s/fnhttc87v4mn1x50nvckpt99999y7uhl and an example run order file for these examples is in inst/extdata. Information on the internal standard (for Cys34 we use isotopic T3 adducted with iodoacetamide) must be provided here - a list (no white space) of expected fragment ions
+**rtDevModeling** - Performs MS/MS spectrum grouping and loess retention time deviation modeling. Requires as input a directory path where the mzXML files are and a path to a run order file. Examples mzXML files are available in the data package adductData. Information on the internal standard (for Cys34 we use isotopic T3 adducted with iodoacetamide) must be provided here - a list (no white space) of expected fragment ions
 for the internal standard spectrum and the expected mass-to-charge ratio of the internal standard precursor (default = 834.77692, for Cys34)  In addition the internal standard retention time drift window (in seconds) can be specified by the user (default 200-600 ppm). 
 
 This function produces a plot for the internal standard RT, ppm difference and deviation from the median across the run order to highlight retention time drift. This is a plot from a previous dataset https://www.ncbi.nlm.nih.gov/pubmed/27936627
@@ -56,11 +57,11 @@ A plot of the adjusted retention time for each retention time (seconds) of this 
 
 **specSimPepId** performs spectral similarity based adducted peptide identification. It takes as input the `rtDevModeling` object and a directory path where the mzXML files are. A retention time window within which to identify spectra can be specified using minRT and maxRT (default 20-45 minutes). Similarly a mass-to-charge window can also be specified using minMz and maxMz (defaults 750-1000). A model spectrum file for the peptide under study must be provided to perform spectral similarity to. Built in model tables (in the extdata directory) can be used by specifying the path to the table (currently available are: "ALVLIAFAQYLQQCPFEDHVK" and "RHPYFYAPELLFFAK"). If supplying a custom table it must consist of the following mandatory columns ("mass", "intensity", "ionType" and "fixed or variable"). This function also performs grouping using hierarchical clustering of the spectra. The mass-to-charge ratio and RT threshold for cutting the tree can be specified using groupMzabs and groupRtDev respectively. 
 
-This function produces an MS2 plot for each adduct in each scan. This is saved in the mzXML directory in a separate directory for each sample ending in _adductID. These should be used to visually inspect 2-3 plots for each adduct group identified to remove false positives. A plot of the model spectrum provided is also saved in the mzXML directory for comparison. An example plot for adduct A40 from dataset https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5555296/ is shown below.
+This function produces an MS2 plot for each adduct in each scan. This is saved in the output directory in a separate directory for each sample ending in _adductID. These should be used to visually inspect 2-3 plots for each adduct group identified to remove false positives. A plot of the model spectrum provided is also saved in the mzXML directory for comparison. An example plot for adduct A40 from dataset https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5555296/ is shown below.
 
 ![example_MS2](https://github.com/JosieLHayes/adductomicsR/blob/master/inst/extdata/ORB35018.mzXMLscan1485M798.0402_RT24.52dp0.8varPeakDet5.png)
 
-In addition a plot of the mass-to-charge vs the RT and adjusted RT is produced by this function. Each group, assigned using the grouping thresholds the user provided) is colored differently. These plots are provided within the mzXML directory in a directory labeled spectrumGroups_[peptide]. The plot of all groups for the dataset https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5555296/ is shown below. This shows that some groups, such as those at m/z 850, should be merged into one group as they represent tails of the same peak.
+In addition a plot of the mass-to-charge vs the RT and adjusted RT is produced by this function. Each group, assigned using the grouping thresholds the user provided) is colored differently. These plots are provided within the output directory in a directory labeled spectrumGroups_[peptide]. The plot of all groups for the dataset https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5555296/ is shown below. This shows that some groups, such as those at m/z 850, should be merged into one group as they represent tails of the same peak.
 
 ![example_groups](https://github.com/JosieLHayes/adductomicsR/blob/master/inst/extdata/allGroups.png)
 
