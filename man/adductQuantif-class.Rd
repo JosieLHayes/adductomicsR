@@ -3,6 +3,7 @@
 \docType{class}
 \name{AdductQuantif-class}
 \alias{AdductQuantif-class}
+\alias{c,AdductQuantif-method}
 \alias{show,c,file.paths,peakQuantTable,AdductQuantif,AdductQuantif-class}
 \alias{peakIdData,predIsoDist,targTable,AdductQuantif,AdductQuantif-class}
 \alias{c,file.paths,peakQuantTable,peakIdData,AdductQuantif-method}
