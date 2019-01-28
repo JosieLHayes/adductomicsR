@@ -17,10 +17,10 @@
 #' expRt = NULL)
 #' @return list with peak and peak table
 peakIntegrate <- function(peakTable = NULL,
-                          peakStart = NULL,
-                          peakEnd = NULL,
-                          expMass = NULL,
-                          expRt = NULL) {
+                            peakStart = NULL,
+                            peakEnd = NULL,
+                            expMass = NULL,
+                            expRt = NULL) {
     if (all(c("peaks", "troughs") %in% colnames(peakTable))) {
         peakTable <- peakTable[{
             peakTable$troughs %in% "intPeakTrough"
@@ -36,9 +36,8 @@ peakIntegrate <- function(peakTable = NULL,
         peakStart:peakEnd
     }[which.max(peakTable[peakStart:peakEnd, 2])]
     peakTable$peaks[peakApIndx] <- "intPeak"
-    
     psDf <- data.frame(matrix(0, nrow = 1, ncol = ncol(peakTable)),
-                       stringsAsFactors = FALSE)
+                        stringsAsFactors = FALSE)
     colnames(psDf) <- colnames(peakTable)
     psDf$troughs <- "intPeakTrough"
     peDf <- psDf
@@ -66,7 +65,6 @@ peakIntegrate <- function(peakTable = NULL,
         x[k] <-
             peakTime[k] * peakIntensity[h] - peakTime[h] * peakIntensity[k]
     }
-    
     resV <- vector("numeric", 16)
     names(resV) <- c(
         "massAcc",
@@ -112,19 +110,18 @@ peakIntegrate <- function(peakTable = NULL,
     resV["mzmin"] <-
         round(min(as.numeric(peakTable[tmpIndxV[zeroIdx], 1])), 4)
     resV["corrRtMed"] <- round(as.numeric(peakTable[peakApIndx, 3]) /
-                                   60, 2)
+                                    60, 2)
     resV["corrRtMax"] <- round(max(as.numeric(peakTable[tmpIndxV[zeroIdx],
                                                         3]) / 60), 2)
     resV["corrRtMin"] <- round(min(as.numeric(peakTable[tmpIndxV[zeroIdx],
                                                         3]) / 60), 2)
     resV["rtmed"] <-
-        round(as.numeric(peakTable[peakApIndx, 4]) /
-                  60, 2)
+        round(as.numeric(peakTable[peakApIndx, 4]) / 60, 2)
     resV["rtmax"] <-
         round(max(as.numeric(peakTable[tmpIndxV[zeroIdx],
-                                       4]) / 60), 2)
+                                        4]) / 60), 2)
     resV["rtmin"] <-
         round(min(as.numeric(peakTable[tmpIndxV[zeroIdx],
-                                       4]) / 60), 2)
+                                        4]) / 60), 2)
     return(list(intRes = resV, peakTable = peakTable))
 }  # end function

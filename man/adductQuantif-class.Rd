@@ -3,8 +3,10 @@
 \docType{class}
 \name{AdductQuantif-class}
 \alias{AdductQuantif-class}
-\alias{show,c,AdductQuantif,AdductQuantif-class}
-\alias{c,AdductQuantif-method}
+\alias{show,c,file.paths,peakQuantTable,peakIdData,predIsoDist,targTable,
+AdductQuantif,AdductQuantif-class},
+\alias{c, file.paths,peakQuantTable,peakIdData,predIsoDist,targTable,
+AdductQuantif-method}
 \title{AdductQuantif class 
 The AdductQuantif class contains a peak integral matrix,
 peak ranges and region of integration, the isotopic distribution identified

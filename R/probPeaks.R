@@ -15,15 +15,15 @@
 #' "nMadPeakArea", "duplicates"))
 #' @return 'AdductQuantif' class object
 probPeaks <- function(object = NULL,
-                      nTimesMad = 3,
-                      metrics = c(
-                          "nMadDotProdDistN",
-                          "nMadSkewness",
-                          "nMadKurtosis",
-                          "nMadRtGroupDev",
-                          "nMadPeakArea",
-                          "duplicates"
-                      )) {
+                    nTimesMad = 3,
+                    metrics = c(
+                        "nMadDotProdDistN",
+                        "nMadSkewness",
+                        "nMadKurtosis",
+                        "nMadRtGroupDev",
+                        "nMadPeakArea",
+                        "duplicates"
+                    )) {
     # error handling
     if (is.null(object)) {
         stop("argument object is missing with no default.")
@@ -58,7 +58,6 @@ probPeaks <- function(object = NULL,
             nTimesMad <- as.numeric(unlist(metrics))
             metrics <- names(metrics)
             }
-    
     indxTmp <- as.numeric(peakQuantTable(object)[, "peakArea"]) != 0
     resultsTmp <- matrix(0, ncol = 11, nrow = length(indxTmp))
     colnames(resultsTmp) <- c(
@@ -74,7 +73,6 @@ probPeaks <- function(object = NULL,
         "possOutPeak",
         "peakOutMetrics"
     )
-    
     quantTableTmp <- peakQuantTable(object)
     # remove previous results if necessary
     quantTableTmp <-
@@ -83,28 +81,27 @@ probPeaks <- function(object = NULL,
     # median absolute deviation of the rt deviation
     madRtDevTmp <-
         tapply(abs(as.numeric(quantTableTmp[indxTmp, "rtDev"])),
-               quantTableTmp[indxTmp,
-                             "featureName"], function(feat)
-                                 mad(feat))
+                quantTableTmp[indxTmp,
+                            "featureName"], function(feat)
+                                mad(feat))
     matchIndx <-
         match(quantTableTmp[, "featureName"], names(madRtDevTmp))
     # calculate median peak area for the group
     peakAreaMed <-
         tapply(as.numeric(quantTableTmp[indxTmp, "peakArea"]),
-               quantTableTmp[indxTmp,
-                             "featureName"], median)
+            quantTableTmp[indxTmp,
+                            "featureName"], median)
     peakAreaMed <- peakAreaMed[matchIndx]
     # deviation of peak area from the group median
     peakAreaDev <-
         as.numeric(quantTableTmp[, "peakArea"]) - peakAreaMed
     madPeakAreaTmp <-
         tapply(as.numeric(quantTableTmp[indxTmp, "peakArea"]),
-               quantTableTmp[indxTmp,
-                             "featureName"], function(feat)
-                                 mad(feat))
+                quantTableTmp[indxTmp,
+                            "featureName"], function(feat)
+                                mad(feat))
     madRtDevTmp <- madRtDevTmp[matchIndx]
     madPeakAreaTmp <- madPeakAreaTmp[matchIndx]
-    
     for (i in which(indxTmp)) {
         # setTxtProgressBar(pb, i)
         peakRangeTmp <- peakIdData(object)[[i]]$peakRange
@@ -115,7 +112,7 @@ probPeaks <- function(object = NULL,
         }
         peakIntTmp <-
             peakRangeTmp[min(peakIntIndx):max(peakIntIndx), ,
-                         drop = FALSE]
+                        drop = FALSE]
         # calculate guassian
         apexTmp <- which(peakIntTmp$peaks == "intPeak")
         seqTmp <- seq(-4, 4, length = nrow(peakIntTmp))
@@ -127,13 +124,13 @@ probPeaks <- function(object = NULL,
         # inner prod
         resultsTmp[i, "dotProdDistN"] <-
             as.vector((scaledPeakIntTmp %*%
-                           normGaussian) /
-                          (sqrt(sum(
-                              scaledPeakIntTmp ^ 2
-                          )) *
-                              sqrt(sum(
-                                  normGaussian ^ 2
-                              ))))
+                            normGaussian) /
+                            (sqrt(sum(
+                                scaledPeakIntTmp ^ 2
+                            )) *
+                                sqrt(sum(
+                                    normGaussian ^ 2
+                                ))))
         # skewness
         n <- length(scaledPeakIntTmp)
         resultsTmp[i, "skewness"] <- (sum((
@@ -146,13 +143,13 @@ probPeaks <- function(object = NULL,
             ) ^ 2) / n) ^ (3 / 2)
         # kurtosis
         resultsTmp[i, "kurtosis"] <- n * sum((scaledPeakIntTmp -
-                                                  mean(scaledPeakIntTmp)) ^ 4) /
+                                                mean(scaledPeakIntTmp)) ^ 4) /
             (sum((scaledPeakIntTmp - mean(scaledPeakIntTmp)
             ) ^ 2) ^ 2)
         # number of median absolute deviations from the Rt deviation
         resultsTmp[i, "nMadRtGroupDev"] <-
             abs(as.numeric(quantTableTmp[i,
-                                         "rtDev"])) / madRtDevTmp[i]
+                                        "rtDev"])) / madRtDevTmp[i]
         # number of median absolute deviations from the peak area
         resultsTmp[i, "nMadPeakArea"] <-
             abs(peakAreaDev[i]) / madPeakAreaTmp[i]
@@ -161,7 +158,7 @@ probPeaks <- function(object = NULL,
     madSkewness <- mad(resultsTmp[indxTmp, "skewness"])
     devMedianSkewness <- ifelse(resultsTmp[, "skewness"] == 0, 0,
                                 abs(abs(resultsTmp[,
-                                                   "skewness"]) - median(
+                                                    "skewness"]) - median(
                                                     resultsTmp[
                                                     indxTmp, "skewness"])))
     resultsTmp[, "nMadSkewness"] <- devMedianSkewness / madSkewness
@@ -169,7 +166,7 @@ probPeaks <- function(object = NULL,
     madKurtosis <- mad(resultsTmp[indxTmp, "kurtosis"])
     devMedianKurtosis <- ifelse(resultsTmp[, "kurtosis"] == 0, 0,
                                 abs(resultsTmp[,
-                                               "kurtosis"] - median(
+                                                "kurtosis"] - median(
                                                     resultsTmp[
                                                     indxTmp, "kurtosis"])))
     resultsTmp[, "nMadKurtosis"] <- devMedianKurtosis / madKurtosis
@@ -177,11 +174,10 @@ probPeaks <- function(object = NULL,
     madDotProd <- mad(resultsTmp[indxTmp, "dotProdDistN"])
     devMedianDotProd <-
         ifelse(resultsTmp[, "dotProdDistN"] == 0, 0,
-               abs(resultsTmp[,
-                              "dotProdDistN"] - median(resultsTmp[
+                abs(resultsTmp[,
+                                "dotProdDistN"] - median(resultsTmp[
                                 indxTmp, "dotProdDistN"])))
     resultsTmp[, "nMadDotProdDistN"] <- devMedianDotProd / madDotProd
-    
     # duplicate ratios
     nPeakGrs <- length(unique(quantTableTmp[, "featureName"]))
     seqTmp <- seq_len(nrow(quantTableTmp))
@@ -197,29 +193,26 @@ probPeaks <- function(object = NULL,
     splSeq <- rep(c(rep(1, nPeakGrs), rep(2, nPeakGrs)), nSamps)
     inj1 <- seqTmp[splSeq == 1]
     inj2 <- seqTmp[splSeq == 2]
-    
     peakRatios <- as.numeric(quantTableTmp[inj1, "peakArea"]) /
         as.numeric(quantTableTmp[inj2,
                                  "peakArea"])
     # possible problem peaks logical
     possOutPeaksTmp <-
         apply(resultsTmp[, allMetricColNames, drop = FALSE],
-              2, function(colTmp)
-                  colTmp >=
-                  nTimesMad)
+                2, function(colTmp)
+                colTmp >=
+                nTimesMad)
     resultsTmp[, "possOutPeak"] <-
         (rowSums(possOutPeaksTmp[, metrics,
-                                 drop = FALSE]) >=
-             1) * 1
+                                drop = FALSE]) >=
+            1) * 1
     message(
         "Summary nPeaks > ",
         nTimesMad,
         " * median absolute deviation (mad):\n\n",
         paste0(metrics, " ",
-               colSums(possOutPeaksTmp[, metrics, drop = FALSE]), "\n")
+                colSums(possOutPeaksTmp[, metrics, drop = FALSE]), "\n")
     )
-    
-    
     par(mfrow = c(3, 2))
     for (j in seq_len(5)) {
         colNameTmp <- colnames(resultsTmp)[j]
@@ -232,7 +225,7 @@ probPeaks <- function(object = NULL,
             col = possProbIndx[orderTmp],
             main = paste0(
                 ifelse(colnames(possOutPeaksTmp)[j] %in%
-                           metrics, "***", ""),
+                            metrics, "***", ""),
                 colNameTmp,
                 " (median = ",
                 round(median(yTmp), 2),
@@ -266,7 +259,7 @@ probPeaks <- function(object = NULL,
         x = 0.5,
         y = 0.3,
         paste("peaks > ", nTimesMad,
-              " * MAD of each metric"),
+                " * MAD of each metric"),
         cex = 1.3,
         col = "red"
     )
@@ -279,7 +272,7 @@ probPeaks <- function(object = NULL,
         " peaks ",
         "(",
         round(sum(resultsTmp[,
-                             "possOutPeak"]) / sum(indxTmp) * 100, 1),
+                            "possOutPeak"]) / sum(indxTmp) * 100, 1),
         "%)",
         " of a total of ",
         sum(indxTmp),
@@ -287,26 +280,25 @@ probPeaks <- function(object = NULL,
         long tailed, or deviant from the peak group retention
         time or peak area.\n"
     )
-    
     nMadColNames <-
         colnames(resultsTmp)[grep("nMad", colnames(resultsTmp))]
     resultsTmp[, "peakOutMetrics"] <-
         apply(resultsTmp[, nMadColNames], 1,
-              function(rowTmp) {
-                  paste0(nMadColNames[rowTmp >= nTimesMad], collapse = "; ")
+                function(rowTmp) {
+                paste0(nMadColNames[rowTmp >= nTimesMad], collapse = "; ")
               })
     peakQuantTable(object) <-
         cbind(resultsTmp[, c("possOutPeak",
-                             "peakOutMetrics")], quantTableTmp,
+                            "peakOutMetrics")], quantTableTmp,
               resultsTmp[, c(
-                  "dotProdDistN",
-                  "skewness",
-                  "kurtosis",
-                  "nMadRtGroupDev",
-                  "nMadPeakArea",
-                  "nMadDotProdDistN",
-                  "nMadSkewness",
-                  "nMadKurtosis"
-              )])
+                    "dotProdDistN",
+                    "skewness",
+                    "kurtosis",
+                    "nMadRtGroupDev",
+                    "nMadPeakArea",
+                    "nMadDotProdDistN",
+                    "nMadSkewness",
+                    "nMadKurtosis"
+                )])
     return(object)
         }  # end function

@@ -14,7 +14,6 @@ rtDevModelSave <- function(object = NULL, outputDir = NULL) {
     # error handling
     if (is.character(object)) {
         message("loading AdductSpec .RData file...Please wait.\n")
-        
         objectName <- load(object, envir = environment())
         # if different object then assign object name eval parse
         object <- eval(parse(text = objectName))
@@ -32,5 +31,5 @@ rtDevModelSave <- function(object = NULL, outputDir = NULL) {
     # save as
     save(rtDevModels,
          file = paste0(outputDir, ifelse(grepl("/$", outputDir),
-                                         "", "/"), "rtDevModels.RData"))
+                                        "", "/"), "rtDevModels.RData"))
 }  # end function

@@ -119,27 +119,27 @@
 #' @export
 specSimPepId <-
     function(MS2Dir = NULL,
-             nCores = NULL,
-             rtDevModels = NULL,
-             topIons = 100,
-             topIntIt = 5,
-             minDotProd = 0.8,
-             precCh = 3,
-             minSNR = 3,
-             minRt = 20,
-             maxRt = 35,
-             minIdScore = 0.4,
-             minFixed = 3,
-             minMz = 750,
-             maxMz = 1000,
-             modelSpec = c('ALVLIAFAQYLQQCPFEDHVK',
-                           'RHPYFYAPELLFFAK'),
-             groupMzabs = 0.005,
-             groupRtDev = 0.5,
-             possFormMzabs = 0.01,
-             minMeanSpecSim = 0.7,
-             idPossForm = 0,
-             outputPlotDir = NULL) {
+            nCores = NULL,
+            rtDevModels = NULL,
+            topIons = 100,
+            topIntIt = 5,
+            minDotProd = 0.8,
+            precCh = 3,
+            minSNR = 3,
+            minRt = 20,
+            maxRt = 35,
+            minIdScore = 0.4,
+            minFixed = 3,
+            minMz = 750,
+            maxMz = 1000,
+            modelSpec = c('ALVLIAFAQYLQQCPFEDHVK',
+                            'RHPYFYAPELLFFAK'),
+            groupMzabs = 0.005,
+            groupRtDev = 0.5,
+            possFormMzabs = 0.01,
+            minMeanSpecSim = 0.7,
+            idPossForm = 0,
+            outputPlotDir = NULL) {
         binSizeMS2 = 3
         noiseBin = 200
         minVarPeaks = 0
@@ -155,21 +155,18 @@ specSimPepId <-
             )
             buildInIndx <-
                 grepl(paste0('modelSpectrum_', modelSpec, '\\.csv'),
-                      basename(builtInModSpec))
+                        basename(builtInModSpec))
             if (any(buildInIndx)) {
                 modelSpec <- builtInModSpec[buildInIndx]
             }
         }
         nCores <- ifelse(is.null(nCores), 1, nCores)
-        
         if (is.null(MS2Dir)) {
             stop("Please provide an .mzXML data directory")
         }
-        
         if (is.null(rtDevModels)) {
             stop("Please provide an rtDevModels object")
         }
-        
         if (is.character(rtDevModels)) {
             rtDevModelsDir <- dirname(rtDevModels)
             message('loading rtDevModels .RData file...Please wait.\n')
@@ -232,17 +229,17 @@ specSimPepId <-
             col.sub = 'white'
         )
         points(modelSpec[modelSpec$fixed.or.variable == 'fixed', seq_len(2)],
-               type = 'h',
-               col = 'sandybrown',
-               lwd = 2)
+                type = 'h',
+                col = 'sandybrown',
+                lwd = 2)
         points(modelSpec[modelSpec$fixed.or.variable == 'variable',seq_len(2)],
-               type = 'h',
-               col = 'yellowgreen',
-               lwd = 2)
+                type = 'h',
+                col = 'yellowgreen',
+                lwd = 2)
         points(modelSpec[modelSpec$fixed.or.variable == '', seq_len(2)],
-               type = 'h',
-               col = 'purple',
-               lwd = 2)
+                type = 'h',
+                col = 'purple',
+                lwd = 2)
         text(
             modelSpec[modelSpec$fixed.or.variable != '', seq_len(2)],
             labels = modelSpec$ionType[modelSpec$fixed.or.variable != ''],
@@ -264,11 +261,10 @@ specSimPepId <-
         modelSpec <-
             modelSpec[modelSpec$fixed.or.variable == 'variable',]
         modelSpec <- modelSpec[order(modelSpec[, 1]),]
-        
         # diff between base peak and other ions
         diffSpec <-
             cbind(modelSpec[, 1] - modelSpec[which.max(modelSpec[, 2]), 1],
-                  modelSpec[, 2])
+                    modelSpec[, 2])
         maxMass <-
             floor(max(diffSpec[, 1], na.rm = TRUE)) + {
                 binSizeMS2 * 2
@@ -280,14 +276,14 @@ specSimPepId <-
         # bin them according to expected mass accuracy
         labelsTmp <-
             paste0('(',
-                   seq(minMass, (maxMass - binSizeMS2), binSizeMS2),
-                   ',',
-                   seq((minMass + binSizeMS2), maxMass, binSizeMS2),
-                   ']')
+                    seq(minMass, (maxMass - binSizeMS2), binSizeMS2),
+                    ',',
+                    seq((minMass + binSizeMS2), maxMass, binSizeMS2),
+                    ']')
         massBinsDiffSpec <-
             cut(diffSpec[, 1],
                 breaks = seq(minMass, maxMass,
-                             binSizeMS2),
+                                binSizeMS2),
                 labels = labelsTmp)
         # empty bins
         massBinsDiffSpec <- tapply(diffSpec[, 2], massBinsDiffSpec, max)
@@ -313,7 +309,6 @@ specSimPepId <-
         )
         massDriftFiles <-
             gsub('\\.mzXML$|\\.mzML$', '.massDrift.csv', ms2Files)
-    
         if (nCores < 2) {
             pb <- txtProgressBar(max = length(ms2Files), style = 3)
             allResults <- data.frame(stringsAsFactors = FALSE)
@@ -323,8 +318,8 @@ specSimPepId <-
                 metaData <- mzR::header(ms2File)
                 if (file.exists(massDriftFiles[i])) {
                     massDriftTmp <- read.csv(massDriftFiles[i],
-                                             header = TRUE,
-                                             stringsAsFactors = FALSE)
+                                            header = TRUE,
+                                            stringsAsFactors = FALSE)
                     metaData <- cbind(metaData,
                                     massDriftTmp[, c(
                                         'ppmDrift', 'adjPrecursorMZ')])
@@ -332,9 +327,8 @@ specSimPepId <-
                     metaData$ppmDrift <- NA
                     metaData$adjPrecursorMZ <- metaData$precursorMZ
                 }
-                
                 ms2Indx <- which(metaData$msLevel == 2 &
-                                     metaData$precursorCharge %in% precCh)
+                                    metaData$precursorCharge %in% precCh)
                 # rt range
                 metaData$retentionTime <- metaData$retentionTime / 60
                 ms2Indx <- ms2Indx[metaData$retentionTime[ms2Indx] >=
@@ -342,52 +336,53 @@ specSimPepId <-
                                         ms2Indx] <= maxRt]
                 # if fixed ions detected
                 fixedDetectIons <- lapply(mzR::peaks(ms2File, ms2Indx),
-                          function(x) {
-                              detIons <- lapply(fixedIons,
+                            function(x) {
+                                detIons <- lapply(fixedIons,
                                                 function(y) {
                                   # calculate local noise level
-                                  localArTmp <-
-                                      x[x[, 1] > {
-                                          y - {
-                                              noiseBin / 2
-                                          }
-                                      } & x[, 1] <
-                                      {
-                                          y + {
-                                              noiseBin / 2
-                                          }
-                                      }, 2]
-                                  noiseLevTmp <- median(
-                                      localArTmp)
-                                  snrTmp <- x[, 2] / noiseLevTmp
-                                  inMass <-
-                                      which({
-                                          abs(x[, 1] - y) <= binSizeMS2
-                                      } &
-                                      {
-                                          snrTmp >= minSNR
-                                      })
-                                  if (length(inMass) > 0) {
-                                    inMass <- inMass[which.max(
-                                    snrTmp[inMass])]
-                                    names(inMass) <- round(snrTmp[inMass], 2)
-                                  }
-                                  return(inMass)
-                              })
-                          })#{{x[, 2]/max(x[, 2])} * 100} >= minRelFixed))})
+                                    localArTmp <-
+                                        x[x[, 1] > {
+                                            y - {
+                                                noiseBin / 2
+                                            }
+                                        } & x[, 1] <
+                                        {
+                                            y + {
+                                                noiseBin / 2
+                                            }
+                                        }, 2]
+                                    noiseLevTmp <- median(
+                                        localArTmp)
+                                    snrTmp <- x[, 2] / noiseLevTmp
+                                    inMass <-
+                                        which({
+                                            abs(x[, 1] - y) <= binSizeMS2
+                                        } &
+                                        {
+                                            snrTmp >= minSNR
+                                        })
+                                    if (length(inMass) > 0) {
+                                        inMass <- inMass[which.max(
+                                        snrTmp[inMass])]
+                                        names(inMass) <- round(
+                                            snrTmp[inMass], 2)
+                                    }
+                                    return(inMass)
+                                })
+                            })#{{x[, 2]/max(x[, 2])} * 100} >= minRelFixed))})
                 names(fixedDetectIons) <- ms2Indx
                 fixedDetectIndx <- unlist(lapply(fixedDetectIons,
-                                                 function(x)
-                                             sum(
-                                                 vapply(x, function(y)
-                                                     length(y) > 0,
-                                                     FUN.VALUE = logical(1))
-                                             ) >= minFixed))
+                                                function(x)
+                                            sum(
+                                                vapply(x, function(y)
+                                                    length(y) > 0,
+                                                    FUN.VALUE = logical(1))
+                                            ) >= minFixed))
                 fixedDetectIndx <- ms2Indx[fixedDetectIndx]
                 # calc sim of top 5 base peaks to example spec
                 dpMat <- do.call(cbind, lapply(mzR::peaks(ms2File,
                 fixedDetectIndx), function(x) {
-                              mostIntIdx <- order(x[, 2], decreasing = TRUE)[
+                                mostIntIdx <- order(x[, 2], decreasing = TRUE)[
                                   seq_len(topIons)]
                               x <- x[mostIntIdx, , drop = FALSE]
                               x <- x[order(x[, 1]),]

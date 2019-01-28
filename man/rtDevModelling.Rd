@@ -12,7 +12,7 @@ intStdPeakList=c(290.21, 403.30, 516.38, 587.42,849.40, 884.92, 958.46,
 intStdMass = 834.77692, intStd_MaxMedRtDrift = 600, intStd_MaxPpmDev = 200,
 minSpecEx = 40, 
 minDotProd = 0.8, percMissing = 15, percExtra = 100, smoothingSpan = 0.8,
-saveRtDev = 1)
+saveRtDev = 1, outputPlotDir = NULL)
 }
 \arguments{
 \item{MS2Dir}{character a full path to a directory containing either
@@ -79,6 +79,8 @@ is calculated for each file seperately using 7-fold CV.}
 \item{saveRtDev}{integer (default = 1) should just the retention time
 deviation model be saved (TRUE = 1) or the AdductSpec class object 
 (FALSE = 0) as .RData workspace files.}
+
+\item{outputPlotDir}{character (default = NULL) output directory for plots.}
 }
 \value{
 LOESS RT models as adductSpectra AdductSpec object

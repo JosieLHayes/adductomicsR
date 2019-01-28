@@ -29,18 +29,17 @@
 #' nExtra = 1, folds = 7, outputFileDir = NULL)
 #' @return LOESS RT models as adductSpectra AdductSpec object
 retentionCorr <- function(adductSpectra = NULL,
-                          smoothingSpan = NULL,
-                          nMissing = 1,
-                          nExtra = 1,
-                          folds = 7,
-                          outputFileDir = NULL) {
+                            smoothingSpan = NULL,
+                            nMissing = 1,
+                            nExtra = 1,
+                            folds = 7,
+                            outputFileDir = NULL) {
     # error handling
     if (is.null(adductSpectra)) {
         stop("argument adductSpectra is missing with no default.")
     } else if (!is(adductSpectra, 'AdductSpec')) {
         stop("argument adductSpectra is not an AdductSpec class object.")
     }
-    
     metaDataTmp <- metaData(adductSpectra)
     # single point rt drift
     if (!is.null(metaDataTmp$intStdRtDrift)) {
@@ -50,15 +49,14 @@ retentionCorr <- function(adductSpectra = NULL,
     } else {
         metaDataTmp$retentionTime <- as.numeric(metaDataTmp$retentionTime)
     }
-    
     nFiles <- length(Specfile.paths(adductSpectra))
     nFilesPerGroup <- tapply(metaDataTmp$mzXMLFile,
-                             as.factor(metaDataTmp$interMSMSrtGroups),
-                             function(MSMSgroup) {
-                                 length(unique(MSMSgroup))
-                             })[-1]
+                            as.factor(metaDataTmp$interMSMSrtGroups),
+                            function(MSMSgroup) {
+                                length(unique(MSMSgroup))
+                            })[-1]
     wellBehaved <- names(nFilesPerGroup)[which(nFilesPerGroup >=
-                                                   (nFiles - nMissing))]
+                                                (nFiles - nMissing))]
     # check n extra
     nExtraScans <- table(metaDataTmp$interMSMSrtGroups)
     nExtraScans <- nExtraScans[nExtraScans < {
@@ -104,11 +102,10 @@ retentionCorr <- function(adductSpectra = NULL,
             " well-behaved retention time groups)...\n"
             )
     }
-    
     metaDataTmp$predRtLoess <- 0
     pb <- txtProgressBar(min = 0,
-                         max = nFiles,
-                         style = 3)
+                        max = nFiles,
+                        style = 3)
     for (i in seq_len(nFiles)) {
         setTxtProgressBar(pb, i)
         fileNameTmp <- basename(Specfile.paths(adductSpectra))[i]
@@ -124,7 +121,6 @@ retentionCorr <- function(adductSpectra = NULL,
         indxWellBeTmp <-
             indxWellBeTmp[complete.cases(indxWellBeTmp)]
         rtsFileTmp <- meanRtAll[indxWellBeTmp] / 60
-        
         # deviation of rts from median
         deviationMed <- rtsFileTmp - medianRts[complete.cases(match(names(
             medianRts), names(rtsFileTmp)))]
@@ -132,14 +128,14 @@ retentionCorr <- function(adductSpectra = NULL,
         #start and finish
         deviationMed <-
             c(deviationMed, deviationMed[which.min(rtsFileTmp)],
-              deviationMed[which.max(rtsFileTmp)])
+            deviationMed[which.max(rtsFileTmp)])
         rtsFileTmp <- c(rtsFileTmp, minMaxRt)
         # loess model retentionTime and retentionTime deviation optimal loess
         # predict(adductSpectra@rtDevModels[[i]], newdata=rtSeqTmp)
         if (!is.null(smoothingSpan)) {
             rtDevModels(adductSpectra)[[i]] <- loess(deviationMed ~ rtsFileTmp,
-                                                     span = smoothingSpan,
-                                                     surface = "direct")
+                                                    span = smoothingSpan,
+                                                    surface = "direct")
         } else {
             rtDevModels(adductSpectra)[[i]] <- loessWrapperMod(rtsFileTmp,
                                                             deviationMed, 
@@ -193,7 +189,6 @@ retentionCorr <- function(adductSpectra = NULL,
     abline(h = rep(0, length(rtSeqTmp)), col = "blue")
     if (!is.null(outputFileDir)) {
         dev.off()
-    
     }
 }
     # plot adjusted
@@ -204,11 +199,10 @@ retentionCorr <- function(adductSpectra = NULL,
                         wellBehavedMeta$interMSMSrtGroups,
                         median) / 60
     minMaxRt <- c(min(metaDataTmp$predRtLoess) / 60,
-                  max(metaDataTmp$predRtLoess) / 60)
+                max(metaDataTmp$predRtLoess) / 60)
     rtSeqTmp <- seq(minMaxRt[1], minMaxRt[2], 0.1)
     # deviation from loess adjusted median values
     message("calculating deviation from loess-adjusted median values.\n")
-    
     for (i in seq_len(nFiles)) {
         setTxtProgressBar(pb, i)
         fileNameTmp <- basename(Specfile.paths(adductSpectra))[i]
@@ -218,19 +212,16 @@ retentionCorr <- function(adductSpectra = NULL,
         meanRtAll <- tapply(fileMetaTmp$predRtLoess,
                             as.factor(fileMetaTmp$interMSMSrtGroups),
                             mean)
-        
         indxWellBeTmp <- match(wellBehaved, names(meanRtAll))
         indxWellBeTmp <-
             indxWellBeTmp[complete.cases(indxWellBeTmp)]
-        
         rtsFileTmp <- meanRtAll[indxWellBeTmp] / 60
-        
         # deviation of rts from median
         deviationMed <- rtsFileTmp - medianRts[complete.cases(match(names(
             medianRts), names(rtsFileTmp)))]
         deviationMed <-
             c(deviationMed, deviationMed[which.min(rtsFileTmp)],
-              deviationMed[which.max(rtsFileTmp)])
+            deviationMed[which.max(rtsFileTmp)])
         rtsFileTmp <- c(rtsFileTmp, minMaxRt)
         # min/max deviation
         minMaxRtDf[i,] <- c(min(deviationMed), max(deviationMed))
@@ -243,7 +234,6 @@ retentionCorr <- function(adductSpectra = NULL,
     }
     if (!is.null(outputFileDir)) {
         png(paste0(outputFileDir, "/adjRtPlot.png"))
-    
     plot(
         rtSeqTmp,
         rep(0, length(rtSeqTmp)),

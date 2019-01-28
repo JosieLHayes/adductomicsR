@@ -17,28 +17,28 @@
 #' summed.
 signalGrouping <-
     function(spectrum.df = NULL,
-             mzError = 0.8,
-             minPeaks = 5) {
+            mzError = 0.8,
+            minPeaks = 5) {
         # error handling
         if (is.null(spectrum.df)) {
             stop("No spectrum matrix/dataframe supplied")
         } else {
             hr <-
                 fastcluster::hclust.vector(spectrum.df[, 1], method = "median",
-                                           members = NULL)
+                                            members = NULL)
             # cut tree according to absolute m/z error
             spectrum_group <- cutree(hr, h = mzError)
             # calculate weighted mean of the m/z and
             #sum signal within each peak group
             mass <-
                 do.call(c, as.list(by(spectrum.df, as.factor(spectrum_group),
-                                      function(x) {
-                                          weighted.mean(x[, 1], x[, 2])
-                                      })))
+                                        function(x) {
+                                            weighted.mean(x[, 1], x[, 2])
+                                        })))
             grouped.df <- data.frame(
                 mass = mass,
                 intensity = tapply(spectrum.df[, 2],
-                                   as.factor(spectrum_group), sum),
+                                    as.factor(spectrum_group), sum),
                 stringsAsFactors = FALSE
             )
             # average any additional columns i.e. retention time

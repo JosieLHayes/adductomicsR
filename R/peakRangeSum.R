@@ -41,11 +41,11 @@
 #' maxEmptyRt = 7)
 peakRangeSum <-
     function(peakRange = NULL,
-             spikeScans = 2,
-             rtDevModel =
-                 NULL,
-             gaussAlpha = NULL,
-             maxEmptyRt = 7) {
+            spikeScans = 2,
+            rtDevModel =
+                NULL,
+            gaussAlpha = NULL,
+            maxEmptyRt = 7) {
         intTmp <- tapply(peakRange[, 2, drop = FALSE], peakRange[, 3, drop =
                                                                 FALSE], max)
         massTmp <- tapply(peakRange[, 1, drop = FALSE], peakRange[, 3, drop = 
@@ -53,13 +53,11 @@ peakRangeSum <-
         scansTmp <- unique(peakRange[, 4, drop = FALSE])
         peakRange <-
             cbind(massTmp, intTmp, as.numeric(names(intTmp)), scansTmp)
-        
         # regions great than n seconds then add zeros
         emptyRts <- diff(peakRange[, 3, drop = FALSE])
         emptyRts <- c(0.5, emptyRts)
         names(emptyRts) <- peakRange[, 3, drop = FALSE]
         emptyRtsIndx <- emptyRts >= maxEmptyRt
-        
         if (any(emptyRtsIndx)) {
             byTmp <- min(emptyRts)
             fromTmp <-
@@ -73,7 +71,6 @@ peakRangeSum <-
                 MoreArgs = list(by = byTmp),
                 SIMPLIFY = FALSE
             ))
-            
             peakRange <-
                 rbind(peakRange, cbind(
                     rep(0, length(emptyRts)),
@@ -84,20 +81,19 @@ peakRangeSum <-
             peakRange <-
                 peakRange[order(peakRange[, 3]), , drop = FALSE]
         }
-        
         # replace only one scans (spikes) with zero
         spikes <- rle(peakRange[, 2] == 0)
         spikesIndx <- cumsum(spikes$lengths)[spikes$lengths <=
-                                                 spikeScans & spikes$values 
+                                                spikeScans & spikes$values 
                                             == FALSE]
         spikesIndx <- do.call(c, lapply(spikesIndx,
                                         function(spike)
                                             seq(spike - (spikeScans -
-                                                             1), spike, 1)))
+                                                            1), spike, 1)))
         peakRange <- cbind(peakRange[, 1, drop = FALSE],
-                           ifelse(seq_len(nrow(peakRange)) %in% spikesIndx,
-                                  0, peakRange[, 2, drop = FALSE]),
-                           peakRange[, 3:4, drop = FALSE])
+                            ifelse(seq_len(nrow(peakRange)) %in% spikesIndx,
+                                    0, peakRange[, 2, drop = FALSE]),
+                            peakRange[, 3:4, drop = FALSE])
         
         # adjust retention times based on retention time deviation loess model
         #  if
@@ -105,22 +101,22 @@ peakRangeSum <-
         if (!is.null(rtDevModel)) {
             rtDevsTmp <- predict(rtDevModel, newdata = peakRange[, 3] / 60)
             peakRange <- cbind(peakRange[, seq_len(2), drop = FALSE],
-                               peakRange[, 3, drop = FALSE] -
-                                   (rtDevsTmp * 60),
-                               peakRange[, 3, drop = FALSE],
-                               peakRange[, 4, drop = FALSE])
+                                peakRange[, 3, drop = FALSE] -
+                                    (rtDevsTmp * 60),
+                                peakRange[, 3, drop = FALSE],
+                                peakRange[, 4, drop = FALSE])
         } else {
             peakRange <- cbind(peakRange[, seq_len(3), drop = FALSE],
-                               peakRange[, 3, drop = FALSE],
-                               peakRange[, 4, drop = FALSE])
+                                peakRange[, 3, drop = FALSE],
+                                peakRange[, 4, drop = FALSE])
         }
         peakRange <- peakRange[order(peakRange[, 3]), , drop = FALSE]
         # if desired gaussian smooth
         if (nrow(peakRange) > 1) {
             if (!is.null(gaussAlpha)) {
                 peakRange[, 2] <- smoother::smth.gaussian(peakRange[, 2],
-                                                          alpha = gaussAlpha,
-                                                          tails = TRUE)
+                                                            alpha = gaussAlpha,
+                                                            tails = TRUE)
             }
         }
         return(peakRange)

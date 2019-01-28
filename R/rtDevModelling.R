@@ -70,34 +70,34 @@
 #' saveRtDev = 1, outputPlotDir = NULL)
 #' @export
 rtDevModelling <- function(MS2Dir = NULL,
-                           runOrder = NULL,
-                           nCores = NULL,
-                           TICfilter = 0,
-                           intStdPeakList = c(
-                               290.21,
-                               403.30,
-                               516.38,
-                               587.42,
-                               849.40,
-                               884.92,
-                               958.46,
-                               993.97,
-                               1050.52,
-                               1107.06,
-                               1209.73,
-                               1337.79,
-                               1465.85
-                           ),
-                           intStdMass = 834.77692,
-                           intStd_MaxMedRtDrift = 600,
-                           intStd_MaxPpmDev = 200,
-                           minSpecEx = 40,
-                           minDotProd = 0.8,
-                           percMissing = 15,
-                           percExtra = 100,
-                           smoothingSpan = 0.8,
-                           saveRtDev = 1,
-                           outputPlotDir = NULL) {
+                            runOrder = NULL,
+                            nCores = NULL,
+                            TICfilter = 0,
+                            intStdPeakList = c(
+                                290.21,
+                                403.30,
+                                516.38,
+                                587.42,
+                                849.40,
+                                884.92,
+                                958.46,
+                                993.97,
+                                1050.52,
+                                1107.06,
+                                1209.73,
+                                1337.79,
+                                1465.85
+                            ),
+                            intStdMass = 834.77692,
+                            intStd_MaxMedRtDrift = 600,
+                            intStd_MaxPpmDev = 200,
+                            minSpecEx = 40,
+                            minDotProd = 0.8,
+                            percMissing = 15,
+                            percExtra = 100,
+                            smoothingSpan = 0.8,
+                            saveRtDev = 1,
+                            outputPlotDir = NULL) {
     #intStdPeakList <- as.numeric(strsplit(intStdPeakList, ",")[[1]])
     if (is.null(MS2Dir)) {
         stop("Please provide an .mzXML data directory")
@@ -108,7 +108,6 @@ rtDevModelling <- function(MS2Dir = NULL,
     if (is.null(runOrder)) {
         stop("Please provide an run order file")
     }
-    
     adductSpectra <-
         adductSpecGen(
             mzXmlDir = MS2Dir,
@@ -175,6 +174,6 @@ rtDevModelling <- function(MS2Dir = NULL,
             )
         )
         save(adductSpectra, file = paste0(MS2Dir,
-                                          "adductSpectra.RData"))
+                                        "adductSpectra.RData"))
     }
 }  # end function

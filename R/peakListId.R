@@ -30,30 +30,30 @@
 #' @return dataframe peak list
 peakListId <-
     function(adductSpectra = NULL,
-             peakList = c(
-                 290.21,
-                 403.3,
-                 516.38,
-                 587.42,
-                 849.4,
-                 884.92,
-                 958.46,
-                 993.97,
-                 1050.52,
-                 1107.06,
-                 1209.73,
-                 1337.79,
-                 1465.85
-             ),
-             exPeakMass = 834.7769,
-             frag.delta = 1,
-             minPeaksId = 7,
-             minSpecEx = 50,
-             maxRtDrift = 360,
-             maxPpmDev = 200,
-             allScans = TRUE,
-             closestMassByFile = TRUE,
-             outputPlotDir = NULL) {
+            peakList = c(
+                290.21,
+                403.3,
+                516.38,
+                587.42,
+                849.4,
+                884.92,
+                958.46,
+                993.97,
+                1050.52,
+                1107.06,
+                1209.73,
+                1337.79,
+                1465.85
+            ),
+            exPeakMass = 834.7769,
+            frag.delta = 1,
+            minPeaksId = 7,
+            minSpecEx = 50,
+            maxRtDrift = 360,
+            maxPpmDev = 200,
+            allScans = TRUE,
+            closestMassByFile = TRUE,
+            outputPlotDir = NULL) {
         if (is.null(adductSpectra)) {
             stop("argument adductSpectra is missing with no default.")
         } else if (!is(adductSpectra, 'AdductSpec')) {
@@ -112,7 +112,6 @@ peakListId <-
         peakList <- sort(peakList)
         names(peakList) <- paste("peak", seq_along(peakList))
         message("identifying target ion list...\n")
-        
         pb <- txtProgressBar(max = length(peakList), style = 3)
         peakListMatches <- as.numeric()
         for (j in seq_along(peakList)) {
@@ -124,15 +123,15 @@ peakListId <-
         }
         peakListMatches <-
             cbind(namesTmp[peakListMatches],
-                  intV[peakListMatches],
-                  massV[peakListMatches],
-                  names(peakListMatches),
-                  peakListMatches)
+                    intV[peakListMatches],
+                    massV[peakListMatches],
+                    names(peakListMatches),
+                    peakListMatches)
         sumTic <- tapply(intV, namesTmp, sum)
         # add sum of comp spectrum TICs
         peakListMatches <- cbind(peakListMatches,
-                                 sumTic[match(peakListMatches[, 1],
-                                              names(sumTic))])
+                                sumTic[match(peakListMatches[, 1],
+                                            names(sumTic))])
         # add missing comp spectra if necessary
         resColNamesTmp <- c(
             "mzXMLFile",
@@ -152,11 +151,11 @@ peakListId <-
         ), stringsAsFactors = FALSE)
         colnames(specPepMatchesTmp) <- resColNamesTmp
         indxTmp <- match(peakListMatches[, 1],
-                         paste0(
-                             metaData(adductSpectra)[, 'mzXMLFile'],
-                             ".MS2spectra.",
-                             metaData(adductSpectra)[, 'seqNum']
-                         ))
+                        paste0(
+                            metaData(adductSpectra)[, 'mzXMLFile'],
+                            ".MS2spectra.",
+                            metaData(adductSpectra)[, 'seqNum']
+                        ))
         specPepMatchesTmp$precursorMz <-
             metaData(adductSpectra)[, 'precursorMZ'][indxTmp]
         specPepMatchesTmp$retentionTime <-
@@ -168,8 +167,8 @@ peakListId <-
         specPepMatchesTmp$peakNo <-
             peakNos[as.numeric(peakListMatches[, 5])]
         peakPercentSumInt <- (as.numeric(peakListMatches[, 2]) /
-                                  as.numeric(peakListMatches[,
-                                                             6])) * 100
+                                as.numeric(peakListMatches[,
+                                                            6])) * 100
         totPercSum <-
             tapply(peakPercentSumInt, peakListMatches[, 1], sum)
         specPepMatchesTmp$totPercentSumInt <-
@@ -177,16 +176,15 @@ peakListId <-
                     1], names(totPercSum))])
         specPepMatchesTmp$peakId <-
             names(peakList)[match(peakListMatches[, 4],
-                                  names(peakList))]
+                                    names(peakList))]
         FreqTmp <-
             tapply(specPepMatchesTmp$peakId, peakListMatches[, 1],
-                   function(x)
-                       length(unique(x)))
+                    function(x)
+                        length(unique(x)))
         specPepMatchesTmp$Freq <-
             as.numeric(FreqTmp[match(peakListMatches[, 1],
-                                     names(FreqTmp))])
+                                    names(FreqTmp))])
         specPepMatchesTmp$name <- peakListMatches[, 1]
-        
         # subset by min peaks id'ed
         specPepMatchesTmp <- specPepMatchesTmp[as.numeric(
             specPepMatchesTmp$Freq) >= minPeaksId, , drop = FALSE]
@@ -196,36 +194,35 @@ peakListId <-
         specPepMatchesTmp <- specPepMatchesTmp[abs(
             specPepMatchesTmp$retentionTime -median(
                 specPepMatchesTmp$retentionTime)) < maxRtDrift, , drop = FALSE]
-        
         # if more than 1 scan id'ed per file go for closest in mass
         if (closestMassByFile == TRUE) {
             precursorMzs <- specPepMatchesTmp$precursorMz
             names(precursorMzs) <- row.names(specPepMatchesTmp)
             minAbsMassDiff <-
                 tapply(precursorMzs, specPepMatchesTmp$mzXMLFile,
-                       function(x)
-                           names(x)[which.min(abs(x -
-                                                      exPeakMass))])
+                        function(x)
+                            names(x)[which.min(abs(x -
+                                                    exPeakMass))])
             closestMassScans <-
                 specPepMatchesTmp$name[row.names(specPepMatchesTmp)
-                                       %in% minAbsMassDiff]
+                                        %in% minAbsMassDiff]
             specPepMatchesTmp <-
                 specPepMatchesTmp[specPepMatchesTmp$name %in%
-                                      closestMassScans,
-                                  , drop = FALSE]
+                                    closestMassScans,
+                                    , drop = FALSE]
         } else {
             rts <- specPepMatchesTmp$retentionTime
             names(rts) <- row.names(specPepMatchesTmp)
             medRt <- median(rts)
             minAbsRtDiff <- tapply(rts, specPepMatchesTmp$mzXMLFile,
-                                   function(x)
-                                       names(x)[which.min(abs(x -medRt))])
+                                    function(x)
+                                        names(x)[which.min(abs(x -medRt))])
             closestRtScans <-
                 specPepMatchesTmp$name[row.names(specPepMatchesTmp)
-                                       %in% minAbsRtDiff]
+                                        %in% minAbsRtDiff]
             specPepMatchesTmp <-
                 specPepMatchesTmp[specPepMatchesTmp$name %in%
-                                      closestRtScans, , drop = FALSE]
+                                        closestRtScans, , drop = FALSE]
         }
         # if necessary output plots
         if (!is.null(outputPlotDir)) {
@@ -237,7 +234,6 @@ peakListId <-
                 outputPlotDir,
                 "\n\n"
             )
-            
             pb <- txtProgressBar(max = length(fileNames), style = 3)
             for (j in seq_along(fileNames)) {
                 setTxtProgressBar(pb, j)
@@ -249,22 +245,22 @@ peakListId <-
                     xlab = "m/z",
                     ylab = "intensity",
                     xlim = c(0,
-                             1600),
+                            1600),
                     type = "h",
                     main = paste0(
                         "preMz: ",
                         round(specPepMatchesTmp$precursorMz[indxTmp[1]],
-                              4),
+                            4),
                         " RT: ",
                         round(specPepMatchesTmp$retentionTime[indxTmp[1]] / 60,
-                              2),
+                            2),
                         " sumIntEx: ",
                         round(specPepMatchesTmp$totPercentSumInt[indxTmp[1]],
-                              2),
+                            2),
                         " ppmDiff: ",
                         round((specPepMatchesTmp$precursorMz[indxTmp[1]] -
                                    exPeakMass) / exPeakMass * 1e+06,
-                              2
+                            2
                         )
                     )
                 )
@@ -277,9 +273,7 @@ peakListId <-
                 )
                 dev.off()
             }
-            message("...DONE\n")
-            
+            message("...DONE\n")    
         }
-        
         return(specPepMatchesTmp)
     }  # end function

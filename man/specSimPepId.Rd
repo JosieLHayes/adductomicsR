@@ -10,7 +10,7 @@ rtDevModels=NULL, topIons=100, topIntIt=5,minDotProd=0.8, precCh=3,
 minSNR=3,minRt=20, maxRt=35, minIdScore=0.4,minFixed=3, minMz=750, 
 maxMz=1000,modelSpec=c('ALVLIAFAQYLQQCPFEDHVK','RHPYFYAPELLFFAK'),
 groupMzabs=0.005, groupRtDev=0.5, possFormMzabs=0.01,
-minMeanSpecSim=0.7,idPossForm=0)
+minMeanSpecSim=0.7,idPossForm=0, outputPlotDir= NULL)
 }
 \arguments{
 \item{MS2Dir}{character a full path to a directory containing 
@@ -129,6 +129,8 @@ formula to generate
 hypotheses. The default 0 mean this will not take place as the 
 computation is
 potentially time consuming.}
+
+\item{outputPlotDir}{character (default = NULL) output directory for plots.}
 }
 \value{
 dataframe of putative adducts
