@@ -3,12 +3,12 @@
 \docType{class}
 \name{AdductSpec-class}
 \alias{AdductSpec-class}
-\alias{show,c,Specfile.paths,adductMS2spec,metaData,Parameters}
-\alias{groupMS2spec,rtDevModels,sumAdductType,Peptides,specPepMatches}
-\alias{AdductSpec-class}
+\alias{show,c,Specfile.paths,adductMS2spec,metaData,AdductSpec-class}
+\alias{groupMS2spec,rtDevModels,sumAdductType,Parameters,AdductSpec-class}
+\alias{Peptides,specPepMatches,AdductSpec-class}
 \alias{x}
-\alias{c,Specfile.paths, adductMS2spec, metaData, Parameters}
-\alias{groupMS2spec, rtDevModels, sumAdductType, Peptides} 
+\alias{c,Specfile.paths,adductMS2spec,metaData,Parameters,AdductSpec-method}
+\alias{groupMS2spec,rtDevModels,sumAdductType,Peptides,AdductSpec-method} 
 \alias{specPepMatches,AdductSpec-method}
 \title{AdductSpec class}
 \format{An object of class \code{NULL} of length 0.}
