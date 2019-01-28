@@ -90,6 +90,7 @@ MS/MS spectrum grouping and retention time deviation modelling for
 adductomicsR
 }
 \examples{
+\dontrun{
 eh  = suppressMessages(suppressWarnings(
 ExperimentHub::ExperimentHub()));
 temp = suppressMessages(suppressWarnings(
@@ -102,4 +103,5 @@ system.file("extdata",package="adductomicsR"),
 '/runOrder2.csv'), intStdPeakList=c(290.21, 403.30, 516.38, 
 587.42,849.40, 884.92, 958.46, 993.97,1050.52, 1107.06, 1209.73, 
 1337.79,1465.85))
+}
 }
