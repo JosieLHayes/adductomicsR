@@ -11,8 +11,7 @@ minDotProdSpec = 0.8, maxGroups = 10)
 \item{adductSpectra}{AdductSpec object}
 
 \item{nCores}{numeric the number of cores to use for parallel computation. 
-The default is to use all available cores detected using 
-the function parallel::detectCores()}
+The default is to use 1 core.}
 
 \item{minDotProdSpec}{numeric minimum dot product score}
 

@@ -27,16 +27,16 @@
 #'
 ms2Group <-
     function(adductSpectra = NULL,
-             nCores = NULL,
-             maxRtDrift = NULL,
-             ms1mzError = 0.1,
-             ms2mzError = 1,
-             dotProdClust = TRUE,
-             minDotProd = 0.8,
-             fclustMethod = "median",
-             disMetric = "euclidean",
-             compSpecGen = TRUE,
-             adjPrecursorMZ = TRUE) {
+            nCores = NULL,
+            maxRtDrift = NULL,
+            ms1mzError = 0.1,
+            ms2mzError = 1,
+            dotProdClust = TRUE,
+            minDotProd = 0.8,
+            fclustMethod = "median",
+            disMetric = "euclidean",
+            compSpecGen = TRUE,
+            adjPrecursorMZ = TRUE) {
         # error handling
         if (is.null(adductSpectra)) {
             stop("argument adductSpectra is missing with no default")
@@ -77,27 +77,26 @@ ms2Group <-
         # all spectra 1 list
         allSpectra <-
             unlist(adductMS2spec(adductSpectra), recursive =
-                       FALSE)
+                        FALSE)
         # check if mz error has changed if not then do not re-do
         # hierarchical clustering of mass
         hclustMass <- TRUE
         if (!is.null(Parameters(adductSpectra)$ms1mzError)) {
             hclustMass <- ifelse(Parameters(adductSpectra)$ms1mzError ==
-                                     ms1mzError,
-                                 FALSE,
-                                 TRUE)
+                                    ms1mzError,
+                                FALSE,
+                                TRUE)
         }
         if (hclustMass == TRUE) {
             message(
                 "Hierarchically clustering ",
                 prettyNum(nrow(metaDataTmp),
-                          big.mark = ","),
+                        big.mark = ","),
                 " MS/MS precursors and cutting dendrogram according
                 to a mass error of ",
                 ms1mzError,
                 "...\n"
             )
-            
             # if necessary adjust the mass drift
             if ({
                 "adjPrecursorMZ" %in% colnames(metaDataTmp)
@@ -110,10 +109,9 @@ ms2Group <-
             } else {
                 precursorMZs <- metaDataTmp$precursorMZ
             }
-            
             hr <- fastcluster::hclust.vector(precursorMZs,
-                                             metric = disMetric,
-                                             method = fclustMethod)
+                                            metric = disMetric,
+                                            method = fclustMethod)
             # m/z error
             metaDataTmp$msPrecursor_group <- 0
             metaDataTmp$msPrecursor_group <-
@@ -127,38 +125,35 @@ ms2Group <-
         if (!is.null(metaDataTmp$intStdRtDrift)) {
             retentionTime <- as.numeric(metaDataTmp$retentionTime) +
                 (as.numeric(metaDataTmp$intStdRtDrift) *
-                     -1)
+                    -1)
         } else {
             retentionTime <- as.numeric(metaDataTmp$retentionTime)
         }
         if (length(rtDevModels(adductSpectra)) > 0) {
             message("Adjusting retention time based on loess model...")
-            
             metaDataTmp$predRtLoess <- 0
             for (x in seq_along(Specfile.paths(adductSpectra))) {
                 indxFileTmp <- which(metaDataTmp$mzXMLFile %in%
-                                         basename(Specfile.paths(
-                                             adductSpectra))[x])
+                                        basename(Specfile.paths(
+                                            adductSpectra))[x])
                 metaDataTmp$predRtLoess[indxFileTmp] <-
                     retentionTime[indxFileTmp] -
                     (predict(
                         rtDevModels(adductSpectra)[[x]],
                         newdata =
                             as.numeric(retentionTime[indxFileTmp]) / 60
-                    ) *
-                        60)
+                    ) * 60)
             }
             retentionTime <- as.numeric(metaDataTmp$predRtLoess)
         }
-        
         # if unneccessary do not re do retention time clustering
         hclustRt <- TRUE
         if (!is.null(Parameters(adductSpectra)$maxRtDrift)) {
             if (!is.null(maxRtDrift)) {
                 hclustRt <- ifelse(Parameters(adductSpectra)[
                     , 'maxRtDrift'] == maxRtDrift,
-                                   FALSE,
-                                   TRUE)
+                                    FALSE,
+                                    TRUE)
             } else {
                 hclustRt <- FALSE
             }
@@ -171,15 +166,14 @@ ms2Group <-
                 maxRtDrift,
                 ".\n"
             )
-            
             interMSMSrtGroups <- tapply(retentionTime,
                                         metaDataTmp$msPrecursor_group,
                                         function(x) {
                 if (length(x) > 1) {
                     cutree(
                         fastcluster::hclust.vector(x, metric =
-                                                       disMetric,
-                                                   method = fclustMethod),
+                                                    disMetric,
+                                                    method = fclustMethod),
                         h = maxRtDrift
                     )
                 } else {
@@ -189,15 +183,14 @@ ms2Group <-
             # interMSMS groups
             metaDataTmp$interMSMSrtGroups <-
                 paste0(metaDataTmp$msPrecursor_group,
-                       "_",
-                       unlist(interMSMSrtGroups))
+                        "_",
+                        unlist(interMSMSrtGroups))
             message(
                 length(unique(metaDataTmp$interMSMSrtGroups)),
                 " MS/MS peak groups identified at maxRtDrift of ",
                 maxRtDrift,
                 " seconds"
-            )
-            
+            )   
         }
         if (dotProdClust == TRUE)
         {
@@ -205,11 +198,10 @@ ms2Group <-
             #adduct MS2 file
             #names
             spectrumIds <- paste0(metaDataTmp$mzXMLFile,
-                                  ".MS2spectra",
-                                  ".",
-                                  metaDataTmp$seqNum)
+                                 ".MS2spectra",
+                                 ".",
+                                 metaDataTmp$seqNum)
             allSpectra <- allSpectra[spectrumIds]
-            
             # remove previous dot prod clustering results
             metaDataTmp$interMSMSrtGroups <-
                 gsub("\\..+", "",
@@ -222,21 +214,20 @@ ms2Group <-
                 " RT + m/z groups) spectral similarity
                 (dot product) clustering...\n"
             )
-            
             specByGroup <- split(allSpectra,
-                                 metaDataTmp$interMSMSrtGroups)
+                                metaDataTmp$interMSMSrtGroups)
             spectraList <- NULL
             groupName <- NULL
             dotProdSimClust <-
                 function(spectraList = NULL,
-                         groupName = NULL,
-                         minDotProdThresh = minDotProd,
-                         binSizeMS2 = 1) {
+                        groupName = NULL,
+                        minDotProdThresh = minDotProd,
+                        binSizeMS2 = 1) {
                     # if length 1 return nothing
                     clusterId <- groupName
                     if (length(spectraList) > 1) {
                         specNamesVecTmp <- rep(names(spectraList),
-                                               vapply(spectraList,
+                                                vapply(spectraList,
                                                 nrow, FUN.VALUE = numeric(1)))
                         allSpecTmp <-
                             do.call(rbind, spectraList)
@@ -246,7 +237,6 @@ ms2Group <-
                         message("Calculating dot product matrix ",
                                 length(unique(specNamesVecTmp)),
                                 " spectra\n")
-                        
                         # padded integer labels
                         labelsTmp <-
                             paste0(
@@ -263,48 +253,48 @@ ms2Group <-
                             cut(
                                 allSpecTmp[, 1],
                                 breaks = seq(binSizeMS2,
-                                             maxMass, binSizeMS2),
+                                        maxMass, binSizeMS2),
                                 labels = labelsTmp
                             )
                         # empty bins
                         indivSpecVec <-
                             tapply(allSpecTmp[, 2],
-                                   paste0(specNamesVecTmp,
-                                          massBinsIndivTmp),
-                                   sum)
+                                    paste0(specNamesVecTmp,
+                                        massBinsIndivTmp),
+                                    sum)
                         # identify any absent bins
                         allBinNames <-
                             paste0(rep(unique(specNamesVecTmp),
-                                       each = length(labelsTmp)),
-                                   rep(labelsTmp, length(
-                                       unique(specNamesVecTmp)
-                                   )))
+                                    each = length(labelsTmp)),
+                                rep(labelsTmp, length(
+                                    unique(specNamesVecTmp)
+                                )))
                         # add absent bins as zeros
                         allBinsTmp <-
                             rep(0, length(allBinNames))
                         names(allBinsTmp) <- allBinNames
                         # ensure indivSpecVec is in right order
                         allBinsTmp[match(names(indivSpecVec),
-                                         allBinNames)] <-
+                                        allBinNames)] <-
                             indivSpecVec
                         indivSpecMat <-
                             matrix(allBinsTmp,
-                                   byrow =
-                                       FALSE,
-                                   nrow = length(labelsTmp))
+                                    byrow =
+                                        FALSE,
+                                    nrow = length(labelsTmp))
                         # mean all pairwise dotproducts
                         dotProdMat <-
                             crossprod(indivSpecMat)
                         sqrtMatrixTmp <-
                             matrix(
-                                sqrt(colSums(indivSpecMat ^ 2)),
-                                nrow = nrow(dotProdMat),
-                                ncol = ncol(dotProdMat),
-                                byrow = TRUE
+                                    sqrt(colSums(indivSpecMat ^ 2)),
+                                    nrow = nrow(dotProdMat),
+                                    ncol = ncol(dotProdMat),
+                                    byrow = TRUE
                             )
                         dotProdsTmp <-
                             dotProdMat / (sqrtMatrixTmp *
-                                              diag(sqrtMatrixTmp))
+                                            diag(sqrtMatrixTmp))
                         hr <-
                             fastcluster::hclust(as.dist(1 -
                                                             dotProdsTmp),
@@ -314,7 +304,7 @@ ms2Group <-
                         })
                         clusterId <-
                             paste0(groupName, ".",
-                                   clusterId)
+                                    clusterId)
                     }
                     return(clusterId)
                 }  # end dot product hierarchical clustering
@@ -327,7 +317,6 @@ ms2Group <-
                     nCores,
                     " local sockets...\n"
                 ))
-                
                 cl <- parallel::makeCluster(nCores)
                 doSNOW::registerDoSNOW(cl)
                 dotProdResults <-
@@ -349,18 +338,17 @@ ms2Group <-
                 # order
                 indxSpecTmp <-
                     match(do.call(c, lapply(specByGroup, names)),
-                          spectrumIds)
+                        spectrumIds)
                 dotProdResults[indxSpecTmp] <-
                     dotProdResults
             } else {
                 dotProdResults <- vector("character",
-                                         nrow(metaDataTmp))
+                                        nrow(metaDataTmp))
                 for (i in seq_along(specByGroup)) {
                     message(i,
                             " of ",
                             length(specByGroup),
                             " m/z + RT groups.\n")
-                    
                     dotProdResTmp <-
                         dotProdSimClust(
                             spectraList =
@@ -385,44 +373,42 @@ ms2Group <-
                 " inter-MS/MS groups
                 following spectral
                 similarity (dot product) clustering...\n"
-            )
-            
+            )   
         }
         if (compSpecGen == TRUE)
         {
             # order by adduct MS2 file names
             spectrumIds <-
                 paste0(metaDataTmp$mzXMLFile,
-                       ".MS2spectra",
-                       ".",
-                       metaDataTmp$seqNum)
+                        ".MS2spectra",
+                        ".",
+                        metaDataTmp$seqNum)
             allSpectra <-
                 allSpectra[spectrumIds]
             compSpecTable <- table(metaDataTmp$interMSMSrtGroups)
             message("Generating ",
                     sum(compSpecTable > 1),
                     " composite spectra...\n")
-            
             # if nCores not null then parallel comp
             if (!is.null(nCores)) {
                 # all single spectra groups first
                 interMSMScompSpec <-
                     vector("list",
-                           length(unique(
-                               metaDataTmp$interMSMSrtGroups
-                           )))
+                            length(unique(
+                            metaDataTmp$interMSMSrtGroups
+                            )))
                 names(interMSMScompSpec) <-
                     unique(metaDataTmp$interMSMSrtGroups)
                 singleGroupIndx <- match(names(compSpecTable)[
                     compSpecTable == 1],
-                                         metaDataTmp$interMSMSrtGroups)
+                                        metaDataTmp$interMSMSrtGroups)
                 listIndx <- match(metaDataTmp$interMSMSrtGroups[
                     singleGroupIndx],names(interMSMScompSpec))
                 interMSMScompSpec[listIndx] <-
                     allSpectra[paste0(metaDataTmp$mzXMLFile[singleGroupIndx],
-                                      ".MS2spectra",
-                                      ".",
-                                      metaDataTmp$seqNum[singleGroupIndx])]
+                                    ".MS2spectra",
+                                    ".",
+                                    metaDataTmp$seqNum[singleGroupIndx])]
                 multSampNames <-
                     names(compSpecTable)[compSpecTable > 1]
                 # mult sample index
@@ -433,19 +419,18 @@ ms2Group <-
                     nCores,
                     " local sockets...\n"
                 ))
-                
                 cl <-
                     parallel::makeCluster(nCores)
                 doSNOW::registerDoSNOW(cl)
                 compSpecTmp <-
                     foreach(j = multSampNames,
                             .packages = c("fastcluster",
-                                          "adductomics")) %dopar% {
+                                        "adductomics")) %dopar% {
                   subSpecNamesTmp <- spectrumIds[metaDataTmp$interMSMSrtGroups
-                                                 %in% j]
+                                                %in% j]
                   spec.df <-
-                      do.call(rbind, allSpectra[subSpecNamesTmp])
-                  return(signalGrouping(spec.df,
+                    do.call(rbind, allSpectra[subSpecNamesTmp])
+                    return(signalGrouping(spec.df,
                                         ms2mzError, minPeaks = 0))
               }
                 # stop SNOW cluster
@@ -456,20 +441,20 @@ ms2Group <-
             pmt <- proc.time()
             interMSMScompSpec <-
                 vector("list",
-                       length(unique(
-                           metaDataTmp$interMSMSrtGroups
-                       )))
+                        length(unique(
+                            metaDataTmp$interMSMSrtGroups
+                        )))
             names(interMSMScompSpec) <-
                 unique(metaDataTmp$interMSMSrtGroups)
             singleGroupIndx <- match(names(compSpecTable)[compSpecTable == 1],
-                                     metaDataTmp$interMSMSrtGroups)
+                                    metaDataTmp$interMSMSrtGroups)
             listIndx <- match(metaDataTmp$interMSMSrtGroups[singleGroupIndx],
-                              names(interMSMScompSpec))
+                            names(interMSMScompSpec))
             interMSMScompSpec[listIndx] <-
                 allSpectra[paste0(metaDataTmp$mzXMLFile[singleGroupIndx],
-                                  ".MS2spectra",
-                                  ".",
-                                  metaDataTmp$seqNum[singleGroupIndx])]
+                                ".MS2spectra",
+                                ".",
+                                metaDataTmp$seqNum[singleGroupIndx])]
             compSpecIndx <-
                 names(compSpecTable)[compSpecTable > 1]
             pb <- txtProgressBar(
@@ -488,19 +473,19 @@ ms2Group <-
                     do.call(rbind, allSpectra[subSpecNamesTmp])
                 interMSMScompSpec[[listIndxTmp]] <-
                     signalGrouping(spec.df,
-                                   ms2mzError,
-                                   minPeaks = 0)
+                                    ms2mzError,
+                                    minPeaks = 0)
             }
             proc.time() - pmt
         }  # nCores
             # add inter sample spectra to adductspectra
             groupMS2spec(adductSpectra) <-
                 lapply(interMSMScompSpec,
-                       function(subL) {
-                           colnames(subL) <- c("mass", "intensity")
-                           return(data.frame(subL, stringsAsFactors =
-                                                 FALSE))
-                       })
+                        function(subL) {
+                            colnames(subL) <- c("mass", "intensity")
+                            return(data.frame(subL, stringsAsFactors =
+                                                FALSE))
+                        })
         }
         metaDataTmp <- metaDataTmp[order(metaDataTmp$orderTmp),]
         metaDataTmp$orderTmp <- NULL
@@ -513,7 +498,7 @@ ms2Group <-
             ""
         nameIndx <-
             match(colnames(metaDataTmp),
-                  colnames(metaData(adductSpectra)))
+                colnames(metaData(adductSpectra)))
         metaData(adductSpectra) <-
             metaData(adductSpectra)[, nameIndx]
         metaData(adductSpectra)[indxTmp,] <-

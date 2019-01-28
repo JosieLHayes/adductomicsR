@@ -132,7 +132,8 @@ your allResults file from the previous step.
 ```{r, quiet=TRUE, error=TRUE}
 
 generateTargTable(
-  allresultsFile=paste0(system.file("extdata",package =                            "adductomicsR"),'/allResults_ALVLIAFAQYLQQCPFEDHVK_example.csv'),
+  allresultsFile=paste0(system.file("extdata",package =
+  "adductomicsR"),'/allResults_ALVLIAFAQYLQQCPFEDHVK_example.csv'),
   csvDir=tempdir(check = FALSE)
   )
 ```

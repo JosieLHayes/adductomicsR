@@ -4,7 +4,7 @@
 \alias{adductQuant}
 \title{Adduct quantification for adductomicsR}
 \usage{
-adductQuant(nCores = parallel::detectCores(), targTable = NULL, 
+adductQuant(nCores = NULL, targTable = NULL, 
 intStdRtDrift = NULL, rtDevModels = NULL, 
 filePaths = NULL, quantObject = NULL, indivAdduct = NULL, maxPpm = 4,
 minSimScore = 0.8, spikeScans = 2, minPeakHeight = 100, maxRtDrift = 20,
@@ -13,7 +13,7 @@ hkPeptide = "LVNEVTEFAK", gaussAlpha = 16)
 }
 \arguments{
 \item{nCores}{number of cores to use for analysis. 
-If NULL thenumber of cores detected will be used.}
+If NULL then 1 core will be used.}
 
 \item{targTable}{is the fullpath to the target table. 
 See inst/extdata/examplePeptideTargetTable.csv for an example.}

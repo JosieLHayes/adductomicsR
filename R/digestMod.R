@@ -84,20 +84,20 @@ digestMod <-
         }
         if (enzyme != "trypsin" && enzyme != "trypsin.strict" &&
             enzyme != "pepsin")
-            stop("undefined enzyme, defined enzymes are trypsin,
-                 trypsin.strict, and pepsin")
+            stop("undefined enzyme, defined enzymes are trypsin, 
+                trypsin.strict, and pepsin")
         if (length(stop) == 0)
             warning("sequence does not contain cleavage sites")
         if (missed > length(stop))
-            stop("number of specified missed cleavages is greater
-                 than the maximum possible")
+            stop("number of specified missed cleavages is greater 
+                than the maximum possible")
         cleave <-
             function(sequence, start, stop, misses) {
                 peptide <- substring(sequence, start, stop)
                 mc <- rep(misses, times = length(peptide))
                 result <-
                     data.frame(peptide, start, stop, mc,
-                               stringsAsFactors = FALSE)
+                            stringsAsFactors = FALSE)
                 return(result)
             }
         start <- c(1, start)
@@ -172,10 +172,10 @@ digestMod <-
             if (residue == "C" && IAA == TRUE)
                 mass <-
                     ifelse(N15 == FALSE,
-                           C * 5 + H * 8 + N *
-                               2 + O * 2 + S,
-                           C * 5 + H * 8 + N + 14.0030740052 +
-                               O * 2 + S)
+                            C * 5 + H * 8 + N *
+                                2 + O * 2 + S,
+                            C * 5 + H * 8 + N + 14.0030740052 +
+                                O * 2 + S)
             if (length(custom) != 0)
                 for (i in seq_along(custom$code))
                     if (residue == custom$code[i])
@@ -185,18 +185,18 @@ digestMod <-
         mz <- vector("list", length = nrow(results))
         for (i in seq_len(nrow(results))) {
             peptide_vector <- strsplit(results$peptide[i],
-                                       split = "")[[1]]
+                                        split = "")[[1]]
             peptide_mass <-
                 sum(vapply(peptide_vector,
-                           residueMass,
-                           FUN.VALUE = numeric(1)))
+                            residueMass,
+                            FUN.VALUE = numeric(1)))
             mz[[i]] <-
                 round((peptide_mass + H * 2 + O +
-                           (c(
-                               seq_len(maxCharge)
-                           ) *
-                               proton)) / c(seq_len(maxCharge)),
-                      digits = 3)
+                            (c(
+                                seq_len(maxCharge)
+                            ) *
+                                proton)) / c(seq_len(maxCharge)),
+                        digits = 3)
         }
         mz <- as.data.frame(do.call("rbind", mz))
         names(mz) <-

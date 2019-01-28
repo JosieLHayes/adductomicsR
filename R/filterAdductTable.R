@@ -42,13 +42,13 @@
 #'@return csv file
 #'@export
 filterAdductTable <- function(adductTable = NULL,
-                              percMissing = 51,
-                              HKPmass = "575.3",
-                              quantPeptideMass = "811.7",
-                              remHKPzero = FALSE,
-                              remQuantPepzero = FALSE,
-                              remHKPlow = FALSE,
-                              outputDir = NULL) {
+                            percMissing = 51,
+                            HKPmass = "575.3",
+                            quantPeptideMass = "811.7",
+                            remHKPzero = FALSE,
+                            remQuantPepzero = FALSE,
+                            remHKPlow = FALSE,
+                            outputDir = NULL) {
     if (is.null(adductTable)) {
         stop("adduct file is missing with no default")
     }
@@ -56,8 +56,7 @@ filterAdductTable <- function(adductTable = NULL,
         outputDir <- getwd()
     }
     outputDir <- paste0(outputDir, "/")
-    data <- read.csv(adductTable, header = TRUE)
-    
+    data <- read.csv(adductTable, header = TRUE) 
     # remove adducts that have not been quantified correctly
     to_rem <- which(is.na(data$massAcc))
     if (length(to_rem) > 0) {
@@ -65,10 +64,8 @@ filterAdductTable <- function(adductTable = NULL,
     }
     rownames(data) <-
         paste0("M", round(data$mass, 2), "_RT", round(data$RT, 2))
-    
     # only peak areas with unique adduct ID
     data2 <- data[, grep("mzXML", colnames(data))]
-    
     # remove adducts where >51% have missing values
     perc.missing <- apply(data2, 1, function(x)
         (length(which(x == 0)) / ncol(data2)) * 100)
@@ -76,11 +73,9 @@ filterAdductTable <- function(adductTable = NULL,
     if (length(to_rem) > 0) {
         data2 = data2[-to_rem,]
     }
-    
     # identify HKP peptide
     hkp <- suppressWarnings(as.numeric(data[grep(HKPmass,
                                                  rownames(data2)),]))
-    
     # remove samples where housekeeping not detected
     if (remHKPzero == TRUE) {
         to_rem <- which(hkp == 0)
@@ -88,7 +83,6 @@ filterAdductTable <- function(adductTable = NULL,
             data2 = data2[,-to_rem]
         }
     }
-    
     # remove samples where the housekeeping peptide is very low (but not zero)
     if (remHKPlow == TRUE) {
         hkp <- as.numeric(data2[grep(HKPmass, rownames(data2)),])
@@ -97,7 +91,6 @@ filterAdductTable <- function(adductTable = NULL,
             data2 = data2[,-to_rem]
         }
     }
-    
     # remove samples where hkp did not pass QC and also the T3 was not detected
     if (remQuantPepzero == TRUE) {
         T3 <- as.numeric(data2[grep(quantPeptideMass, rownames(data2)),])
@@ -106,7 +99,6 @@ filterAdductTable <- function(adductTable = NULL,
             data2 = data2[,-to_rem]
         }
     }
-    
     write.csv(
         data2,
         paste0(
@@ -117,5 +109,4 @@ filterAdductTable <- function(adductTable = NULL,
         ),
         row.names = TRUE
     )
-    
 }  # end function

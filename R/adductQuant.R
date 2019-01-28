@@ -93,7 +93,6 @@ adductQuant <- function(nCores = NULL,
     if (is.character(rtDevModels)) {
         rtDevModelsDir <- dirname(rtDevModels)
         message("loading rtDevModels .RData file...Please wait.\n")
-        
         objectName <- load(rtDevModels, envir = environment())
         # if different object then assign object name eval parse
         rtDevModels <- eval(parse(text = objectName))
@@ -106,14 +105,13 @@ adductQuant <- function(nCores = NULL,
         if (is.character(targTable)) {
             # read in table from character string if necessary
             targTable <- as.data.frame(data.table::fread(targTable,
-                                                         header = TRUE),
-                                       stringsAsFactors = FALSE)
+                            header = TRUE), stringsAsFactors = FALSE)
         }
         if (!is.data.frame(targTable)) {
             stop("targTable is not a data.frame")
         }
         if (!all(c("mass", "RT", "peptide", "chargeState") %in%
-                 colnames(targTable))) {
+                colnames(targTable))) {
             stop(
                 "The Quantification target table must have the
                 column names:
@@ -124,7 +122,7 @@ adductQuant <- function(nCores = NULL,
         }
         if (is.null(filePaths)) {
             stop("a character vector of file paths to mzXML
-                 or mzML files must be supplied.")
+                or mzML files must be supplied.")
         }
         # peptide isotopic distribution prediction
         indxTmp <- !duplicated(targTable$peptide)
@@ -140,19 +138,19 @@ adductQuant <- function(nCores = NULL,
             })
         predIsoDist <-
             mapply(IsotopicDistributionMod,
-                   eleForm,
-                   targTable$chargeState[indxTmp],
-                   SIMPLIFY = FALSE)
+                    eleForm,
+                    targTable$chargeState[indxTmp],
+                    SIMPLIFY = FALSE)
         predIsoDist <- lapply(predIsoDist,
-                              function(x)
-                                  data.frame(
-                                      x,
-                                      id = c("MIM",
-                                             paste0("iso", seq_len((
-                                                 nrow(x) - 1
-                                             )))),
-                                      sign = c(0, sign(diff(x$percent)))
-                                  ))
+                            function(x)
+                                data.frame(
+                                    x,
+                                    id = c("MIM",
+                                            paste0("iso", seq_len((
+                                                nrow(x) - 1
+                                            )))),
+                                    sign = c(0, sign(diff(x$percent)))
+                                ))
         names(predIsoDist) <- pepSeqs
         # min/ max rt diff
         minMaxRt <- c((min(as.numeric(
@@ -166,9 +164,9 @@ adductQuant <- function(nCores = NULL,
         # empty list for results
         results <-
             matrix(0,
-                   ncol = 24,
-                   nrow = length(filePaths)
-                   * nrow(targTable))
+                ncol = 24,
+                nrow = length(filePaths)
+                * nrow(targTable))
         colnames(results) <-
             c(
                 "file",
@@ -198,7 +196,7 @@ adductQuant <- function(nCores = NULL,
             )
         # add file and feature names to table
         results[, "file"] <- rep(basename(filePaths),
-                                 each = nrow(targTable))
+                                each = nrow(targTable))
         results[, "featureName"] <- rep(paste0(
             "M",
             round(targTable$mass, 3),
@@ -219,10 +217,10 @@ adductQuant <- function(nCores = NULL,
             # error handling
             if (!is(quantObject, 'AdductQuantif')) {
                 stop("argument object is not an
-                     AdductQuantif class object")
+                    AdductQuantif class object")
             } else if (is.null(indivAdduct)) {
                 stop("a numeric vector of AdductQuantif
-                     targets to re-integrate must be provided")
+                    targets to re-integrate must be provided")
             }
             targTable <- targTable(quantObject)
             intSeq <- indivAdduct
@@ -239,14 +237,14 @@ adductQuant <- function(nCores = NULL,
             # empty the results rows necessary
             keepCols <-
                 grepl("file|featureName|expMass|expRt|peptide",
-                      colnames(results))
+                    colnames(results))
             keepCols <- which(keepCols == FALSE)
             emptyResultRows <- rep(((seq_len(
                 length(file.paths(quantObject))
             ) - 1)
             * nrow(targTable)),
             length(indivAdduct)) + rep(indivAdduct,
-                                       each = length(file.paths(quantObject)))
+                                    each = length(file.paths(quantObject)))
             results[emptyResultRows, keepCols] <- 0
             resultsList <- peakIdData(quantObject)
             filePaths <- file.paths(quantObject)
@@ -255,14 +253,13 @@ adductQuant <- function(nCores = NULL,
         filePathTmp <- filePaths[i]
         # mass drift correction
         massDriftFile <- gsub("\\.mzXML", ".massDrift.csv",
-                              filePathTmp)
+                            filePathTmp)
         if (file.exists(massDriftFile)) {
             massDriftTable <- read.csv(massDriftFile,
-                                       header = TRUE,
-                                       stringsAsFactors = FALSE)
+                                    header = TRUE,
+                                    stringsAsFactors = FALSE)
         }
         MSfile <- mzR::openMSfile(filePathTmp)
-        
         metaSubTmp <- mzR::header(MSfile)
         # max gap ms1 scans
         maxGapMs1Scan <- max(diff(metaSubTmp$retentionTime[
@@ -310,15 +307,15 @@ adductQuant <- function(nCores = NULL,
             doSNOW::registerDoSNOW(cl)
             # foreach and dopar from foreach package
             resultsTmp <- foreach(j =
-                                      seq_len(nrow(targTable))) %dopar% {
+                                    seq_len(nrow(targTable))) %dopar% {
                   mzTmp <- as.numeric(targTable[j, 1])
                   rtTmp <- as.numeric(targTable[j, 2]) * 60
                   isoPat <- 1.0032 / targTable$chargeState[j]
                   isoPatPred <- predIsoDist[[as.character(targTable$peptide[
-                      j])]]
+                    j])]]
                   isoPat <-
                       seq(0, isoPat * (nrow(isoPatPred) - 1),
-                          isoPat)
+                        isoPat)
                   names(isoPat) <- isoPatPred$id
                   # retention time deviation model
                   if (!is.null(rtDevModel)) {
@@ -332,48 +329,48 @@ adductQuant <- function(nCores = NULL,
                       targTable[j, "peptide"] %in% hkPeptide
                   if (hkIndx) {
                       peakRangeRtSub <- peakRangeAll[which(peakRangeAll[
-                          , 3] < {
-                          predRtTmp + 240
-                      } & peakRangeAll[, 3] > {
-                          predRtTmp - 240
-                      }), , drop = FALSE]
+                        , 3] < {
+                        predRtTmp + 240
+                    } & peakRangeAll[, 3] > {
+                        predRtTmp - 240
+                    }), , drop = FALSE]
                   } else {
-                      peakRangeRtSub <- peakRangeAll[which(
-                          peakRangeAll[, 3] <
-                              (predRtTmp +
-                                   maxRtWindow) & peakRangeAll[, 3] >
-                              (predRtTmp - maxRtWindow)
-                      ),
-                      , drop = FALSE]
-                  }
-                  # mass drift correction
-                  if (file.exists(massDriftFile)) {
-                      peakRangeRtSub[, 1] <- peakRangeRtSub[, 1] - {
-                          {
-                              peakRangeRtSub[, 1] / 1e+06
-                          } * massDriftTable[peakRangeRtSub[, 4],
-                                             "ppmDrift"]
-                      }
-                  }
-                  resultTMP <-
-                      peakIdQuant_newMethod(
-                          mzTmp = mzTmp,
-                          rtTmp = rtTmp,
-                          peakRangeRtSub = peakRangeRtSub,
-                          rtDevModel = rtDevModel,
-                          isoPat = isoPat,
-                          isoPatPred = isoPatPred,
-                          minSimScore = minSimScore,
-                          maxPpm = maxPpm,
-                          gaussAlpha = gaussAlpha,
-                          spikeScans = spikeScans,
-                          minPeakHeight = minPeakHeight,
-                          maxRtDrift = ifelse(hkIndx, 60, maxRtDrift),
-                          isoWindow = isoWindow,
-                          maxGapMs1Scan = maxGapMs1Scan,
-                          intMaxPeak = hkIndx
-                      )
-              }
+                    peakRangeRtSub <- peakRangeAll[which(
+                        peakRangeAll[, 3] <
+                            (predRtTmp +
+                                maxRtWindow) & peakRangeAll[, 3] >
+                            (predRtTmp - maxRtWindow)
+                    ),
+                    , drop = FALSE]
+                }
+                # mass drift correction
+                if (file.exists(massDriftFile)) {
+                    peakRangeRtSub[, 1] <- peakRangeRtSub[, 1] - {
+                        {
+                            peakRangeRtSub[, 1] / 1e+06
+                        } * massDriftTable[peakRangeRtSub[, 4],
+                                            "ppmDrift"]
+                    }
+                }
+                resultTMP <-
+                    peakIdQuant_newMethod(
+                        mzTmp = mzTmp,
+                        rtTmp = rtTmp,
+                        peakRangeRtSub = peakRangeRtSub,
+                        rtDevModel = rtDevModel,
+                        isoPat = isoPat,
+                        isoPatPred = isoPatPred,
+                        minSimScore = minSimScore,
+                        maxPpm = maxPpm,
+                        gaussAlpha = gaussAlpha,
+                        spikeScans = spikeScans,
+                        minPeakHeight = minPeakHeight,
+                        maxRtDrift = ifelse(hkIndx, 60, maxRtDrift),
+                        isoWindow = isoWindow,
+                        maxGapMs1Scan = maxGapMs1Scan,
+                        intMaxPeak = hkIndx
+                    )
+            }
             # stop SNOW cluster
             parallel::stopCluster(cl)
             proc.time() - pmt
@@ -431,7 +428,7 @@ adductQuant <- function(nCores = NULL,
                         {
                             peakRangeRtSub[, 1] / 1e+06
                         } * massDriftTable[peakRangeRtSub[, 4],
-                                           "ppmDrift"]
+                                            "ppmDrift"]
                     }
                 }
                 resultsList[[resultRow]] <-
@@ -454,7 +451,7 @@ adductQuant <- function(nCores = NULL,
                     )
                 ########################### PLOTS #############
                 colnames(peakRangeRtSub) = c("MIM", "int",
-                                             "adjRT", "seq Number")
+                                            "adjRT", "seq Number")
                 print(head(peakRangeRtSub))
             }  # end feature loop
             proc.time() - pmt
@@ -484,7 +481,7 @@ setMethod("show", "AdductQuantif", function(object) {
         message(
             "Consisting of:\n",
             sum(peakQuantTable(object)[,
-                                       "peakArea"] != "0"),
+                                        "peakArea"] != "0"),
             " quantified peaks\n",
             "and ",
             sum(peakQuantTable(object)[, "peakArea"] ==
@@ -495,18 +492,18 @@ setMethod("show", "AdductQuantif", function(object) {
             " targets.\n\n"
         )
         if (any(grepl("^possOutPeak$",
-                      colnames(peakQuantTable(object))))) {
+                    colnames(peakQuantTable(object))))) {
             message("Potentially outlying peaks:")
             message(
                 sum(peakQuantTable(object)[, "possOutPeak"] == 1),
                 paste0("(", round((
                     sum(peakQuantTable(object)[,
-                                               "possOutPeak"] == "1") /
+                                            "possOutPeak"] == "1") /
                         sum(peakQuantTable(object)[, "peakArea"] !="0") * 100
                 ), 1), "%)", collapse = ""),
                 "of a total of",
                 sum(peakQuantTable(object)[,
-                                           "peakArea"] != "0"),
+                                        "peakArea"] != "0"),
                 "peaks quantified were potentially non-gaussian,
                 long tailed,
                 or deviant from the peak group
@@ -525,8 +522,7 @@ setMethod("c", signature(x = "AdductQuantif"), function(x, ...) {
     if (any(vapply(elements, function(ele)
         is(ele, 'AdductQuantif'),
         FUN.VALUE = logical(1)) == FALSE)) {
-        stop("all elements must be an
-             AdductQuantif class object")
+        stop("all elements must be an AdductQuantif class object")
     }
     emptyAdductQuantif <- new("AdductQuantif")
     for (i in seq_along(elements)) {
@@ -536,14 +532,14 @@ setMethod("c", signature(x = "AdductQuantif"), function(x, ...) {
         } else {
             peakQuantTable(emptyAdductQuantif) <-
                 rbind(peakQuantTable(emptyAdductQuantif),
-                      peakQuantTable(elements[[i]]))
+                    peakQuantTable(elements[[i]]))
         }
         peakIdData(emptyAdductQuantif) <-
             c(peakIdData(emptyAdductQuantif),
-              peakIdData(elements[[i]]))
+            peakIdData(elements[[i]]))
         predIsoDist(emptyAdductQuantif) <-
             c(predIsoDist(emptyAdductQuantif),
-              predIsoDist(elements[[i]]))
+            predIsoDist(elements[[i]]))
         # keep unique
         predIsoDist(emptyAdductQuantif) <-
             predIsoDist(emptyAdductQuantif)[!duplicated(names(predIsoDist(
@@ -551,17 +547,17 @@ setMethod("c", signature(x = "AdductQuantif"), function(x, ...) {
         # target table
         targTable(emptyAdductQuantif) <-
             rbind(targTable(emptyAdductQuantif),
-                  targTable(elements[[i]]))
+                targTable(elements[[i]]))
         # remove duplicates
         uniEntries <-
             apply(targTable(emptyAdductQuantif)[, seq_len(3)],
-                  1, paste, collapse = "")
+                1, paste, collapse = "")
         targTable(emptyAdductQuantif) <-
             targTable(emptyAdductQuantif)[duplicated(uniEntries) ==
-                                              FALSE, , drop = FALSE]
+                                            FALSE, , drop = FALSE]
         file.paths(emptyAdductQuantif) <-
             c(file.paths(emptyAdductQuantif),
-              file.paths(elements[[i]]))
+            file.paths(elements[[i]]))
     }
     return(emptyAdductQuantif)
     })  # end function

@@ -5,7 +5,7 @@
 \title{spectral similarity based adducted peptide 
 identification for adductomicsR}
 \usage{
-specSimPepId(MS2Dir=NULL,nCores=parallel::detectCores(),
+specSimPepId(MS2Dir=NULL,nCores=NULL,
 rtDevModels=NULL, topIons=100, topIntIt=5,minDotProd=0.8, precCh=3,
 minSNR=3,minRt=20, maxRt=35, minIdScore=0.4,minFixed=3, minMz=750, 
 maxMz=1000,modelSpec=c('ALVLIAFAQYLQQCPFEDHVK','RHPYFYAPELLFFAK'),
@@ -17,9 +17,7 @@ minMeanSpecSim=0.7,idPossForm=0)
 either .mzXML or .mzML data}
 
 \item{nCores}{numeric the number of cores to use for parallel computation.
-The default
-is to use all available cores detected using the function 
-parallel::detectCores()}
+The default is to use 1 core.}
 
 \item{rtDevModels}{a list object or a full path to an RData file
 containing the retention time deviation models for the dataset.}

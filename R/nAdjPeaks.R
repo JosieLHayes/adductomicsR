@@ -9,8 +9,8 @@
 #' @return peaksTmp but with lower intensity adjacent
 #' peaks between the same troughs removed
 nAdjPeaks <- function(peaksTmp = NULL,
-                      troughsTmp = NULL,
-                      peakRangeTmp = NULL) {
+                    troughsTmp = NULL,
+                    peakRangeTmp = NULL) {
     names(peaksTmp) <- rep("peaks", length(peaksTmp))
     names(troughsTmp) <- rep("troughs", length(troughsTmp))
     pTCombTmp <- sort(c(peaksTmp, troughsTmp))

@@ -13,13 +13,13 @@
 #' @export
 loessWrapperMod <-
     function(x,
-             y,
-             span.vals = seq(0.25, 1, by = 0.05),
-             folds = 5) {
+            y,
+            span.vals = seq(0.25, 1, by = 0.05),
+            folds = 5) {
         mae <- numeric(length(span.vals))
         theta.fit <- function(x, y, span)
             loess(y ~ x, span = span,
-                  surface = "direct")
+                surface = "direct")
         theta.predict <- function(fit, x0)
             predict(fit, newdata = x0)
         ii = 0

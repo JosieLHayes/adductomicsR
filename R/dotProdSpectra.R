@@ -33,15 +33,12 @@ minDotProdSpec = 0.8, maxGroups = 10) {
     }
     # all constituent spectra
     indivSpecs <- unlist(adductMS2spec(adductSpectra), recursive = FALSE)
-
     uniqueMSMSgroups <- unique(metaData(adductSpectra)[,'interMSMSrtGroups'])
     uniqueMSMSgroups <- uniqueMSMSgroups[uniqueMSMSgroups != ""]
     freqMSMSgroup <- table(metaData(adductSpectra)[,'interMSMSrtGroups'])
     freqMSMSgroup <- freqMSMSgroup[freqMSMSgroup != ""]
     freqMSMSgroup <- names(freqMSMSgroup)[freqMSMSgroup > 1]
-
     uniqueMSMSgroups <- uniqueMSMSgroups[uniqueMSMSgroups %in% freqMSMSgroup]
-
     metaDataTmp <- metaData(adductSpectra)[
     metaData(adductSpectra)[,'interMSMSrtGroups']
     %in% uniqueMSMSgroups, , drop = FALSE]
@@ -109,7 +106,6 @@ minDotProdSpec = 0.8, maxGroups = 10) {
         pmt <- proc.time()
         message(paste0("Starting SNOW cluster with ", nCores, 
         " local sockets...\n"))
-        
         cl <- parallel::makeCluster(nCores)
         doSNOW::registerDoSNOW(cl)
         dotProdResults <- foreach(i = seq_along(indivSpecs),
@@ -129,7 +125,6 @@ minDotProdSpec = 0.8, maxGroups = 10) {
     } else {
         dotProdResults <- vector("character", length(spectrumIds))
         pmt <- proc.time()
-
         pb <- txtProgressBar(max = length(indivSpecs), style = 3)
         for (i in seq_along(indivSpecs)) {
             setTxtProgressBar(pb, i)

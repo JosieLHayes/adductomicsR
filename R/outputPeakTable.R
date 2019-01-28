@@ -56,8 +56,8 @@ outputPeakTable <- function(object = NULL, outputDir = NULL) {
         "rtmax"
     )
     resMatrixTmp <- matrix(0,
-                           nrow = nrow(peakQuantDf),
-                           ncol = length(reqPeakColumns))
+                            nrow = nrow(peakQuantDf),
+                            ncol = length(reqPeakColumns))
     colnames(resMatrixTmp) <- reqPeakColumns
     for (i in seq_along(reqPeakColumns)) {
         # change to weighted mean with by
@@ -68,18 +68,18 @@ outputPeakTable <- function(object = NULL, outputDir = NULL) {
             as.factor(peakQuantTable[, "featureName"])[nonZeroIndx],
             mean)
         tmpidx <- match(peakQuantTable[seq_len(nrow(resMatrixTmp)),
-                                       "featureName"],
+                                        "featureName"],
                         names(wMeanColTmp))
         resMatrixTmp[, i] <- as.numeric(wMeanColTmp)[tmpidx]
     }
     peakQuantDf <- data.frame(cbind(targTable(object),
                                     resMatrixTmp, peakQuantDf),
-                              stringsAsFactors = FALSE)
+                                stringsAsFactors = FALSE)
     write.csv(
         peakQuantDf,
         paste0(outputDir, "adductQuantif_peakList_",
-               Sys.Date(),
-               ".csv"),
+                Sys.Date(),
+                ".csv"),
         row.names = FALSE
     )
     return(peakQuantDf)

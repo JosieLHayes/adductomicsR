@@ -60,48 +60,46 @@
 #' }
 #' @return AdductSpec object
 adductSpecGen <- function(mzXmlDir = NULL,
-                          runOrder = NULL,
-                          nCores = NULL,
-                          intStdMass = 834.77692,
-                          intStdPeakList = c(
-                              290.21,
-                              403.30,
-                              516.38,
-                              587.42,
-                              849.40,
-                              884.92,
-                              958.46,
-                              993.97,
-                              1050.52,
-                              1107.06,
-                              1209.73,
-                              1337.79,
-                              1465.85
-                          ),
-                          TICfilter = 10000,
-                          DNF = 2,
-                          minInt = 300,
-                          minPeaks = 5,
-                          intStd_MaxMedRtDrift = 360,
-                          intStd_MaxPpmDev = 200,
-                          minSpecEx = 40,
-                          outputPlotDir = NULL) {
+                        runOrder = NULL,
+                        nCores = NULL,
+                        intStdMass = 834.77692,
+                        intStdPeakList = c(
+                            290.21,
+                            403.30,
+                            516.38,
+                            587.42,
+                            849.40,
+                            884.92,
+                            958.46,
+                            993.97,
+                            1050.52,
+                            1107.06,
+                            1209.73,
+                            1337.79,
+                            1465.85
+                        ),
+                        TICfilter = 10000,
+                        DNF = 2,
+                        minInt = 300,
+                        minPeaks = 5,
+                        intStd_MaxMedRtDrift = 360,
+                        intStd_MaxPpmDev = 200,
+                        minSpecEx = 40,
+                        outputPlotDir = NULL) {
     # set global options
     options(stringsAsFactors = FALSE)
     # if is.null mzXmlDir select mzXML file containing directory
     if (is.null(mzXmlDir)) {
         message("Select your .mzXML data directory")
-        
         mzXmlDir <- tcltk::tk_choose.dir(default = "",
                     caption = "Select your .mzXML data directory")
     }
     # if is.null runOrder select .csv file
     if (is.null(runOrder)) {
         message("Select your .csv file containing the precise run order")
-        
         runOrder <-
-            tcltk::tclvalue(tcltk::tkgetOpenFile(title = "select your run
-                                                 order csv file"))
+            tcltk::tclvalue(tcltk::tkgetOpenFile(title = "select your run 
+                                                order csv file"))
     }
     if (is.character(runOrder)) {
         if (!grepl('\\.csv$', runOrder)) {
@@ -143,7 +141,7 @@ adductSpecGen <- function(mzXmlDir = NULL,
     # sort ms2 files by run order info
     idxTmp <-
         match(gsub('\\.mzXML$', '', runOrder[, 1]),
-              gsub('\\.mzXML$',
+            gsub('\\.mzXML$',
                    '',      basename(MS2files)))
     if (any(is.na(idxTmp))) {
         warning(
@@ -195,13 +193,13 @@ adductSpecGen <- function(mzXmlDir = NULL,
         opts <- list(progress = progress)
         massDriftFiles <-
             gsub('\\.mzXML$|\\.mzML$', '.massDrift.csv',
-                 MS2files)
+                MS2files)
         # foreach and dopar from foreach package
         Results <-
             foreach(
                 i = seq_along(MS2files),
                 .packages = c('mzR',
-                              "RcppEigen", 'pracma'),
+                            "RcppEigen", 'pracma'),
                 .options.snow = opts
             ) %dopar% {
                 Res.tmp <- spectraCreate(
@@ -215,8 +213,8 @@ adductSpecGen <- function(mzXmlDir = NULL,
                 if (file.exists(massDriftFiles[i])) {
                     massDriftTmp <-
                         read.csv(massDriftFiles[i],
-                                 header = TRUE,
-                                 stringsAsFactors = FALSE)
+                                header = TRUE,
+                                stringsAsFactors = FALSE)
                     ms1Level <- Res.tmp[[1]]$msLevel == 1
                     ms1MassDrift <- massDriftTmp[ms1Level, , drop = FALSE]
                     ms1MassDrift$ppmDrift[ms1MassDrift[, 3] == 0] <- NA
@@ -250,7 +248,7 @@ adductSpecGen <- function(mzXmlDir = NULL,
                     massDriftTmp$adjPrecursorMZ <- Res.tmp[[1]]$adjPrecursorMZ
                     massDriftTmp$ppmDrift <- Res.tmp[[1]]$ppmDrift
                     write.csv(massDriftTmp, massDriftFiles[i], row.names 
-                              = FALSE)
+                            = FALSE)
                 }
                 return(Res.tmp)
             }
@@ -262,7 +260,7 @@ adductSpecGen <- function(mzXmlDir = NULL,
         Results <- vector("list", length(MS2files))
         massDriftFiles <-
             gsub('\\.mzXML$|\\.mzML$', '.massDrift.csv',
-                 MS2files)
+                MS2files)
         for (i in seq_along(MS2files)) {
             Res.tmp <- spectraCreate(
                 MS2file = MS2files[i],
@@ -275,8 +273,8 @@ adductSpecGen <- function(mzXmlDir = NULL,
             if (file.exists(massDriftFiles[i])) {
                 massDriftTmp <-
                     read.csv(massDriftFiles[i],
-                             header = TRUE,
-                             stringsAsFactors = FALSE)
+                            header = TRUE,
+                            stringsAsFactors = FALSE)
                 ms1Level <- Res.tmp[[1]]$msLevel == 1
                 ms1MassDrift <- massDriftTmp[ms1Level, , drop = FALSE]
                 ms1MassDrift$ppmDrift[ms1MassDrift[, 3] == 0] <- NA
@@ -329,8 +327,8 @@ adductSpecGen <- function(mzXmlDir = NULL,
             vapply(metaDataTmp, nrow, numeric(1)))
     metaDataTmp <- do.call(rbind, metaDataTmp)
     metaDataTmp <- data.frame(mzXMLFile = fileNamesTmp,
-                              metaDataTmp,
-                              stringsAsFactors = FALSE)
+                            metaDataTmp,
+                            stringsAsFactors = FALSE)
     metaData(AdductSpecTmp) <- metaDataTmp
     Specfile.paths(AdductSpecTmp) <- MS2files
     Parameters(AdductSpecTmp) <-
@@ -387,7 +385,7 @@ adductSpecGen <- function(mzXmlDir = NULL,
         intStdScans$IntStd_medRtDev <- medRtDiffFile / 60
         # match names with file path names
         runOrderTmp <- match(intStdScans$mzXMLFile,
-                             basename(Specfile.paths(AdductSpecTmp)))
+                            basename(Specfile.paths(AdductSpecTmp)))
         # sort table
         intStdScans <- intStdScans[order(runOrderTmp), , drop = FALSE]
         nFilesTmp <- seq_along(Specfile.paths(AdductSpecTmp))
@@ -433,27 +431,27 @@ adductSpecGen <- function(mzXmlDir = NULL,
         )
         par(mfrow = c(2, 2))
         plot(runOrderTmp,
-             medRtDiffFile / 60,
-             xlab = 'run order',
-             ylab = 'deviation from median Rt (mins)')
+            medRtDiffFile / 60,
+            xlab = 'run order',
+            ylab = 'deviation from median Rt (mins)')
         # highlight inputed values
         if (length(missingFiles) > 0) {
             points(missingFiles,
-                   medRtDiffFile[missingFiles] / 60,
-                   col = 'red',
-                   pch = 19)
+                    medRtDiffFile[missingFiles] / 60,
+                    col = 'red',
+                    pch = 19)
         }
         plot(runOrderTmp,
-             ppmDiffFile,
-             xlab = 'run order',
-             ylab = 'ppm difference int.
-             std.')
+            ppmDiffFile,
+            xlab = 'run order',
+            ylab = 'ppm difference int.
+            std.')
         # highlight inputed values
         if (length(missingFiles) > 0) {
             points(missingFiles,
-                   ppmDiffFile[missingFiles],
-                   col = 'red',
-                   pch = 19)
+                ppmDiffFile[missingFiles],
+                col = 'red',
+                pch = 19)
         }
         plot(
             ppmDiffFile,
@@ -503,13 +501,12 @@ adductSpecGen <- function(mzXmlDir = NULL,
         text(
             x = 0.5,
             y = 0.3,
-            paste("internal standard MS2 spectrum were not
-                  identified"),
+            paste("internal standard MS2 spectrum were not 
+                identified"),
             cex = 1.3,
             col = "red"
             )
         dev.off()
-    
         # write table
         intStdScans$peakId <- NULL
         intStdScans$peakNo <- NULL
@@ -522,16 +519,16 @@ adductSpecGen <- function(mzXmlDir = NULL,
         '.png')
         intStdScans$retentionTime <- intStdScans$retentionTime / 60
         write.csv(intStdScans,
-                  paste0(
-                      ifelse(
-                          is.null(outputPlotDir),
-                          paste0(getwd(), '/'),
-                          outputPlotDir
-                      ),
-                      '/internalStd_scansTable.csv'
-                  ),
-                  row.names = FALSE)
-              }
+                paste0(
+                    ifelse(
+                        is.null(outputPlotDir),
+                        paste0(getwd(), '/'),
+                        outputPlotDir
+                    ),
+                    '/internalStd_scansTable.csv'
+                ),
+                row.names = FALSE)
+            }
         message('...DONE')
     }
 
@@ -604,7 +601,7 @@ setMethod("c", signature(x = "AdductSpec"), function(x, ...) {
             rbind(metaData(emptyAdductSpec), metaDataTmp)
         Specfile.paths(emptyAdductSpec) <-
             c(Specfile.paths(emptyAdductSpec),
-              Specfile.paths(elements[[i]]))
+            Specfile.paths(elements[[i]]))
     }
     message(
         'Grouping, retention time correction and composite spectra

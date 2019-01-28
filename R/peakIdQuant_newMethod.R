@@ -38,21 +38,21 @@
 #' isoWindow = 10, maxGapMs1Scan = 5, intMaxPeak = FALSE)
 #' @return list
 peakIdQuant_newMethod <- function(mzTmp = NULL,
-                                  rtTmp = NULL,
-                                  peakRangeRtSub = NULL,
-                                  rtDevModel = NULL,
-                                  isoPat = NULL,
-                                  isoPatPred = NULL,
-                                  minSimScore = 0.96,
-                                  maxPpm = 4,
-                                  gaussAlpha = 16,
-                                  spikeScans = 2,
-                                  minPeakHeight = 5000,
-                                  maxRtDrift = 20,
-                                  showPlots = FALSE,
-                                  isoWindow = 10,
-                                  maxGapMs1Scan = 5,
-                                  intMaxPeak = FALSE) {
+                                rtTmp = NULL,
+                                peakRangeRtSub = NULL,
+                                rtDevModel = NULL,
+                                isoPat = NULL,
+                                isoPatPred = NULL,
+                                minSimScore = 0.96,
+                                maxPpm = 4,
+                                gaussAlpha = 16,
+                                spikeScans = 2,
+                                minPeakHeight = 5000,
+                                maxRtDrift = 20,
+                                showPlots = FALSE,
+                                isoWindow = 10,
+                                maxGapMs1Scan = 5,
+                                intMaxPeak = FALSE) {
     # empty results list
     resList <- list()
     minMz <- mzTmp - (mzTmp / 1e+06) * maxPpm
@@ -78,7 +78,7 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
             peaksMIM[peakRangeMIM[peaksMIM, 2] >= minPeakHeight]
         # 2. subset by max Rt drift
         peaksMIM <- peaksMIM[abs(peakRangeMIM[peaksMIM, 3] -
-                                     rtTmp) <= maxRtDrift]
+                                    rtTmp) <= maxRtDrift]
         if (length(peaksMIM) > 0)
         {
             #if min peak index larger than min valley then add to
@@ -92,19 +92,17 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
             # 1st round # identify true well resolved peaks
             truePeaks <-
                 truePeakTrough(peaksMIM, troughsMIM,
-                               peakRangeMIM)
+                                peakRangeMIM)
             # subset peaksTmp and troughsMIM
             trueTroughs <- unique(truePeaks[grep("trough",
-                                                 names(truePeaks))])
+                                                names(truePeaks))])
             truePeaks <- unique(truePeaks[grep("peak",
-                                               names(truePeaks))])
-            
+                                                names(truePeaks))])
             if (length(truePeaks) > 0 &
                 length(trueTroughs) > 0)
             {
                 peaksMIM <- peaksMIM[truePeaks]
                 troughsMIM <- troughsMIM[trueTroughs]
-                
                 if (min(troughsMIM) > min(peaksMIM)) {
                     troughsMIM <- c(1, troughsMIM)
                 }
@@ -115,19 +113,19 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                 #two troughs then take the most intense
                 peaksMIM <-
                     nAdjPeaks(peaksMIM, troughsMIM,
-                              peakRangeMIM)
+                                peakRangeMIM)
                 # 2nd round # identify true well resolved peaks
                 truePeaks <-
                     truePeakTrough(peaksMIM, troughsMIM,
-                                   peakRangeMIM,
-                                   lrRes = TRUE)
+                                 peakRangeMIM,
+                                 lrRes = TRUE)
                 # subset peaksTmp and troughsMIM
                 trueTroughs <-
                     unique(truePeaks[grep("trough",
-                                          names(truePeaks))])
+                                        names(truePeaks))])
                 truePeaks <-
                     unique(truePeaks[grep("peak",
-                                          names(truePeaks))])
+                                        names(truePeaks))])
                 if (length(truePeaks) > 0 &
                     length(trueTroughs) > 0)
                 {
@@ -147,7 +145,7 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                 0,
                                 max(peakRangeMIM[peaksMIM, 2]) *
                                     (100 / isoPatPred$percent[1] +
-                                         0.5)
+                                        0.5)
                             )
                         )
                         points(peakRangeMIM[peaksMIM, 3],
@@ -161,7 +159,7 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                 peakRangeMIM[peaksMIM, 3] -
                                     isoWindow,
                                 peakRangeMIM[peaksMIM,
-                                             3] + isoWindow
+                                            3] + isoWindow
                             ),
                             lty = (seq_len(
                                 length(peaksMIM)
@@ -178,7 +176,7 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                         )
                         abline(
                             v = c(rtTmp - maxRtDrift,
-                                  rtTmp + maxRtDrift),
+                                rtTmp + maxRtDrift),
                             lty = 2,
                             col = "red"
                         )
@@ -193,42 +191,41 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                         nrow(peakRangeMIM))
                     }
                     peaksTableTmp <- cbind("iso0",
-                                           peakRangeMIM[peaksMIM
+                                        peakRangeMIM[peaksMIM
                                                         , , drop = FALSE])
                     colnames(peaksTableTmp) <-
                         c("isoPat",
-                          "mass",
-                          "intensity",
-                          "predRtLoess",
-                          "RT",
-                          "seqNum")
+                        "mass",
+                        "intensity",
+                        "predRtLoess",
+                        "RT",
+                        "seqNum")
                     # dist iso table
                     distIsoTable <-
                         matrix(nrow = 0,
-                               ncol = ncol(peaksTableTmp))
+                                ncol = ncol(peaksTableTmp))
                     colnames(distIsoTable) <-
                         c("isoPat",
-                          "mass",
-                          "intensity",
-                          "predRtLoess",
-                          "RT",
-                          "seqNum")
+                         "mass",
+                         "intensity",
+                         "predRtLoess",
+                         "RT",
+                         "seqNum")
                     # 2. id isotope peaks (first 5)
                     for (isoIt in 2:6) {
                         peakRangeTmp <- peakRangeRtSub[peakRangeRtSub[, 1] <
-                                       (maxMz + isoPat[isoIt]) &
-                                       peakRangeRtSub[, 1] >
-                                       (minMz + isoPat[isoIt]), , drop =
-                                       FALSE]
+                                        (maxMz + isoPat[isoIt]) &
+                                        peakRangeRtSub[, 1] >
+                                        (minMz + isoPat[isoIt]), , drop =
+                                        FALSE]
                         # sum signal rt
                         if (nrow(peakRangeTmp) > 0) {
                             peakRangeTmp <-
                                 peakRangeSum(peakRangeTmp,
-                                             spikeScans,
-                                             rtDevModel)
+                                            spikeScans,
+                                            rtDevModel)
                             peaksTmp <-
                                 findPeaks(peakRangeTmp[, 2], m = 1)
-                            
                             if (!is.null(peaksTmp)) {
                                 if (showPlots == TRUE) {
                                     points(
@@ -240,13 +237,13 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                             isoIt
                                     )
                                     points(peakRangeTmp[peaksTmp, 3],
-                                           peakRangeTmp[peaksTmp,
+                                            peakRangeTmp[peaksTmp,
                                                         2],
-                                           col = "red")
+                                            col = "red")
                                 }
                                 peakRangeTmp <-
                                     cbind(names(isoPat)[isoIt],
-                                          peakRangeTmp)
+                                        peakRangeTmp)
                                 colnames(peakRangeTmp) <-
                                     c(
                                         "isoPat",
@@ -262,18 +259,17 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                           peakRangeTmp)
                                 peakRangeTmp <-
                                     peakRangeTmp[peaksTmp, ,
-                                                 drop = FALSE]
+                                                drop = FALSE]
                                 peaksTableTmp <-
                                     rbind(peaksTableTmp,
-                                          peakRangeTmp)
+                                        peakRangeTmp)
                             }
                         }
                     }
                     # 3. hierarchically cluster isotope peaks
                     if (nrow(peaksTableTmp) > 1) {
                         hr <- fastcluster::hclust.vector(
-                            as.numeric(peaksTableTmp[,
-                                                     4]),
+                            as.numeric(peaksTableTmp[,4]),
                             method = "median",
                             members = NULL
                         )
@@ -284,7 +280,7 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                             cutree(hr, h = isoWindow)
                         nIsoDetected <-
                             table(rtGroups[!duplicated(paste0(
-                                peaksTableTmp[,1], "_", rtGroups))])
+                                    peaksTableTmp[,1], "_", rtGroups))])
                         nIsoDetected <-
                             nIsoDetected[names(nIsoDetected)
                                 %in% rtGroups[seq_along(peaksMIM)]]
@@ -300,7 +296,7 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                 rtGroups[indxTmp]
                             peaksTableTmp <-
                                 peaksTableTmp[indxTmp, ,
-                                              drop = FALSE]
+                                            drop = FALSE]
                             # 4. calculate dot product
                             # similarity
                             #with predicted iso distribution
@@ -308,15 +304,15 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                             # matrix for results
                             dotProdRes <-
                                 matrix(0,
-                                       ncol = 9,
-                                       nrow = length(unique(rtGroups)))
+                                        ncol = 9,
+                                        nrow = length(unique(rtGroups)))
                             dotProdRes[, 1] <-
                                 unique(rtGroups)
                             # loop through diff rt groups and
                             # calc dot prod
                             for (rtGr in seq_len(nrow(dotProdRes))) {
                                 indxTmp <- which(rtGroups %in%
-                                                     unique(rtGroups)[rtGr])
+                                                    unique(rtGroups)[rtGr])
                                 # split in to a list of each
                                 # isotope
                                 splitF <- 
@@ -325,12 +321,12 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                     paste0("iso", 0:5)
                                 indxTmp <-
                                     split(indxTmp,
-                                          splitF)
+                                        splitF)
                                 # replace integer(0) with zero
                                 indxTmp[vapply(indxTmp,
-                                               length,
-                                               FUN.VALUE = 
-                                                   numeric(1)) == 0] <- 0
+                                                length,
+                                                FUN.VALUE = 
+                                                    numeric(1)) == 0] <- 0
                                 # all combination of different
                                 # MIM and isotope
                                 #peaks
@@ -386,8 +382,7 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                             )
                                         ) * 1
                                     dotProd <-
-                                        c(corrPattTmp,
-                                          dotProd)
+                                        c(corrPattTmp,dotProd)
                                 }))
                                 # concatenate results add
                                 #to table
@@ -395,7 +390,7 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                     c(
                                         ifelse(
                                             any(dotProds[,
-                                                         1] == 1),
+                                                        1] == 1),
                                             1,
                                             max(dotProds[, 2])
                                         ),
@@ -410,10 +405,10 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                             #subset
                             #by min similarity score
                             indxTmp <- which(dotProdRes[, 2]
-                                             >= minSimScore)
+                                            >= minSimScore)
                             dotProdRes <-
                                 dotProdRes[indxTmp, ,
-                                           drop = FALSE]
+                                            drop = FALSE]
                             if (nrow(dotProdRes) > 0) {
                                 # subset by highest
                                 #intensity (hk
@@ -428,12 +423,12 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                 } else {
                                     indxTmp <- which.min(abs(
                                         as.numeric(peaksTableTmp[indxTmp,
-                                                                 4]) - rtTmp
+                                                                4]) - rtTmp
                                     ))
                                 }
                                 dotProdRes <-
                                     dotProdRes[indxTmp, ,
-                                               drop = FALSE]
+                                                drop = FALSE]
                                 # subset peaksTable by
                                 #retention time
                                 #group
@@ -443,7 +438,7 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                     indxTmp[indxTmp != 0]
                                 peaksTableTmp <-
                                     peaksTableTmp[indxTmp, ,
-                                                  drop = FALSE]
+                                                    drop = FALSE]
                                 # add column names peak
                                 #range mim
                                 colnames(peakRangeMIM) <-
@@ -457,25 +452,25 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                 # convert to data.frame
                                 peakRangeMIM <-
                                     as.data.frame(peakRangeMIM,
-                                                  stringsAsFactors = FALSE)
+                                                stringsAsFactors = FALSE)
                                 # id peak apex
                                 peakApex <-
                                     peaksMIM[dotProdRes[, 1]]
                                 peakStart <-
                                     peakRangeMIM[max(troughsMIM[troughsMIM <
                                                                     peakApex]),
-                                                 "AdjRetentionTime"]
+                                                "AdjRetentionTime"]
                                 peakEnd <-
                                     peakRangeMIM[min(troughsMIM[troughsMIM >
                                                                     peakApex]),
-                                                 "AdjRetentionTime"]
+                                                "AdjRetentionTime"]
                                 # integrate peak
                                 peakIntRes <-
                                     peakIntegrate(peakRangeMIM,
-                                                  peakStart,
-                                                  peakEnd,
-                                                  mzTmp,
-                                                  rtTmp)
+                                                peakStart,
+                                                peakEnd,
+                                                mzTmp,
+                                                rtTmp)
                                 peakRangeMIM <-
                                     peakIntRes$peakTable
                                 # results columns
@@ -486,10 +481,10 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                     c(
                                         dotProd =
                                             as.numeric(dotProdRes[,
-                                                                  3]),
+                                                                3]),
                                         isoDet = paste0(
                                             c("MIM",
-                                              peaksTableTmp[2:nrow(
+                                            peaksTableTmp[2:nrow(
                                                 peaksTableTmp),1]),
                                             collapse = "; "
                                         ),
@@ -500,11 +495,11 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
                                 #peaksTableTmp
                                 peaksTableTmp[, "isoPat"] <-
                                     paste0(peaksTableTmp[,
-                                                         "isoPat"], "_peak")
+                                                        "isoPat"], "_peak")
                                 # plot m/z profile
                                 peaksTableTmp <-
                                     rbind(peaksTableTmp,
-                                          distIsoTable)
+                                        distIsoTable)
                                 colnames(peaksTableTmp) <-
                                     c(
                                         "isoPat",
@@ -538,13 +533,13 @@ peakIdQuant_newMethod <- function(mzTmp = NULL,
         row.names(peakRangeMIM) <- NULL
         peakRangeMIM <-
             data.frame(peakRangeMIM,
-                       stringsAsFactors = FALSE)
+                        stringsAsFactors = FALSE)
         colnames(peakRangeMIM) <-
             c("mass",
-              "intensity",
-              "AdjRetentionTime",
-              "retentionTime",
-              "seqNum")
+                "intensity",
+                "AdjRetentionTime",
+                "retentionTime",
+                "seqNum")
         peakRangeMIM$peaks <- ""
         peakRangeMIM$troughs <- ""
         peakRangeMIM <-

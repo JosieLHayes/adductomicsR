@@ -11,40 +11,38 @@
 #' number of unique spectrum names
 
 dotProdMatrix <- function(allSpectra = NULL,
-                          spectraNames = NULL,
-                          binSizeMS2 = NULL) {
+                            spectraNames = NULL,
+                            binSizeMS2 = NULL) {
     # error handling
     stopifnot(is.matrix(allSpectra))
     stopifnot(is.character(spectraNames))
     message("Calculating dot product matrix ",
             length(unique(spectraNames)),
             " spectra\n")
-    
     maxMass <- floor(max(allSpectra[, 1])) + 10
     # padded integer labels
     labelsTmp <-
         paste0("(",
-               seq(binSizeMS2, (maxMass - binSizeMS2),
-                   binSizeMS2),
-               ",",
-               seq((2 * binSizeMS2), maxMass, binSizeMS2),
-               "]")
+                seq(binSizeMS2, (maxMass - binSizeMS2),
+                    binSizeMS2),
+                ",",
+                seq((2 * binSizeMS2), maxMass, binSizeMS2),
+                "]")
     massBinsIndivTmp <-
         cut(
             allSpectra[, 1],
             breaks = seq(binSizeMS2, maxMass,
-                         binSizeMS2),
+                        binSizeMS2),
             labels = labelsTmp
         )
     # empty bins
     indivSpecVec <- tapply(allSpectra[, 2], paste0(spectraNames,
-                                                   massBinsIndivTmp),
-                           sum)
+                                                    massBinsIndivTmp), sum)
     # identify any absent bins
     allBinNames <-
         paste0(rep(unique(spectraNames), each = length(labelsTmp)),
-               rep(labelsTmp,
-                   length(unique(spectraNames))))
+                rep(labelsTmp,
+                    length(unique(spectraNames))))
     # add absent bins as zeros
     allBinsTmp <- rep(0, length(allBinNames))
     names(allBinsTmp) <- allBinNames

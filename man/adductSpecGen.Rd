@@ -5,7 +5,7 @@
 \title{Constructor of AdductSpec object deconvolute spectra 
 MS2 and MS1 levels}
 \usage{
-adductSpecGen(mzXmlDir=NULL, runOrder=NULL, nCores=parallel::detectCores(),
+adductSpecGen(mzXmlDir=NULL, runOrder=NULL, nCores=NULL,
 intStdMass=834.77692,intStdPeakList=c(290.21, 403.30, 516.38,
 587.42,849.40, 884.92, 958.46, 993.97,1050.52, 1107.06, 1209.73,
 1337.79,1465.85),TICfilter=10000, DNF=2, minInt=300,
@@ -22,9 +22,7 @@ the first column must contain the precise file name and the second
 column an integer representing the precise run order.}
 
 \item{nCores}{numeric the number of cores to use for parallel computation. 
-The default
-is to use all available cores detected using the function 
-parallel::detectCores()}
+The default is to 1 core}
 
 \item{intStdMass}{numeric vector of the mass of the internal standard. 
 Default is the mass of}

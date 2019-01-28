@@ -35,12 +35,11 @@
 #' the RcppEigen package is used to increase the speed of computation.
 #' @usage dynamicNoiseFilter(spectrum.df = NULL, DNF = 2, minPeaks = 5,
 #' minInt = 100)
-
 dynamicNoiseFilter <-
     function(spectrum.df = NULL,
-             DNF = 2,
-             minPeaks = 5,
-             minInt = 100) {
+            DNF = 2,
+            minPeaks = 5,
+            minInt = 100) {
         # error handling
         if (is.null(spectrum.df)) {
             stop("No spectrum matrix/dataframe supplied")
@@ -100,9 +99,8 @@ dynamicNoiseFilter <-
                         IntCompSpec = IntCompSpec,
                         TotalIntSNR = TotalIntSNR,
                         nPeaks = nrow(spectrum.df),
-                        stringsAsFactors = FALSE
-                    ),
-                aboveMinPeaks = aboveMinPeaks
+                        stringsAsFactors = FALSE),
+                        aboveMinPeaks = aboveMinPeaks
             )
         } else {
             DNF.tmp <- list(
@@ -113,8 +111,7 @@ dynamicNoiseFilter <-
                         IntCompSpec = 0,
                         TotalIntSNR = 0,
                         nPeaks = nrow(spectrum.df),
-                        stringsAsFactors = FALSE
-                    ),
+                        stringsAsFactors = FALSE),
                 aboveMinPeaks = FALSE
             )
         }

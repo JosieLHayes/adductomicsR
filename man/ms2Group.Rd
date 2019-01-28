@@ -4,7 +4,7 @@
 \alias{ms2Group}
 \title{group MS/MS precursor masses}
 \usage{
-ms2Group(adductSpectra = NULL, nCores = parallel::detectCores(), 
+ms2Group(adductSpectra = NULL, nCores = NULL, 
 maxRtDrift = NULL, 
 ms1mzError = 0.1, ms2mzError = 1, dotProdClust = TRUE, minDotProd = 0.8,
 fclustMethod = "median", disMetric = "euclidean", compSpecGen = TRUE,
@@ -14,8 +14,7 @@ adjPrecursorMZ = TRUE)
 \item{adductSpectra}{AdductSpec object}
 
 \item{nCores}{numeric the number of cores to use for parallel computation. 
-The default is to use all available cores detected using the function 
-parallel::detectCores()}
+The default is to use 1 core.}
 
 \item{maxRtDrift}{numeric for the maximum rentention time
 drift to be considered. Default is 20.}

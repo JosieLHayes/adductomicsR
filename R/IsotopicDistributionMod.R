@@ -28,57 +28,57 @@ IsotopicDistributionMod <- function(formula = list(), charge = 1) {
         row.names(data)= data[,1]
         data = data[,-1]
         massCarbon <- sum(sample(
-            as.numeric(data['C', 1:2]),
+            as.numeric(data['C', seq(1, 2)]),
             size = inputFormula$C,
             replace = TRUE,
-            prob = as.numeric(data['C', 5:6])
+            prob = as.numeric(data['C', seq(5, 6)])
         ))
         massHydrogen <-
             sum(sample(
-                as.numeric(data['H', 1:2]),
+                as.numeric(data['H', seq(1, 2)]),
                 size = inputFormula$H,
                 replace = TRUE,
-                prob = as.numeric(data['H', 5:6])
+                prob = as.numeric(data['H', seq(5, 6)])
             ))
         massNitrogen <-
             sum(sample(
-                as.numeric(data['N', 1:2]),
+                as.numeric(data['N', seq(1, 2)]),
                 size = inputFormula$N,
                 replace = TRUE,
-                prob = as.numeric(data['N', 5:6])
+                prob = as.numeric(data['N', seq(5, 6)])
             ))
         massOxygen <-
             sum(sample(
-                as.numeric(data['O', 1:3]),
+                as.numeric(data['O', seq(1, 3)]),
                 size = inputFormula$O,
                 replace = TRUE,
-                prob = as.numeric(data['O', 5:7])
+                prob = as.numeric(data['O', seq(5,7)])
             ))
         massSulfer <- sum(sample(
-            as.numeric(data['S', 1:4]),
+            as.numeric(data['S', seq(1, 4)]),
             size = inputFormula$S,
             replace = TRUE,
-            prob = as.numeric(data['S', 5:8])
+            prob = as.numeric(data['S', seq(5, 8)])
         ))
         massPhosphorus <- inputFormula$P * as.numeric(data['P', 1])
         massBromine <- sum(sample(
-            as.numeric(data['Br', 1:2]),
+            as.numeric(data['Br', seq(1, 2)]),
             size = inputFormula$Br,
             replace = TRUE,
-            prob = as.numeric(data['Br', 5:6])
+            prob = as.numeric(data['Br', seq(5, 6)])
         ))
         massChlorine <- sum(sample(
-            as.numeric(data['Cl', 1:2]),
+            as.numeric(data['Cl', seq(1, 2)]),
             size = inputFormula$Cl,
             replace = TRUE,
-            prob = as.numeric(data['Cl', 5:6])
+            prob = as.numeric(data['Cl', seq(5, 6)])
         ))
         massFluorine <- inputFormula$F * as.numeric(data['F', 1])
         massSilicon <- sum(sample(
-            as.numeric(data['Si', 1:3]),
+            as.numeric(data['Si', seq(1, 3)]),
             size = inputFormula$Si,
             replace = TRUE,
-            prob = as.numeric(data['Si', 5:7])
+            prob = as.numeric(data['Si', seq(5, 7)])
         ))
         massMolecule <-
             sum(
@@ -110,8 +110,8 @@ IsotopicDistributionMod <- function(formula = list(), charge = 1) {
     spectrum <- spectrum[spectrum$intensity != 0,]
     spectrum$percent <-
         with(spectrum, round(intensity / max(intensity) *
-                                 100,
-                             digits = 2))
+                            100,
+                            digits = 2))
     row.names(spectrum) <- seq_len((nrow(spectrum)))
     return(spectrum)
 }

@@ -1244,7 +1244,7 @@ specSimPepId <-
                                                       FALSE]
                                 rownames(fixTmp) <- gsub('\\+.+', '+',
                                                          names(fixIonTmp))
-                                if (!is.null(outputPlotDir)) {                         
+                                if (!is.null(outputPlotDir)) {                 
                                 #label fixed ions
                                 points(
                                     fixTmp,

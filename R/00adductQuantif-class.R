@@ -44,7 +44,7 @@ setMethod("c", signature(x = "AdductQuantif"), function(x, ...) {
         is(ele, 'AdductQuantif'),
         FUN.VALUE = logical(1)) == FALSE)) {
         stop("all elements must be an
-             AdductQuantif class object")
+        AdductQuantif class object")
     }
     emptyAdductQuantif <- new("AdductQuantif")
     for (i in seq_along(elements)) {
@@ -55,14 +55,14 @@ setMethod("c", signature(x = "AdductQuantif"), function(x, ...) {
         } else {
             emptyAdductQuantif@peakQuantTable <-
                 rbind(emptyAdductQuantif@peakQuantTable,
-                      elements[[i]]@peakQuantTable)
+                elements[[i]]@peakQuantTable)
         }
         emptyAdductQuantif@peakIdData <-
             c(emptyAdductQuantif@peakIdData,
-              elements[[i]]@peakIdData)
+            elements[[i]]@peakIdData)
         emptyAdductQuantif@predIsoDist <-
             c(emptyAdductQuantif@predIsoDist,
-              elements[[i]]@predIsoDist)
+            elements[[i]]@predIsoDist)
         # keep unique
         emptyAdductQuantif@predIsoDist <-
             emptyAdductQuantif@predIsoDist[!duplicated(names(
@@ -70,17 +70,17 @@ setMethod("c", signature(x = "AdductQuantif"), function(x, ...) {
         # target table
         emptyAdductQuantif@targTable <-
             rbind(emptyAdductQuantif@targTable,
-                  elements[[i]]@targTable)
+                elements[[i]]@targTable)
         # remove duplicates
         uniEntries <-
             apply(emptyAdductQuantif@targTable[, seq_len(3)],
-                  1, paste, collapse = "")
+                1, paste, collapse = "")
         emptyAdductQuantif@targTable <-
             emptyAdductQuantif@targTable[duplicated(uniEntries) ==
-                                             FALSE, , drop = FALSE]
+                                            FALSE, , drop = FALSE]
         emptyAdductQuantif@file.paths <-
             c(emptyAdductQuantif@file.paths,
-              elements[[i]]@file.paths)
+            elements[[i]]@file.paths)
     }
     return(emptyAdductQuantif)
     })  # end function
@@ -148,7 +148,7 @@ setMethod(
     }
 )
 setGeneric("predIsoDist<-", function(object,
-                                     value)
+                                    value)
     standardGeneric("predIsoDist<-"))
 setMethod("predIsoDist<-", "AdductQuantif", function(object, value) {
     object@predIsoDist <- value
@@ -166,7 +166,7 @@ setMethod(
     }
 )
 setGeneric("targTable<-", function(object,
-                                   value)
+                                value)
     standardGeneric("targTable<-"))
 setMethod("targTable<-", "AdductQuantif", function(object, value) {
     object@targTable <- value

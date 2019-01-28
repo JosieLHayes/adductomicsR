@@ -14,7 +14,7 @@
 #'@export
 generateTargTable <-
     function(allresultsFile = NULL,
-             csvDir = NULL) {
+            csvDir = NULL) {
         MIM = NULL
         adjMIM = NULL
         RT = NULL
@@ -22,7 +22,6 @@ generateTargTable <-
         MSMSGroupsName = NULL
         data = read.csv(allresultsFile, sep = ",", header = TRUE)
         groups = unique(data$MSMSGroupsName)
-        
         # obtain unique groups with average RT and MIM
         data2 <-
             data.frame(
@@ -34,15 +33,13 @@ generateTargTable <-
                     adjRT = mean(adjRT)
                 )
             )
-        
         data2 <- data2[-(nrow(data2)),]
-        
         # create a target table based on the non adjusted results
         targ <- data.frame(
             mass = data2$MIM,
             RT = data2$RT,
             peptide = rep("ALVLIAFAQYLQQCPFEDHVK",
-                          length(nrow(data2))),
+                        length(nrow(data2))),
             chargeState = rep(3, length(nrow(data2)))
         )
         hk <-
