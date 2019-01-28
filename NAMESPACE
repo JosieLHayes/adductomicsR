@@ -12,7 +12,7 @@ export(rtDevModelling)
 export(specSimPepId)
 exportClasses(AdductQuantif)
 exportClasses(AdductSpec)
-exportMethods("c"
+exportMethods("c")
 import(DT)
 import(adductData)
 import(ade4)
