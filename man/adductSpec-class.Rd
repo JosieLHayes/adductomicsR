@@ -10,6 +10,7 @@
 \alias{c,Specfile.paths,adductMS2spec,metaData,Parameters,AdductSpec-method}
 \alias{groupMS2spec,rtDevModels,sumAdductType,Peptides,AdductSpec-method} 
 \alias{specPepMatches,AdductSpec-method}
+\alias{c,AdductSpec-method}
 \title{AdductSpec class}
 \format{An object of class \code{NULL} of length 0.}
 \usage{
