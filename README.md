@@ -22,7 +22,7 @@ The latest development version and all other package dependencies can be install
 library(devtools)
 devtools::install_github('JosieLHayes/adductomicsR', dependencies=c("Depends", "Imports", "Suggests"))
 ```
-Including ref= 'R3.5' in this command will download the version that can be used for R 3.5.
+Including ref= 'R3.5' in this command will download the version that can be used for R 3.5. If using this version the example data must be downloaded from https://berkeley.box.com/s/fnhttc87v4mn1x50nvckpt99999y7uhl rather than accessing through the adductData package.
 
 Vignette
 ========
