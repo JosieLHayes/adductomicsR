@@ -44,7 +44,7 @@
 #' eh = ExperimentHub();
 #' temp = query(eh, 'adductData');
 #' temp[['EH1957']]; #first mzXML file
-#' file.rename(file.path(hubCache(temp),'1957'), file.path(hubCache(temp),
+#' file.rename(cache(temp["EH1957"]), file.path(hubCache(temp),
 #' 'ORB35017.mzXML'));
 #' temp[['EH1958']]; #second mzXML file
 #' file.rename(file.path(hubCache(temp),'1958'), file.path(hubCache(temp),

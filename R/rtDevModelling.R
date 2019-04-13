@@ -58,7 +58,7 @@
 #' eh = ExperimentHub();
 #' temp = query(eh, 'adductData');
 #' temp[['EH2061']]; #first mzXML file
-#' file.rename(file.path(hubCache(temp),'2061'), file.path(hubCache(temp),
+#' file.rename(cache(temp["2061"]), file.path(hubCache(temp),
 #' 'data42_21221_2.mzXML'));
 #' rtDevModelling(MS2Dir=hubCache(temp),nCores=4,runOrder=paste0(
 #' system.file("extdata",package="adductomicsR"),
